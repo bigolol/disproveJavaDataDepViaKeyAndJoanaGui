@@ -16,18 +16,23 @@ import javafx.stage.Stage;
  * @author holger
  */
 public class DisproveViaKeyAndJoanaGUI extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainWindowFXMLDoc.fxml"));
+        Parent root = fxmlLoader.load();
         MainWindowController controller = (MainWindowController) fxmlLoader.getController();
-        
-        //TODO setup controller here
-        
-        Parent root =  fxmlLoader.load();        
-        Scene scene = new Scene(root);        
+
+        //setup controller here
+        controller.setMainStage(stage);
+
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+        //I do this so the menus opens at the correct place. For some reason it doesnt sometimes
+        //if the main stage isnt moved by a bit
+        stage.setX(stage.getX() + 1);
     }
 
     /**
@@ -36,5 +41,5 @@ public class DisproveViaKeyAndJoanaGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

@@ -32,7 +32,12 @@ public class DisprovingProject {
     private JCallGraph callGraph;
     private SDG sdg;
     private ViolationsWrapper violationsWrapper;
-    
+    private String pathToJar;
+    private String pathToJava;
+
+    private DisprovingProject() {
+    }
+
     public DisprovingProject(
             String pathToSDG, String pathToStateSaverJson, String pathToViolations,
             String pathToSrc, String pathToJar, String pathToViolWrapper) throws IOException {
@@ -67,10 +72,41 @@ public class DisprovingProject {
     public ViolationsWrapper getViolationsWrapper() {
         return violationsWrapper;
     }
+
     public ViolationsWrapper generateNewViolWrapper() throws IOException {
         return new ViolationsWrapper(classifiedViolations, sdg, ana, callGraph);
     }
-    
-    
+
+    private void addJsonStringToStringBuilder(StringBuilder stringBuilder, String key, String value) {
+        stringBuilder.append("\"" + key + "\" : " + "\"" + value + "\"");
+    }
+
+    private void addKeyValueToJsonStringbuilder(StringBuilder stringBuilder, String key, String value) {
+        stringBuilder.append("\"" + key + "\" : " + value);
+
+    }
+
+    public String generateSaveString() {
+        StringBuilder created = new StringBuilder();
+        created.append("{");
+        addJsonStringToStringBuilder(created, "path_to_jar", pathToJar);
+        created.append(",\n");
+        addJsonStringToStringBuilder(created, "path_to_java_source", pathToJava);
+        created.append(",\n");
+        addJsonStringToStringBuilder(created, "path_to_sdg", pathToSDG);
+        created.append(",\n");
+        addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
+        created.append(",\n");
+        addKeyValueToJsonStringbuilder(created, "violation_wrapper", violationsWrapper.generateSaveString());
+        created.append(",\n");
+
+        created.append("}");
+        return created.toString();
+    }
+
+    public static DisprovingProject generateFromSavestring(String s) {
+        DisprovingProject disprovingProject = new DisprovingProject();
+        return disprovingProject;
+    }
 
 }

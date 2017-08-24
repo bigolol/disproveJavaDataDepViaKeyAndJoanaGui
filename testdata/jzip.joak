@@ -1,0 +1,26 @@
+//this is the joak script for testing Jzip 
+
+pathKeY : "dep/KeY.jar",
+javaClass : "",
+pathToJar : "testdata/JZipWithException.jar",
+pathToJavaFile : "testdata/JZipWithException",
+entryMethod : "jzip/JZip",
+annotationPath : "",
+fullyAutomatic : true,
+sources : [
+	{
+		securityLevel : "high",
+		description : {from : "programPart", programPart : "jzip.JZip.CONFIGURATION"}
+	},	
+	{
+		securityLevel : "high",
+		description : {from : "callsToMethod", method : "java.util.Properties.getProperty(Ljava/lang/String;)Ljava/lang/String", paramPos : 1}
+	}	
+],
+sinks : [ 
+	{
+		securityLevel : "low",
+		description : {from : "programPart", programPart : "jzip.MyFileOutputStream.content"}
+	}
+]
+

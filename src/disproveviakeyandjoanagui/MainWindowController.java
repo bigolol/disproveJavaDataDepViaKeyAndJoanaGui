@@ -7,12 +7,12 @@ package disproveviakeyandjoanagui;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -32,6 +32,9 @@ public class MainWindowController implements Initializable {
     private Label labelProjName;
 
     @FXML
+    private Label labelCurrentAction;
+
+    @FXML
     private Label labelSummaryEdge;
 
     @FXML
@@ -49,18 +52,21 @@ public class MainWindowController implements Initializable {
     @FXML
     private MenuItem menuItemSaveProgress;
 
+    @FXML
+    private ProgressIndicator progressIndicator;
     //---------------------other fields---------------------------
-    public enum ErrorTypes {
-        ERROR_USER_CHOOSING_FILE
-    }
-    
-    private static FileChooser fileChooser;
 
-    private static ArrayList<String> errorMsgs = new ArrayList<>();
-    private static ArrayList<ErrorTypes> errorTypes = new ArrayList<>();
-
+    private static FileChooser fileChooser = new FileChooser();
     private Stage mainStage;
     private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
+
+    private JoakFileManager joakFileManager;
+    private DisproFileManager disproFileManager;
+
+    final private String disprovingProgressFileEnding = "dispro";
+    final private String projectFileEnding = "joak";
+
+    private CurrentActionLogger actionLogger;
 
     //---------------------static methods boiiiiii-----------------------
     public static File letUserChooseFile(String title, String extensionExp, String extension, File baseDirectory, Window ownerWindow) {
@@ -68,35 +74,36 @@ public class MainWindowController implements Initializable {
         if (baseDirectory != null) {
             fileChooser.setInitialDirectory(baseDirectory);
         }
-        fileChooser.getExtensionFilters().addAll(
+        fileChooser.setSelectedExtensionFilter(
                 new FileChooser.ExtensionFilter(extensionExp, extension)
         );
         File chosenFile = fileChooser.showOpenDialog(ownerWindow);
         return chosenFile;
-    }    
-
-    public static void logError(String msg, ErrorTypes errorType) {
-        errorMsgs.add(msg);
-        errorTypes.add(errorType);
-        System.out.println("Error: " + msg);
     }
-    
-    //-------------------non-static methods-------------------------------
 
-    private void tryLetUserChooseJoakFileAndHandleResponse() {
-        String title = "please navigate to and select .joak file";
+    //-------------------non-static methods-------------------------------
+    private void tryLetUserChooseFileAndHandleResponse(String joakordispro) {
+        if (!joakordispro.equals(disprovingProgressFileEnding) && !joakordispro.equals(projectFileEnding)) {
+            ErrorLogger.logError("the file extension is not known to this program. Pls step yo game up",
+                    ErrorLogger.ErrorTypes.UNKNOWN_FILE_EXTENSION);
+            return;
+        }
+        String title = "please navigate to and select " + joakordispro + " file";
         String extensionExp = "A .joak file containing info about which java project to load";
-        String extension = ".joak";
-        File joakFile = letUserChooseFile(title, extensionExp, extension, null, mainStage);
-        if (joakFile == null) {
-            logError("new joak file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy", 
-                    ErrorTypes.ERROR_USER_CHOOSING_FILE);
+        String extension = "*." + joakordispro;
+        File file = letUserChooseFile(title, extensionExp, extension, null, mainStage);
+        if (file == null) {
+            ErrorLogger.logError("no" + joakordispro
+                    + "file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy",
+                    ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
         } else {
-            
+            if (joakordispro.equals(projectFileEnding)) {
+                joakFileManager.handleJoakFileChanged(file);
+            } else if (joakordispro.equals(disprovingProgressFileEnding)) {
+                disproFileManager.handleNewDisproFile(file);
+            }
         }
     }
-    
-    
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
@@ -104,7 +111,15 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        loopInvariantGetter.getLoopInvariantFromUser();
+        actionLogger = new CurrentActionLogger(labelCurrentAction, progressIndicator);
+        joakFileManager = new JoakFileManager(labelProjName, actionLogger);
+
+        menuItemOpenJoak.setOnAction((event) -> {
+            tryLetUserChooseFileAndHandleResponse(projectFileEnding);
+        });
+        menuItemOpenDispro.setOnAction((event) -> {
+            tryLetUserChooseFileAndHandleResponse(disprovingProgressFileEnding);
+        });
     }
 
 }

@@ -1,0 +1,22 @@
+//this is the joak script for testing Jzip 
+
+pathKeY : "dep/KeY.jar",
+javaClass : "",
+pathToJar : "testdata/plusMinusFalsePositive/build/PlusMinusFalsePos.jar",
+pathToJavaFile : "testdata/plusMinusFalsePositive/",
+entryMethod : "PlusMinusFalsePos",
+annotationPath : "",
+fullyAutomatic : true,
+sources : [
+	{
+		securityLevel : "high",
+		description : {from : "callsToMethod", method : "PlusMinusFalsePos.testMethod(II)I", paramPos : 1}
+	}	
+],
+sinks : [ 
+	{
+		securityLevel : "low",
+		description : {from : "programPart", programPart : "exit of method int PlusMinusFalsePos.testMethod(int, int)"}
+	}
+]
+
