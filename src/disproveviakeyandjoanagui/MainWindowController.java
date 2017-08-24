@@ -60,6 +60,7 @@ public class MainWindowController implements Initializable {
     private static ArrayList<ErrorTypes> errorTypes = new ArrayList<>();
 
     private Stage mainStage;
+    private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
 
     //---------------------static methods boiiiiii-----------------------
     public static File letUserChooseFile(String title, String extensionExp, String extension, File baseDirectory, Window ownerWindow) {
@@ -103,6 +104,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        loopInvariantGetter.getLoopInvariantFromUser();
     }
 
 }
