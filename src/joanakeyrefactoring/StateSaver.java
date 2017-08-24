@@ -48,21 +48,8 @@ public class StateSaver implements CGConsumer {
         this.pointerAnalyis = pointerAnalyis;
     }
 
-    public static StateSaver generateFromSaveStr(String pathToSaveStr) throws IOException {
+    public static StateSaver generateFromJson(JSONObject jsonObj) throws IOException {
         StateSaver stateSaver = new StateSaver();
-
-        BufferedReader br = new BufferedReader(new FileReader(pathToSaveStr));
-        StringBuilder completeString = new StringBuilder();
-        completeString.append("{\n");
-        for (String line = br.readLine(); line != null; line = br.readLine()) {
-            if (line.trim().startsWith("//")) {
-                continue;
-            }
-            completeString.append(line + '\n');
-        }
-        completeString.append("}\n");
-
-        JSONObject jsonObj = new JSONObject(completeString.toString());
 
         JSONArray cgNodeArr = jsonObj.getJSONArray("cgNodes");
 

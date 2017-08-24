@@ -164,9 +164,8 @@ public class ViolationsWrapper {
     private ViolationsWrapper() {
     }
 
-    public static ViolationsWrapper generateFromSaveString(
-            String s, SDG sdg, JCallGraph callGraph) {
-        JSONObject jSONObject = new JSONObject(s);
+    public static ViolationsWrapper generateFromJsonObj(
+            JSONObject jSONObject, SDG sdg, JCallGraph callGraph) {
         ViolationsWrapper created = new ViolationsWrapper();
         JSONArray chopArr = jSONObject.getJSONArray("chops");
         for (int i = 0; i < chopArr.length(); ++i) {
