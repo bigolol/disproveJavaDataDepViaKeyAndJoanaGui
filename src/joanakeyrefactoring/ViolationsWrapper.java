@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import joanakeyrefactoring.persistence.ViolationsSaverLoader;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.json.JSONArray;
@@ -76,6 +77,10 @@ public class ViolationsWrapper {
         StringBuilder created = new StringBuilder();
         created.append("{").append(System.lineSeparator());
         int lengthOfLineSep = System.lineSeparator().length();
+        
+        created.append(ViolationsSaverLoader.generateSaveString(uncheckedViolations));
+        created.append(",\n");
+        
         created.append("\"chops\" : [").append(System.lineSeparator());
         for (ViolationChop vc : violationChops) {
             created.append(vc.generateSaveString())
@@ -164,6 +169,10 @@ public class ViolationsWrapper {
     public static ViolationsWrapper generateFromJsonObj(
             JSONObject jSONObject, SDG sdg, JCallGraph callGraph) {
         ViolationsWrapper created = new ViolationsWrapper();
+        
+        JSONArray violArr = jSONObject.getJSONArray("violations");
+        created.uncheckedViolations = ViolationsSaverLoader.generateFromJSON(violArr, sdg);
+        
         JSONArray chopArr = jSONObject.getJSONArray("chops");
         for (int i = 0; i < chopArr.length(); ++i) {
             created.violationChops.add(ViolationChop.generateFromJsonObj(
@@ -458,4 +467,10 @@ public class ViolationsWrapper {
         }
         return false;
     }
+
+    public Collection<? extends IViolation<SecurityNode>> getUncheckedViolations() {
+        return uncheckedViolations;
+    }
+    
+    
 }

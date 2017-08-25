@@ -71,22 +71,9 @@ public class ViolationsSaverLoader {
         return created.toString();
     }
 
-    public static Collection<ClassifiedViolation> generateFromSaveString(String path, SDG sdg) throws FileNotFoundException, IOException {
+    public static Collection<ClassifiedViolation> generateFromJSON(JSONArray violationsArr, SDG sdg) {
         Collection<ClassifiedViolation> created = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new FileReader(path));
-        StringBuilder completeString = new StringBuilder();
-        completeString.append("{\n");
-        for (String line = br.readLine(); line != null; line = br.readLine()) {
-            if (line.trim().startsWith("//")) {
-                continue;
-            }
-            completeString.append(line + '\n');
-        }
-        completeString.append("}\n");
-
-        JSONObject jsonObj = new JSONObject(completeString.toString());
-        JSONArray violationsArr = jsonObj.getJSONArray("violations");
         for (int i = 0; i < violationsArr.length(); ++i) {
             JSONObject currentViolJsonObj = violationsArr.getJSONObject(i);
             int currentSourceId = currentViolJsonObj.getInt("source_id");

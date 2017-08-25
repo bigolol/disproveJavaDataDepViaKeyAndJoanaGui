@@ -13,8 +13,6 @@ import edu.kit.joana.ifc.sdg.graph.SDGNode;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 
 import edu.kit.joana.wala.core.CGConsumer;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,7 +138,6 @@ public class StateSaver implements CGConsumer {
     }
 
     public void generatePersistenseStructures(SDG sdg) {
-
         ArrayList<LocalPointerKey> localPointerKeys = new ArrayList<>();
 
         int id = 0;

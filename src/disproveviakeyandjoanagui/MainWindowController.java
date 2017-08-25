@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
@@ -69,6 +70,12 @@ public class MainWindowController implements Initializable {
     @FXML
     private MenuBar menuBarMain;
 
+    @FXML
+    private ListView<String> listViewUncheckedChops;
+
+    @FXML
+    private ListView<String> listViewUncheckedEdges;
+
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
     private Stage mainStage;
@@ -116,15 +123,19 @@ public class MainWindowController implements Initializable {
             //might be more trouble than its worth though...idk
             menuBarMain.setDisable(true);
             if (joakordispro.equals(projectFileEnding)) {
-                asyncBackgroundLoader.loadJoakFile(file, (newCheckData, worked) -> {
-                    if (worked) {
+                asyncBackgroundLoader.loadJoakFile(file, (newCheckData, succes) -> {
+                    if (succes) {
                         disproHandler.handleNewDispro(newCheckData);
+                    } else {
+                        menuBarMain.setDisable(false);
                     }
                 });
             } else if (joakordispro.equals(disprovingProgressFileEnding)) {
                 asyncBackgroundLoader.loadDisproFie(file, (dispro, succes) -> {
                     if (succes) {
                         disproHandler.handleNewDispro(dispro);
+                    } else {
+                        menuBarMain.setDisable(false);
                     }
                 });
             }
@@ -168,7 +179,11 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         actionLogger = new CurrentActionLogger(labelCurrentAction, progressIndicator);
         asyncBackgroundLoader = new AsyncBackgroundLoader(actionLogger);
-        disproHandler = new DisproHandler(actionLogger, labelProjName, labelSummaryEdge, labelSomeOtherData, menuBarMain);
+        disproHandler = new DisproHandler(
+                actionLogger, labelProjName, labelSummaryEdge,
+                labelSomeOtherData, menuBarMain,
+                listViewUncheckedEdges, listViewUncheckedChops);
+
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {
