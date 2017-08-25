@@ -47,13 +47,6 @@ public class DisprovingProjectTest {
             IOException, ClassHierarchyException, 
             GraphIntegrity.UnsoundGraphException,
             CancelException {
-        JoanaAndKeyCheckData parsedCheckData
-                = CombinedApproach.parseInputFile("testdata/multipleClassesArrFalsePos.joak");
-        DisprovingProject disprovingProject =
-                DisprovingProject.generateFromCheckdata(parsedCheckData);
-        disprovingProject.saveSDG();
-        String saveStr = disprovingProject.generateSaveString();
-        DisprovingProject generated = DisprovingProject.generateFromSavestring(saveStr);
     }
 
 }

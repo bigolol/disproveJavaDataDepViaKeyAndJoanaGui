@@ -40,6 +40,18 @@ public class DisprovingProject {
     private DisprovingProject() {
     }
 
+    public String getPathToSDG() {
+        return pathToSDG;
+    }
+
+    public String getPathToJar() {
+        return pathToJar;
+    }
+
+    public String getPathToJava() {
+        return pathToJava;
+    }
+
     public SDG getSdg() {
         return sdg;
     }
@@ -65,13 +77,16 @@ public class DisprovingProject {
         stringBuilder.append(value);
         stringBuilder.append("}\n");
     }
-    
+
+    public String getProjName() {
+        return pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
+    }
+
     public void saveSDG() throws FileNotFoundException {
         String saveStr = SDGSerializer.toPDGFormat(sdg);
-        String javaProjName = pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
-        String saveFilePos = "savedata/" + javaProjName + "/sdg.pdg";
+        String saveFilePos = "savedata/" + getProjName() + "/sdg.pdg";
         File f = new File(saveFilePos);
-        if(f.exists()) {
+        if (f.exists()) {
             f.delete();
         }
         f.getParentFile().mkdirs();
@@ -92,7 +107,7 @@ public class DisprovingProject {
         created.append(",\n");
         addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
         created.append(",\n");
-        addKeyValueToJsonStringbuilder(created, "violation_wrapper", 
+        addKeyValueToJsonStringbuilder(created, "violation_wrapper",
                 violationsWrapper.generateSaveString());
         created.append("}");
         System.out.println(created.toString());
@@ -127,10 +142,12 @@ public class DisprovingProject {
         disprovingProject.sdg = checkData.getAnalysis().getProgram().getSDG();
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(disprovingProject.pathToJar));
+        
+        checkData.addAnnotations();
         Collection<? extends IViolation<SecurityNode>> viols = checkData.getAnalysis().doIFC();
-        disprovingProject.violationsWrapper = 
-                new ViolationsWrapper(
-                        viols, disprovingProject.sdg, checkData.getAnalysis(), 
+        disprovingProject.violationsWrapper
+                = new ViolationsWrapper(
+                        viols, disprovingProject.sdg, checkData.getAnalysis(),
                         disprovingProject.callGraph);
         return disprovingProject;
     }

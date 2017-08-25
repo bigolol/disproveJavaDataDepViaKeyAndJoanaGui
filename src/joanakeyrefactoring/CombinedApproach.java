@@ -21,6 +21,7 @@ import edu.kit.joana.wala.core.SDGBuilder.ExceptionAnalysis;
 import edu.kit.joana.wala.core.SDGBuilder.FieldPropagation;
 import edu.kit.joana.wala.core.SDGBuilder.PointsToPrecision;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -81,9 +82,9 @@ public class CombinedApproach {
         });
     }
 
-    public static JoanaAndKeyCheckData parseInputFile(String filePath)
+    public static JoanaAndKeyCheckData parseInputFile(File filetoload)
             throws IOException, ClassHierarchyException, UnsoundGraphException, CancelException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        BufferedReader br = new BufferedReader(new FileReader(filetoload));
         StringBuilder completeString = new StringBuilder();
         completeString.append("{\n");
         for (String line = br.readLine(); line != null; line = br.readLine()) {

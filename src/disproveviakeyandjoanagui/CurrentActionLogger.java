@@ -20,8 +20,7 @@ public class CurrentActionLogger {
     public CurrentActionLogger(Label labelCurrentAction, ProgressIndicator progressIndicator) {
         this.labelCurrentAction = labelCurrentAction;
         this.progressIndicator = progressIndicator;
-        progressIndicator.setVisible(false);
-        labelCurrentAction.setText("");
+        endProgress();
     }
 
     public void startProgress(String msg) {

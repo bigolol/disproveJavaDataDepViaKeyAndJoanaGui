@@ -5,18 +5,26 @@
  */
 package disproveviakeyandjoanagui;
 
+import disproveviakeyandjoanagui.asynctaskhandler.AsyncBackgroundLoader;
+import disproveviakeyandjoanagui.asynctaskhandler.AsyncCreateDisproSaveStr;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import joanakeyrefactoring.persistence.DisprovingProject;
 
 /**
  *
@@ -54,17 +62,24 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ProgressIndicator progressIndicator;
-    //---------------------other fields---------------------------
 
+    @FXML
+    private AnchorPane anchorPaneMain;
+
+    @FXML
+    private MenuBar menuBarMain;
+
+    //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
     private Stage mainStage;
     private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
-
-    private JoakFileManager joakFileManager;
-    private DisproFileManager disproFileManager;
+    private AsyncBackgroundLoader asyncBackgroundLoader;
 
     final private String disprovingProgressFileEnding = "dispro";
     final private String projectFileEnding = "joak";
+
+    private DisproHandler disproHandler;
+    private AsyncCreateDisproSaveStr disproSaveStrCreator;
 
     private CurrentActionLogger actionLogger;
 
@@ -97,12 +112,52 @@ public class MainWindowController implements Initializable {
                     + "file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy",
                     ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
         } else {
+            //TODO: make only certain controll elements inactive, or handle user clicking in some other way
+            //might be more trouble than its worth though...idk
+            menuBarMain.setDisable(true);
             if (joakordispro.equals(projectFileEnding)) {
-                joakFileManager.handleJoakFileChanged(file);
+                asyncBackgroundLoader.loadJoakFile(file, (newCheckData, worked) -> {
+                    if (worked) {
+                        disproHandler.handleNewDispro(newCheckData);
+                    }
+                });
             } else if (joakordispro.equals(disprovingProgressFileEnding)) {
-                disproFileManager.handleNewDisproFile(file);
+                asyncBackgroundLoader.loadDisproFie(file, (dispro, succes) -> {
+                    if (succes) {
+                        disproHandler.handleNewDispro(dispro);
+                    }
+                });
             }
         }
+    }
+
+    private void saveDispro() {
+        DisprovingProject disprovingProject = disproHandler.getDisprovingProject();
+        disproSaveStrCreator.createSaveStr(disprovingProject, (String string, Boolean sucess) -> {
+            if (sucess) {
+                fileChooser.setTitle("please navigate to where to save this disproving project");
+                fileChooser.setSelectedExtensionFilter(
+                        new FileChooser.ExtensionFilter("Disprovingproject save file", ".dispro"));
+                File saveFile = fileChooser.showSaveDialog(mainStage);
+                if (saveFile == null) {
+                    ErrorLogger.logError(" no file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy",
+                            ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
+                } else {
+                    if (!saveFile.getName().endsWith(".dispro")) {
+                        saveFile = new File(saveFile.getAbsolutePath() + ".dispro");
+                    }
+                    FileWriter fileWriter;
+                    try {
+                        fileWriter = new FileWriter(saveFile);
+                        fileWriter.write(string);
+                        fileWriter.close();
+                    } catch (IOException ex) {
+                        ErrorLogger.logError("error while trying to write file to disk",
+                                ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK);
+                    }
+                }
+            }
+        });
     }
 
     public void setMainStage(Stage mainStage) {
@@ -112,13 +167,18 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         actionLogger = new CurrentActionLogger(labelCurrentAction, progressIndicator);
-        joakFileManager = new JoakFileManager(labelProjName, actionLogger);
+        asyncBackgroundLoader = new AsyncBackgroundLoader(actionLogger);
+        disproHandler = new DisproHandler(actionLogger, labelProjName, labelSummaryEdge, labelSomeOtherData, menuBarMain);
+        disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {
             tryLetUserChooseFileAndHandleResponse(projectFileEnding);
         });
         menuItemOpenDispro.setOnAction((event) -> {
             tryLetUserChooseFileAndHandleResponse(disprovingProgressFileEnding);
+        });
+        menuItemSaveProgress.setOnAction((event) -> {
+            saveDispro();
         });
     }
 

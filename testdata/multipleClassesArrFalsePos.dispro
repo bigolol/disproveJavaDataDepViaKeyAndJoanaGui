@@ -1,0 +1,77 @@
+{"path_to_jar" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar",
+"path_to_java_source" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src",
+"path_to_sdg" : "savedata/MultipleClassesFalsePos/sdg.pdg",
+"state_saver" : {"cgNodes" : [
+{"id" : 0, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 1, "cg_node_id" :0, "ir" : {
+"1" : "args"
+}},
+{"id" : 2, "cg_node_id" :0, "ir" : {
+
+}},
+{"id" : 3, "cg_node_id" :8, "ir" : {
+"1" : "this"
+}},
+{"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}},
+{"id" : 5, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 6, "cg_node_id" :11, "ir" : {
+"1" : "this"
+}},
+{"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}],
+"localPointerKeys" : [{"id" : 0, "value_number" : 1, "node" : 0
+},
+{"id" : 1, "value_number" : 1, "node" : 1
+},
+{"id" : 2, "value_number" : 1, "node" : 2
+},
+{"id" : 3, "value_number" : 1, "node" : 3
+},
+{"id" : 4, "value_number" : 1, "node" : 4
+},
+{"id" : 5, "value_number" : 1, "node" : 5
+},
+{"id" : 6, "value_number" : 1, "node" : 6
+},
+{"id" : 7, "value_number" : 1, "node" : 7
+}],
+"disjunctPointsTo" : []
+},
+"violation_wrapper" : {
+"chops" : [
+{
+"src" : 11,
+"sink" : 12,
+"nodes_in_chop" : [
+129,
+193,
+66,
+131,
+164,
+133,
+168,
+170,
+11,
+12,
+205,
+126,
+63]
+}],
+"summary_edges_sorted" : [
+{"src" : 11, "sink" : 12},
+{"src" : 126, "sink" : 205}],
+"summary_edges_methods": [
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"},
+{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"}],"summary_edges_chops" : [
+{"pos" :0, "chops" : [
+{"src" : 11, "sink" : 12}]},
+{"pos" :1, "chops" : [
+{"src" : 11, "sink" : 12}]}]
+}}
