@@ -18,6 +18,6 @@ public class LoopInvariantFromUserGetter {
         Stage stage = new Stage();
         stage.setTitle("Please Please PLEASE gimme a loop invariant :D");
         stage.setAlwaysOnTop(true);
-        javaCodeEditor.showEditorArea(stage, "");
+        //javaCodeEditor.showEditorArea(stage, "");
     }
 }

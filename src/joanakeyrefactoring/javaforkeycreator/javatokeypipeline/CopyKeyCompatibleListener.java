@@ -30,7 +30,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * @author holger
  */
 public class CopyKeyCompatibleListener extends Java8BaseListener implements JavaToKeyPipelineStage {
-
+    
     private StringBuilder currentlyGenerated;
     private List<String> keyCompatibleJavaFeature = new ArrayList<>();
     private List<String> classCodeAsLines = new ArrayList<>();
@@ -38,7 +38,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
     private String mainPackageName;
     private String packageOfClass;
     Set<StaticCGJavaMethod> neededMethods;
-
+    
     public CopyKeyCompatibleListener(String mainPackageName) throws FileNotFoundException, IOException {
         InputStream is = new FileInputStream("dep/JAVALANG.txt");
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
@@ -50,7 +50,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         }
         buf.close();
     }
-
+    
     private List<String> getPossiblePackagesForType(String type) {
         List<String> created = new ArrayList<>();
         for (String currentImport : importStatements) {
@@ -60,7 +60,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
                 created.add(currentImport);
             }
         }
-
+        
         if (created.isEmpty()) {
             created.add(packageOfClass + "." + type);
             for (String currentImport : importStatements) {
@@ -69,13 +69,13 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
                 }
             }
         }
-
+        
         return created;
     }
-
+    
     private boolean isTypeKeyCompatible(String type) {
         List<String> possiblePackagesForType = getPossiblePackagesForType(type);
-
+        
         if (possiblePackagesForType.size() == 1) {
             if (isImportKeyCompatible(possiblePackagesForType.get(0))) {
                 return true;
@@ -90,7 +90,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         }
         return false;
     }
-
+    
     private boolean isImportKeyCompatible(String importStmt) {
         int firstDot = importStmt.indexOf(".");
         String mainPackageOfImportStmt = importStmt.substring(0, firstDot);
@@ -104,20 +104,20 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         }
         return false;
     }
-
+    
     @Override
     public void enterConstructorDeclaration(Java8Parser.ConstructorDeclarationContext ctx) {
         if (isCtorNecessary(ctx)) {
-            currentlyGenerated.append(extractStringInBetween(ctx)).append("\n");
+            currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append("\n");
         }
     }
-
+    
     private boolean isCtorNecessary(Java8Parser.ConstructorDeclarationContext ctx) {
         String id = "<init>";
         String args = GetMethodBodyListener.getArgTypeString(ctx.constructorDeclarator().formalParameterList());
         return isMethodNeeded(id, args);
     }
-
+    
     private boolean isMethodNeeded(String methodId, String args) {
         for (StaticCGJavaMethod m : neededMethods) {
             if (m.getId().equals(methodId) && m.getParameterWithoutPackage().equals(args)) {
@@ -126,7 +126,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         }
         return false;
     }
-
+    
     @Override
     public void enterClassDeclaration(Java8Parser.ClassDeclarationContext ctx) {
         String classDecl = "";
@@ -139,18 +139,18 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         classDecl += identifier;
         currentlyGenerated.append(classDecl).append("{\n");
     }
-
+    
     @Override
     public void exitClassDeclaration(Java8Parser.ClassDeclarationContext ctx) {
         currentlyGenerated.append("}\n");
     }
-
-    private String extractStringInBetween(ParserRuleContext ctx) {
+    
+    public static String extractStringInBetween(ParserRuleContext ctx, List<String> classCodeAsLines) {
         int startLine = ctx.getStart().getLine();
         int startCharPositionInLine = ctx.getStart().getCharPositionInLine();
         int stopLine = ctx.getStop().getLine();
         int stopCharPositionInLine = ctx.getStop().getCharPositionInLine();
-
+        
         String s = "";
         if (startLine == stopLine) {
             return classCodeAsLines.get(startLine - 1).substring(startCharPositionInLine, stopCharPositionInLine);
@@ -164,10 +164,10 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
                 s += classCodeAsLines.get(i) + '\n';
             }
         }
-
+        
         return s;
     }
-
+    
     @Override
     public void enterPackageDeclaration(Java8Parser.PackageDeclarationContext ctx) {
         List<TerminalNode> Identifier = ctx.Identifier();
@@ -176,18 +176,18 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
             packageOfClass += n.getText() + ".";
         }
         packageOfClass = packageOfClass.substring(0, packageOfClass.length() - 1);
-        currentlyGenerated.append(extractStringInBetween(ctx)).append(";\n");
+        currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
     }
-
+    
     @Override
     public void enterImportDeclaration(Java8Parser.ImportDeclarationContext ctx) {
         String importStmt = ctx.getText().substring("import".length(), ctx.getText().length() - 1);
         importStatements.add(importStmt);
         if (isImportKeyCompatible(importStmt)) {
-            currentlyGenerated.append(extractStringInBetween(ctx)).append(";\n");
+            currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
         }
     }
-
+    
     @Override
     public void enterFieldDeclaration(Java8Parser.FieldDeclarationContext ctx) {
         String type = ctx.unannType().getText();
@@ -200,23 +200,23 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
             List<Java8Parser.FieldModifierContext> fieldModifier = ctx.fieldModifier();
             for (Java8Parser.FieldModifierContext currentMod : fieldModifier) {
                 if (currentMod.getText().equals("public")) {
-                    currentlyGenerated.append(extractStringInBetween(ctx)).append(";\n");
+                    currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
                     return;
                 }
             }
             currentlyGenerated
                     //.append("/*@spec_pub@*/")
-                    .append(extractStringInBetween(ctx)).append(";\n");
+                    .append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
         }
     }
-
+    
     @Override
     public void enterMethodDeclaration(Java8Parser.MethodDeclarationContext ctx) {
         if (methodIsNeeded(ctx)) {
-            currentlyGenerated.append(extractStringInBetween(ctx)).append('\n');
+            currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append('\n');
         }
     }
-
+    
     private boolean methodIsNeeded(Java8Parser.MethodDeclarationContext ctx) {
         String id = ctx.methodHeader().methodDeclarator().Identifier().getText();
         String args = GetMethodBodyListener.getArgTypeString(ctx.methodHeader().methodDeclarator().formalParameterList());
@@ -228,19 +228,19 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         classCodeAsLines = new ArrayList<>();
         importStatements = new ArrayList<>();
         this.neededMethods = neededMethods;
-
+        
         String[] split = classCode.split("\n");
         for (int i = 0; i < split.length; i++) {
             String string = split[i];
             classCodeAsLines.add(string);
         }
-
+        
         Java8Lexer java8Lexer = new Java8Lexer(new ANTLRInputStream(classCode));
         Java8Parser java8Parser = new Java8Parser(new CommonTokenStream(java8Lexer));
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(this, java8Parser.compilationUnit());
-
+        
         return currentlyGenerated.toString();
     }
-
+    
 }

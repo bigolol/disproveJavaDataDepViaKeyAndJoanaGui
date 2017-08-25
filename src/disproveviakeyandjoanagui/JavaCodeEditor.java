@@ -9,10 +9,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
@@ -20,7 +19,6 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.demo.JavaKeywordsAsync;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
-
 
 /**
  *
@@ -60,22 +58,18 @@ public class JavaCodeEditor {
             + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    public void showEditorArea(Stage stageToShowOn, String codeAlreadyDisplayed) {
+    public CodeArea getCodeArea() {
         CodeArea codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-        codeArea.richChanges()                
+        codeArea.richChanges()
                 .filter(ch -> !ch.getInserted().equals(ch.getRemoved())) // XXX
                 .subscribe(change -> {
                     codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText()));
                 });
-        codeArea.replaceText(0, 0, codeAlreadyDisplayed);
-
-        Scene scene = new Scene(new StackPane(new VirtualizedScrollPane(codeArea)), 600, 400);
-        scene.getStylesheets().add(JavaKeywordsAsync.class.getResource("java-keywords.css").toExternalForm());
-        stageToShowOn.setScene(scene);
-        stageToShowOn.show();
-    }
+        codeArea.getStylesheets().add(JavaKeywordsAsync.class.getResource("java-keywords.css").toExternalForm());
+        return codeArea;
+    }    
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
         Matcher matcher = PATTERN.matcher(text);

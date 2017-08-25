@@ -75,12 +75,18 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ListView<String> listViewUncheckedEdges;
-    
+
     @FXML
     private ListView<String> listViewLoopsOfSE;
-    
+
     @FXML
     private ListView<String> listViewCalledMethodsOfSE;
+
+    @FXML
+    private AnchorPane anchorPaneMethodCode;
+
+    @FXML
+    private AnchorPane anchorPaneLoopInvariant;
 
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
@@ -186,15 +192,17 @@ public class MainWindowController implements Initializable {
         actionLogger = new CurrentActionLogger(labelCurrentAction, progressIndicator);
         asyncBackgroundLoader = new AsyncBackgroundLoader(actionLogger);
         disproHandler = new DisproHandler(
-                actionLogger, 
+                actionLogger,
                 labelProjName,
-                labelSummaryEdge, 
+                labelSummaryEdge,
                 labelSomeOtherData,
-                menuBarMain, 
-                listViewUncheckedEdges, 
-                listViewUncheckedChops, 
-                listViewCalledMethodsOfSE, 
-                listViewLoopsOfSE);
+                menuBarMain,
+                listViewUncheckedEdges,
+                listViewUncheckedChops,
+                listViewCalledMethodsOfSE,
+                listViewLoopsOfSE,
+                anchorPaneMethodCode,
+                anchorPaneLoopInvariant);
 
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 

@@ -10,7 +10,8 @@ package joanakeyrefactoring.javaforkeycreator;
  * @author holger
  */
 public class LoopInvariantGenerator {
-     /**
+
+    /**
      * Creates loop invariants. Is not complete and only fills the determines
      * clause.
      *
@@ -46,5 +47,11 @@ public class LoopInvariantGenerator {
         loopInvariant = sb.toString();
 
         return loopInvariant;
+    }
+
+    public static String getTemplate() {
+        String header = "/*@ loop_invariant \n";
+        String decreases = "@ decreases */";
+        return header + decreases;
     }
 }

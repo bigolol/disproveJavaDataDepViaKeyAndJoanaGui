@@ -1,12 +1,15 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package joanakeyrefactoring.staticCG.javamodel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
+import joanakeyrefactoring.javaforkeycreator.LoopInvariantGenerator;
 import org.antlr.v4.runtime.misc.OrderedHashSet;
 
 /**
@@ -23,7 +26,10 @@ public class StaticCGJavaMethod {
     private String returnType;
     private Set<StaticCGJavaMethod> calledFunctionsRec;
     private String mostGeneralContract;
-    
+    private ArrayList<Integer> relPosOfLoops = new ArrayList<>();
+    private ArrayList<String> loopInvariants = new ArrayList<>();
+    private String methodBody;
+
     public StaticCGJavaMethod(
             StaticCGJavaClass containingClass,
             String id, String parameterTypes,
@@ -42,15 +48,14 @@ public class StaticCGJavaMethod {
     public void setCalledFunctionsRec(Set<StaticCGJavaMethod> calledFunctionsRec) {
         this.calledFunctionsRec = calledFunctionsRec;
     }
-    
+
     public boolean callsFunction(StaticCGJavaMethod m) {
-        return calledFunctionsRec.contains(m);  
+        return calledFunctionsRec.contains(m);
     }
 
     public Set<StaticCGJavaMethod> getCalledFunctionsRec() {
         return calledFunctionsRec;
     }
-      
 
     public String getReturnType() {
         return returnType;
@@ -83,7 +88,7 @@ public class StaticCGJavaMethod {
             int lastIndexOfDot = seperatedByComma[i].lastIndexOf(".");
             created += seperatedByComma[i].substring(lastIndexOfDot + 1, seperatedByComma[i].length()) + ",";
         }
-        if(!created.isEmpty()) {
+        if (!created.isEmpty()) {
             created = created.substring(0, created.length() - 1);
         }
         return created;
@@ -132,9 +137,41 @@ public class StaticCGJavaMethod {
 
     @Override
     public String toString() {
-        return containingClass.getId() + "." + getId() + "(" + getParameterWithoutPackage() +") -> " + returnType;
+        return containingClass.getId() + "." + getId() + "(" + getParameterWithoutPackage() + ") -> " + returnType;
+    }
+
+    public void addRelativeLoopLinePos(int pos) {
+        relPosOfLoops.add(pos);
+        loopInvariants.add(LoopInvariantGenerator.getTemplate());
+    }
+
+    public String getMethodBody() {
+        return methodBody;
+    }
+
+    public ArrayList<Integer> getRelPosOfLoops() {
+        return relPosOfLoops;
+    }
+
+    public void setMethodBody(String methodBody) {
+        this.methodBody = methodBody;
     }
     
-    
+    public void addLoopInvariant(int relPos, String text) {
+        for(int i = 0; i < relPosOfLoops.size(); ++i) {
+            if(relPosOfLoops.get(i) == relPos) {
+                loopInvariants.add(i, text);
+                return;
+            }
+        }
+    }
 
+    public String getLoopInvariant(int relPos) {
+        for(int i = 0; i < relPosOfLoops.size(); ++i) {
+            if(relPosOfLoops.get(i) == relPos) {
+                return loopInvariants.get(i);
+            }
+        }
+        return null;
+    }
 }

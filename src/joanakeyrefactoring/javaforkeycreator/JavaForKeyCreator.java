@@ -51,6 +51,11 @@ public class JavaForKeyCreator {
 
     }
 
+    public static String getPathToJavaClassFile(String pathToSource, StaticCGJavaClass javaClass) {
+        return pathToSource + JavaProjectCopyHandler.getRelPathForJavaClass(javaClass) +
+                javaClass.getOnlyClassName() + ".java";
+    }
+
     public String generateJavaForFormalNodeTuple(
             SDGNodeTuple formalNodeTuple,
             StaticCGJavaMethod methodCorresToSE) throws IOException {
@@ -143,8 +148,8 @@ public class JavaForKeyCreator {
 
         SDGNode currentStructSource = incomingParamStructEdges.get(0).getSource();
         for (SDGEdge e : incomingParamStructEdges) {
-            if (!e.getSource().getBytecodeName().startsWith("<") || 
-                    e.getSource().getBytecodeName().startsWith("<param>")) {
+            if (!e.getSource().getBytecodeName().startsWith("<")
+                    || e.getSource().getBytecodeName().startsWith("<param>")) {
                 currentStructSource = e.getSource();
                 break;
             }

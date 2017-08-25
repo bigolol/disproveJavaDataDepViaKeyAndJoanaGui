@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.loopinvarianthandling.LoopInvariants;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -36,6 +37,7 @@ public class DisprovingProject {
     private JCallGraph callGraph;
     private ViolationsWrapper violationsWrapper;
     private SDG sdg;
+    private LoopInvariants loopInvariants;
 
     private DisprovingProject() {
     }
@@ -131,6 +133,12 @@ public class DisprovingProject {
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
+
+        disprovingProject.loopInvariants = new LoopInvariants();
+        disprovingProject.loopInvariants.findAllLoopPositions(
+                disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
+                pathToJava);
+
         return disprovingProject;
     }
 
@@ -150,6 +158,12 @@ public class DisprovingProject {
                 = new ViolationsWrapper(
                         viols, disprovingProject.sdg, checkData.getAnalysis(),
                         disprovingProject.callGraph);
+
+        disprovingProject.loopInvariants = new LoopInvariants();
+        disprovingProject.loopInvariants.findAllLoopPositions(
+                disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
+                disprovingProject.pathToJava);
+
         return disprovingProject;
     }
 

@@ -15,10 +15,12 @@ import java.util.Map;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
+import org.fxmisc.richtext.CodeArea;
 
 /**
  *
@@ -30,6 +32,9 @@ public class DisproHandler {
     private DisprovingProject disprovingProject;
     private ViolationsWrapper violationsWrapper;
 
+    private CodeArea methodCodeArea;
+    private CodeArea loopInvariantCodeArea;
+
     private Label labelProjName;
     private Label labelSummaryEdge;
     private Label labelSomeOtherData;
@@ -40,8 +45,12 @@ public class DisproHandler {
     private ListView<String> listViewCalledMethodsInSE;
     private ListView<String> listViewLoopsInSE;
 
+    private AnchorPane anchorPaneMethodCode;
+    private AnchorPane anchorPaneLoopInvariant;
+
     private Map<Integer, SDGEdge> itemIndexToSummaryEdge = new HashMap<>();
-    
+    private StaticCGJavaMethod currentSelectedMethod;
+
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
             Label labelProjName,
@@ -51,7 +60,9 @@ public class DisproHandler {
             ListView<String> listViewUncheckedEdges,
             ListView<String> listViewUncheckedChops,
             ListView<String> listViewCalledMethodsInSE,
-            ListView<String> listViewLoopsInSE) {
+            ListView<String> listViewLoopsInSE,
+            AnchorPane anchorPaneMethodCode,
+            AnchorPane anchorPaneLoopInvariant) {
         backgroundDisproCreator = new AsyncBackgroundDisproCreator(currentActionLogger);
         this.labelProjName = labelProjName;
         this.labelSummaryEdge = labelSummaryEdge;
@@ -61,10 +72,25 @@ public class DisproHandler {
         this.listViewSummaryEdges = listViewUncheckedEdges;
         this.listViewCalledMethodsInSE = listViewCalledMethodsInSE;
         this.listViewLoopsInSE = listViewLoopsInSE;
-
+        this.anchorPaneMethodCode = anchorPaneMethodCode;
+        this.anchorPaneLoopInvariant = anchorPaneLoopInvariant;
+        JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
+        methodCodeArea = javaCodeEditor.getCodeArea();
+        addCodeAreaToAnchorPane(methodCodeArea, anchorPaneMethodCode);
+        loopInvariantCodeArea = javaCodeEditor.getCodeArea();
+        addCodeAreaToAnchorPane(loopInvariantCodeArea, this.anchorPaneLoopInvariant);
+        
         labelProjName.setText("");
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
+    }
+
+    private void addCodeAreaToAnchorPane(CodeArea codeArea, AnchorPane anchorPane) {
+        anchorPane.getChildren().add(codeArea);
+        anchorPane.setTopAnchor(codeArea, 0.0);
+        anchorPane.setRightAnchor(codeArea, 0.0);
+        anchorPane.setBottomAnchor(codeArea, 0.0);
+        anchorPane.setLeftAnchor(codeArea, 0.0);
     }
 
     public DisprovingProject getDisprovingProject() {
@@ -95,7 +121,7 @@ public class DisproHandler {
         listViewUncheckedChops.getItems().clear();
         listViewCalledMethodsInSE.getItems().clear();
         listViewLoopsInSE.getItems().clear();
-        
+
         itemIndexToSummaryEdge = new HashMap<>();
 
         Collection<? extends IViolation<SecurityNode>> uncheckedViolations = violationsWrapper.getUncheckedViolations();
@@ -107,19 +133,36 @@ public class DisproHandler {
 
         int i = 0;
         for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
-            listViewSummaryEdges.getItems().add(e.toString() + " " +
-                    summaryEdgesAndCorresJavaMethods.get(e).toString());
+            listViewSummaryEdges.getItems().add(e.toString() + " "
+                    + summaryEdgesAndCorresJavaMethods.get(e).toString());
             itemIndexToSummaryEdge.put(i++, e);
         }
-        
+
         listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             SDGEdge e = itemIndexToSummaryEdge.get(newValue);
             listViewCalledMethodsInSE.getItems().clear();
-            for(StaticCGJavaMethod m : summaryEdgesAndCorresJavaMethods.get(e).getCalledFunctionsRec()) {
+            listViewLoopsInSE.getItems().clear();
+
+            currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(e);
+            String methodBody = currentSelectedMethod.getMethodBody();
+
+            methodCodeArea.replaceText(0, methodCodeArea.getText().length(), methodBody);
+
+            for (int relPos : currentSelectedMethod.getRelPosOfLoops()) {
+                listViewLoopsInSE.getItems().add(String.valueOf(relPos));
+            }
+
+            for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
                 listViewCalledMethodsInSE.getItems().add(m.toString());
             }
         });
-     
-        
+
+        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            loopInvariantCodeArea.replaceText(
+                    0, 
+                    loopInvariantCodeArea.getText().length(), 
+                    currentSelectedMethod.getLoopInvariant(Integer.valueOf(newValue)));
+        });
+
     }
 }
