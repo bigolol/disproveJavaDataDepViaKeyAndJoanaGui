@@ -129,7 +129,6 @@ public class DisprovingProject {
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj);
-        disprovingProject.stateSaver.generatePersistenseStructures(disprovingProject.sdg);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
         return disprovingProject;
@@ -143,7 +142,8 @@ public class DisprovingProject {
         disprovingProject.sdg = checkData.getAnalysis().getProgram().getSDG();
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(disprovingProject.pathToJar));
-        
+        disprovingProject.stateSaver.generatePersistenseStructures(disprovingProject.sdg);
+
         checkData.addAnnotations();
         Collection<? extends IViolation<SecurityNode>> viols = checkData.getAnalysis().doIFC();
         disprovingProject.violationsWrapper

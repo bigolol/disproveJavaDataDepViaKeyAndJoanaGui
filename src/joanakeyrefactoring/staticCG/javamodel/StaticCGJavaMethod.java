@@ -129,6 +129,12 @@ public class StaticCGJavaMethod {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return containingClass.getId() + "." + getId() + "(" + getParameterWithoutPackage() +") -> " + returnType;
+    }
+    
     
 
 }

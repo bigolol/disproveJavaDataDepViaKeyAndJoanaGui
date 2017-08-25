@@ -471,6 +471,15 @@ public class ViolationsWrapper {
     public Collection<? extends IViolation<SecurityNode>> getUncheckedViolations() {
         return uncheckedViolations;
     }
+
+    public Map<SDGEdge, ArrayList<ViolationChop>> getSummaryEdgesAndContainingChops() {
+        return summaryEdgesAndContainingChops;
+    }
+
+    public Map<SDGEdge, StaticCGJavaMethod> getSummaryEdgesAndCorresJavaMethods() {
+        return summaryEdgesAndCorresJavaMethods;
+    }
+    
     
     
 }

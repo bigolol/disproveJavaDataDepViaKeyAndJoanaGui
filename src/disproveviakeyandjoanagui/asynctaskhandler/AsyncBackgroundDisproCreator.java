@@ -44,6 +44,7 @@ public class AsyncBackgroundDisproCreator implements Runnable {
             disprovingProject = DisprovingProject.generateFromCheckdata(checkData);
             loadingWorked = true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             ErrorLogger.logError("could not create dispro proj from joak file for some reason", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
         }
         Platform.runLater(() -> {

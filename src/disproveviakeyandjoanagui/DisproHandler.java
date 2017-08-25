@@ -8,14 +8,17 @@ package disproveviakeyandjoanagui;
 import disproveviakeyandjoanagui.asynctaskhandler.AsyncBackgroundDisproCreator;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
+import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import java.util.Collection;
-import javafx.fxml.FXML;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.persistence.DisprovingProject;
+import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 
 /**
  *
@@ -32,9 +35,13 @@ public class DisproHandler {
     private Label labelSomeOtherData;
     private MenuBar mainMenu;
 
-    private ListView<String> listViewUncheckedEdges;
+    private ListView<String> listViewSummaryEdges;
     private ListView<String> listViewUncheckedChops;
+    private ListView<String> listViewCalledMethodsInSE;
+    private ListView<String> listViewLoopsInSE;
 
+    private Map<Integer, SDGEdge> itemIndexToSummaryEdge = new HashMap<>();
+    
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
             Label labelProjName,
@@ -42,15 +49,19 @@ public class DisproHandler {
             Label labelSomeOtherData,
             MenuBar mainMenu,
             ListView<String> listViewUncheckedEdges,
-            ListView<String> listViewUncheckedChops) {
+            ListView<String> listViewUncheckedChops,
+            ListView<String> listViewCalledMethodsInSE,
+            ListView<String> listViewLoopsInSE) {
         backgroundDisproCreator = new AsyncBackgroundDisproCreator(currentActionLogger);
         this.labelProjName = labelProjName;
         this.labelSummaryEdge = labelSummaryEdge;
         this.labelSomeOtherData = labelSomeOtherData;
         this.mainMenu = mainMenu;
         this.listViewUncheckedChops = listViewUncheckedChops;
-        this.listViewUncheckedEdges = listViewUncheckedEdges;
-        
+        this.listViewSummaryEdges = listViewUncheckedEdges;
+        this.listViewCalledMethodsInSE = listViewCalledMethodsInSE;
+        this.listViewLoopsInSE = listViewLoopsInSE;
+
         labelProjName.setText("");
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
@@ -79,10 +90,36 @@ public class DisproHandler {
     private void handleNewDisproSet() {
         labelProjName.setText(disprovingProject.getProjName());
         violationsWrapper = disprovingProject.getViolationsWrapper();
+
+        listViewSummaryEdges.getItems().clear();
+        listViewUncheckedChops.getItems().clear();
+        listViewCalledMethodsInSE.getItems().clear();
+        listViewLoopsInSE.getItems().clear();
         
+        itemIndexToSummaryEdge = new HashMap<>();
+
         Collection<? extends IViolation<SecurityNode>> uncheckedViolations = violationsWrapper.getUncheckedViolations();
-        for(IViolation<SecurityNode> v : uncheckedViolations) {
+        for (IViolation<SecurityNode> v : uncheckedViolations) {
             listViewUncheckedChops.getItems().add(v.toString());
-        }       
+        }
+
+        Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
+
+        int i = 0;
+        for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
+            listViewSummaryEdges.getItems().add(e.toString() + " " +
+                    summaryEdgesAndCorresJavaMethods.get(e).toString());
+            itemIndexToSummaryEdge.put(i++, e);
+        }
+        
+        listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            SDGEdge e = itemIndexToSummaryEdge.get(newValue);
+            listViewCalledMethodsInSE.getItems().clear();
+            for(StaticCGJavaMethod m : summaryEdgesAndCorresJavaMethods.get(e).getCalledFunctionsRec()) {
+                listViewCalledMethodsInSE.getItems().add(m.toString());
+            }
+        });
+     
+        
     }
 }
