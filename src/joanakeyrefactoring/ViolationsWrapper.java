@@ -61,7 +61,7 @@ public class ViolationsWrapper {
         this.callGraph = callGraph;
         this.ana = ana;
 
-        InputStream is = new FileInputStream("dep/JAVALANG.txt");
+        InputStream is = new FileInputStream("otherdata/JAVALANG.txt");
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
         while (line != null) {
@@ -75,14 +75,16 @@ public class ViolationsWrapper {
     public String generateSaveString() {
         StringBuilder created = new StringBuilder();
         created.append("{").append(System.lineSeparator());
-        created.append("\"chops\" : [").append(System.lineSeparator());
         int lengthOfLineSep = System.lineSeparator().length();
+        created.append("\"chops\" : [").append(System.lineSeparator());
         for (ViolationChop vc : violationChops) {
             created.append(vc.generateSaveString())
                     .append(",")
                     .append(System.lineSeparator());
         }
-        if (created.lastIndexOf("[") != created.length() - 1) {
+        int length = created.length();
+        int lastIndexOf = created.lastIndexOf("[");
+        if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
             created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
         }
         created.append("],").append(System.lineSeparator());
@@ -96,20 +98,15 @@ public class ViolationsWrapper {
 
             if (srcId == 14724 && sinkId == 49581) {
                 SDGEdge foundEdge = sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
-                System.out.println("wuat");
             }
 
             SDGEdge foundEdge = sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
-
-            if (!e.equals(foundEdge)) {
-                System.out.println("edge doesnt equal found edge: " + e.toString());
-            }
 
             created.append("\"src\" : ").append(srcId);
             created.append(", \"sink\" : ").append(sinkId);
             created.append("},").append(System.lineSeparator());
         }
-        if (created.lastIndexOf("[") != created.length() - 1) {
+        if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
             created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
         }
         created.append("],").append(System.lineSeparator());
@@ -129,7 +126,7 @@ public class ViolationsWrapper {
                     .append("\"");
             created.append("},").append(System.lineSeparator());
         }
-        if (created.lastIndexOf("[") != created.length() - 1) {
+        if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
             created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
         }
         created.append("],");
@@ -146,14 +143,14 @@ public class ViolationsWrapper {
                 created.append(", \"sink\" : ").append(vc.getViolationSink().getId());
                 created.append("},").append(System.lineSeparator());
             }
-            if (created.lastIndexOf("[") != created.length() - 1) {
+            if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
                 created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
             }
             created.append("]");
 
             created.append("},").append(System.lineSeparator());
         }
-        if (created.lastIndexOf("[") != created.length() - 1) {
+        if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
             created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
         }
         created.append("]").append(System.lineSeparator());
@@ -444,7 +441,7 @@ public class ViolationsWrapper {
         for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
             if (!summaryEdgesAndCorresJavaMethods.get(e).equals(
                     other.summaryEdgesAndCorresJavaMethods.get(e))) {
-                return false;    
+                return false;
             }
 
         }

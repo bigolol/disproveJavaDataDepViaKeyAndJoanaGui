@@ -5,10 +5,18 @@
  */
 package joanakeyrefactoring.persistence;
 
+import edu.kit.joana.api.sdg.SDGProgram;
+import edu.kit.joana.ifc.sdg.core.SecurityNode;
+import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.graph.SDG;
+import edu.kit.joana.ifc.sdg.graph.SDGSerializer;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -51,11 +59,26 @@ public class DisprovingProject {
     private void addKeyValueToJsonStringbuilder(StringBuilder stringBuilder, String key, String value) {
         stringBuilder.append("\"" + key + "\" : " + value);
     }
-    
+
     private void addJsonObjValueToStringBuiler(StringBuilder stringBuilder, String key, String value) {
         stringBuilder.append("\"" + key + "\" : {\n");
         stringBuilder.append(value);
         stringBuilder.append("}\n");
+    }
+    
+    public void saveSDG() throws FileNotFoundException {
+        String saveStr = SDGSerializer.toPDGFormat(sdg);
+        String javaProjName = pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
+        String saveFilePos = "savedata/" + javaProjName + "/sdg.pdg";
+        File f = new File(saveFilePos);
+        if(f.exists()) {
+            f.delete();
+        }
+        f.getParentFile().mkdirs();
+        PrintWriter out = new PrintWriter(f);
+        out.write(saveStr);
+        out.close();
+        pathToSDG = saveFilePos;
     }
 
     public String generateSaveString() {
@@ -67,13 +90,14 @@ public class DisprovingProject {
         created.append(",\n");
         addJsonStringToStringBuilder(created, "path_to_sdg", pathToSDG);
         created.append(",\n");
-        addJsonObjValueToStringBuiler(created, "state_saver", stateSaver.getSaveString());
+        addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
         created.append(",\n");
-        addJsonObjValueToStringBuiler(created, "violation_wrapper", violationsWrapper.generateSaveString());
+        addKeyValueToJsonStringbuilder(created, "violation_wrapper", 
+                violationsWrapper.generateSaveString());
         created.append("}");
+        System.out.println(created.toString());
         return created.toString();
     }
-    
 
     public static DisprovingProject generateFromSavestring(String s) throws IOException {
         DisprovingProject disprovingProject = new DisprovingProject();
@@ -86,12 +110,28 @@ public class DisprovingProject {
         disprovingProject.pathToJava = pathToJava;
         disprovingProject.pathToSDG = pathToSdg;
         disprovingProject.pathToJar = pathToJar;
-        disprovingProject.sdg = SDG.readFrom(FileUtils.readFileToString(new File(pathToSdg),  Charset.defaultCharset()));
+        disprovingProject.sdg = SDGProgram.loadSDG(pathToSdg).getSDG();
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
+        return disprovingProject;
+    }
+
+    public static DisprovingProject generateFromCheckdata(JoanaAndKeyCheckData checkData) throws IOException {
+        DisprovingProject disprovingProject = new DisprovingProject();
+        disprovingProject.pathToJar = checkData.getPathToJar();
+        disprovingProject.pathToJava = checkData.getPathToJavaFile();
+        disprovingProject.stateSaver = checkData.getStateSaver();
+        disprovingProject.sdg = checkData.getAnalysis().getProgram().getSDG();
+        disprovingProject.callGraph = new JCallGraph();
+        disprovingProject.callGraph.generateCG(new File(disprovingProject.pathToJar));
+        Collection<? extends IViolation<SecurityNode>> viols = checkData.getAnalysis().doIFC();
+        disprovingProject.violationsWrapper = 
+                new ViolationsWrapper(
+                        viols, disprovingProject.sdg, checkData.getAnalysis(), 
+                        disprovingProject.callGraph);
         return disprovingProject;
     }
 

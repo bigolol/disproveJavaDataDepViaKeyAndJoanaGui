@@ -86,6 +86,7 @@ public class StateSaver implements CGConsumer {
 
     public String getSaveString() {
         StringBuilder created = new StringBuilder();
+        created.append("{");
         created.append("\"cgNodes\" : [").append('\n');
         for (PersistentCGNode persistentCGNode : persistentCGNodes) {
             created.append("{");
@@ -126,7 +127,7 @@ public class StateSaver implements CGConsumer {
             created.replace(created.length() - 2, created.length(), "");
         }
         created.append("]\n");
-
+        created.append("}");
         return created.toString();
     }
 
