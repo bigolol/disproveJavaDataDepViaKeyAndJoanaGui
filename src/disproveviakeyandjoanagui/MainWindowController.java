@@ -12,10 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
@@ -87,6 +86,12 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private AnchorPane anchorPaneLoopInvariant;
+
+    @FXML
+    private Button buttonSaveLoopInvariant;
+
+    @FXML
+    private Button buttonResetLoopInvariant;
 
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
@@ -202,7 +207,9 @@ public class MainWindowController implements Initializable {
                 listViewCalledMethodsOfSE,
                 listViewLoopsOfSE,
                 anchorPaneMethodCode,
-                anchorPaneLoopInvariant);
+                anchorPaneLoopInvariant,
+                buttonSaveLoopInvariant,
+                buttonResetLoopInvariant);
 
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 

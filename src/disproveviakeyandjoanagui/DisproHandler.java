@@ -12,12 +12,17 @@ import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.ViolationsWrapper;
+import joanakeyrefactoring.javaforkeycreator.LoopInvariantGenerator;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.fxmisc.richtext.CodeArea;
@@ -39,6 +44,9 @@ public class DisproHandler {
     private Label labelSummaryEdge;
     private Label labelSomeOtherData;
     private MenuBar mainMenu;
+
+    private Button buttonSaveLoopInvariant;
+    private Button buttonResetLoopInvariant;
 
     private ListView<String> listViewSummaryEdges;
     private ListView<String> listViewUncheckedChops;
@@ -62,7 +70,9 @@ public class DisproHandler {
             ListView<String> listViewCalledMethodsInSE,
             ListView<String> listViewLoopsInSE,
             AnchorPane anchorPaneMethodCode,
-            AnchorPane anchorPaneLoopInvariant) {
+            AnchorPane anchorPaneLoopInvariant,
+            Button buttonSaveLoopInvariant,
+            Button buttonResetLoopInvariant) {
         backgroundDisproCreator = new AsyncBackgroundDisproCreator(currentActionLogger);
         this.labelProjName = labelProjName;
         this.labelSummaryEdge = labelSummaryEdge;
@@ -74,12 +84,17 @@ public class DisproHandler {
         this.listViewLoopsInSE = listViewLoopsInSE;
         this.anchorPaneMethodCode = anchorPaneMethodCode;
         this.anchorPaneLoopInvariant = anchorPaneLoopInvariant;
+        this.buttonResetLoopInvariant = buttonResetLoopInvariant;
+        this.buttonSaveLoopInvariant = buttonSaveLoopInvariant;
+
         JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
-        methodCodeArea = javaCodeEditor.getCodeArea();
+        methodCodeArea = javaCodeEditor.getCodeArea();        
         addCodeAreaToAnchorPane(methodCodeArea, anchorPaneMethodCode);
+        methodCodeArea.setDisable(true);
+        
         loopInvariantCodeArea = javaCodeEditor.getCodeArea();
         addCodeAreaToAnchorPane(loopInvariantCodeArea, this.anchorPaneLoopInvariant);
-        
+
         labelProjName.setText("");
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
@@ -111,6 +126,10 @@ public class DisproHandler {
         this.disprovingProject = disprovingProject;
         handleNewDisproSet();
         mainMenu.setDisable(false);
+    }
+    
+    private void setLoopInvInCurrent(int pos, String inv) {
+        currentSelectedMethod.setLoopInvariant(pos, inv);
     }
 
     private void handleNewDisproSet() {
@@ -155,13 +174,30 @@ public class DisproHandler {
             for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
                 listViewCalledMethodsInSE.getItems().add(m.toString());
             }
-        });
 
-        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             loopInvariantCodeArea.replaceText(
-                    0, 
-                    loopInvariantCodeArea.getText().length(), 
-                    currentSelectedMethod.getLoopInvariant(Integer.valueOf(newValue)));
+                    0,
+                    loopInvariantCodeArea.getText().length(),
+                    "");
+        });
+        
+        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> o, String ov, String nv) -> {
+            if (nv == null) {
+                return;
+            }
+            int relPos = Integer.valueOf(nv);
+            loopInvariantCodeArea.replaceText(
+                    0,
+                    loopInvariantCodeArea.getText().length(),
+                    currentSelectedMethod.getLoopInvariant(relPos));
+            buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
+                String template = LoopInvariantGenerator.getTemplate();
+                setLoopInvInCurrent(relPos, template);
+                loopInvariantCodeArea.replaceText(0, loopInvariantCodeArea.getText().length(), template);
+            });
+            buttonSaveLoopInvariant.setOnAction((event) -> {
+                setLoopInvInCurrent(relPos, loopInvariantCodeArea.getText());
+            });
         });
 
     }

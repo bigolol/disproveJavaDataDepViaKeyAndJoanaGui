@@ -157,7 +157,7 @@ public class StaticCGJavaMethod {
         this.methodBody = methodBody;
     }
     
-    public void addLoopInvariant(int relPos, String text) {
+    public void setLoopInvariant(int relPos, String text) {
         for(int i = 0; i < relPosOfLoops.size(); ++i) {
             if(relPosOfLoops.get(i) == relPos) {
                 loopInvariants.add(i, text);
