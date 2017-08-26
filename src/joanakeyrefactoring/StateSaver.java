@@ -98,9 +98,17 @@ public class StateSaver implements CGConsumer {
 
         created.append("\"formal_ins_to_pers_cg\" : [\n");
 
-        formalInsToPersistentCGNodes.forEach((t, u) -> {
-            created.append("{ \"sdg_node\" : " + t.getId() + ", \"cg_node\" : {" + u.generateSaveString() + "}},\n");
-        });
+        for (SDGNode n : formalInsToPersistentCGNodes.keySet()) {
+            PersistentCGNode get = formalInsToPersistentCGNodes.get(n);
+            try {
+
+                created.append("{ \"sdg_node\" : " + n.getId() + ", \"cg_node\" : {"
+                        + get.generateSaveString() + "}},\n");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (created.lastIndexOf("[") != created.length() - 1) {
             created.replace(created.length() - 2, created.length(), "");
         }
@@ -195,9 +203,9 @@ public class StateSaver implements CGConsumer {
                     int cgNodeId = sdg.getCGNodeId(methodNode);
                     CGNode cgNode = callGraph.getNode(cgNodeId);
                     PersistentCGNode corresPersCGNode = cgNodesToPersistentCGNodes.get(cgNode);
-                    formalInsToPersistentCGNodes.put(formalInNode, corresPersCGNode);
                     if (corresPersCGNode != null) {
                         corresPersCGNode.setCgNodeId(cgNodeId);
+                        formalInsToPersistentCGNodes.put(formalInNode, corresPersCGNode);
                     }
                 }
             }

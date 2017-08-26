@@ -56,16 +56,26 @@ public class DisprovingProjectTest {
     public void tearDown() {
     }
 
+    public static void main(String[] args) throws
+            IOException, ClassHierarchyException,
+            GraphIntegrity.UnsoundGraphException,
+            CancelException {
+        DisprovingProject generateFromCheckdata = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/jzip.joak")));
+        generateFromCheckdata.saveSDG();
+        String generateSaveString = generateFromCheckdata.generateSaveString();
+        DisprovingProject generateFromSavestring = DisprovingProject.generateFromSavestring(generateSaveString);
+    }
+
     @Test
     public void testStateSaverSaveIds() throws
             IOException, ClassHierarchyException,
             GraphIntegrity.UnsoundGraphException,
             CancelException {
-        DisprovingProject disprovingProject
-                = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
-        String saveString = disprovingProject.getStateSaver().getSaveString();
-        System.out.println(saveString);
-        StateSaver.generateFromJson(new JSONObject(saveString), disprovingProject.getSdg());
+//        DisprovingProject disprovingProject
+//                = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
+//        String saveString = disprovingProject.getStateSaver().getSaveString();
+//        System.out.println(saveString);
+//        StateSaver.generateFromJson(new JSONObject(saveString), disprovingProject.getSdg());
     }
 
     @Test

@@ -129,7 +129,7 @@ public class DisprovingProject {
         disprovingProject.pathToJava = pathToJava;
         disprovingProject.pathToSDG = pathToSdg;
         disprovingProject.pathToJar = pathToJar;
-        disprovingProject.sdg = SDG.readFrom(new FileReader(new File(pathToSdg)));
+        disprovingProject.sdg = SDGProgram.loadSDG(pathToSdg).getSDG();
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
