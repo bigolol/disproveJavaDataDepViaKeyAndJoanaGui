@@ -10,6 +10,7 @@ import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,7 +120,7 @@ public class DisproHandler {
         labelProjName.setText("");
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
-        
+
         listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             onSummaryEdgeSelectionChange((int) newValue);
         });
@@ -146,16 +147,24 @@ public class DisproHandler {
     public void handleNewDispro(JoanaAndKeyCheckData checkData) {
         backgroundDisproCreator.generateFromCheckData(checkData, (dispro, worked) -> {
             if (worked) {
-                disprovingProject = dispro;
-                handleNewDisproSet();
+                try {
+                    disprovingProject = dispro;
+                    handleNewDisproSet();
+                } catch (Exception e) {
+                    ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
+                }
             }
         });
         mainMenu.setDisable(false);
     }
 
     public void handleNewDispro(DisprovingProject disprovingProject) {
-        this.disprovingProject = disprovingProject;
-        handleNewDisproSet();
+        try {
+            this.disprovingProject = disprovingProject;
+            handleNewDisproSet();
+        } catch (Exception e) {
+            ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
+        }
         mainMenu.setDisable(false);
     }
 
@@ -178,8 +187,7 @@ public class DisproHandler {
         } catch (Exception e) {
         }
     }
-    
-    
+
     //#######################################################################
     //this gets run whenever the selected SUMMARY EDGE changes-------------->
     //#######################################################################
@@ -256,7 +264,9 @@ public class DisproHandler {
      * this gets called whenever a new .dispro file is loaded or a new
      * DisprovingProject is created from a .joak file.
      */
-    private void handleNewDisproSet() {
+    private void handleNewDisproSet() throws IOException {
+        violationsWrapper = disprovingProject.getViolationsWrapper();
+
         joanaKeyInterfacer = new JoanaKeyInterfacer(
                 violationsWrapper,
                 disprovingProject.getPathToJava(),
@@ -267,7 +277,6 @@ public class DisproHandler {
         //do view stuff
         //
         labelProjName.setText(disprovingProject.getProjName());
-        violationsWrapper = disprovingProject.getViolationsWrapper();
 
         resetListView(listViewSummaryEdges);
         resetListView(listViewUncheckedChops);

@@ -5,6 +5,7 @@
  */
 package joanakeyrefactoring.persistence;
 
+import edu.kit.joana.api.sdg.SDGProgram;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.ClassifiedViolation;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
@@ -98,6 +99,7 @@ public class ViolationsSaverLoader {
             ClassifiedViolation createdViolation = ClassifiedViolation.createViolation(sinkNode, sourceNode, pathes, currentAttackerLvl);
             created.add(createdViolation);
         }
+        
         return created;
     }
 }

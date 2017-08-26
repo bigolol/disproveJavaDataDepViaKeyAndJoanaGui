@@ -174,4 +174,8 @@ public class StaticCGJavaMethod {
         }
         return null;
     }
+
+    public void getMethodParamName(int p_number) {
+        
+    }
 }

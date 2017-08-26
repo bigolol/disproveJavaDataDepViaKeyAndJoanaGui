@@ -69,7 +69,6 @@ public class JavaForKeyCreator {
         }
 
         String contents = new String(Files.readAllBytes(javaClassFile.toPath()));
-
         Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses = callGraph.getAllNecessaryClasses(methodCorresToSE);
 
         String keyCompatibleContents = keyCompatibleListener.transformCode(
@@ -79,7 +78,7 @@ public class JavaForKeyCreator {
 
         javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
         javaProjectCopyHandler.copyClasses(allNecessaryClasses);
-        
+
         String descriptionForKey = getMethodContractFor(formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE);
 
         List<String> classFileForKey = generateClassFileForKey(descriptionForKey, keyCompatibleContents);
@@ -95,7 +94,26 @@ public class JavaForKeyCreator {
     public String getMethodContractFor(
             SDGNode formalInNode,
             SDGNode formalOutNode,
-            StaticCGJavaMethod methodCorresToSE) {
+            StaticCGJavaMethod methodCorresToSE) throws IOException {
+        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+
+        StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
+        String relPathForJavaClass
+                = JavaProjectCopyHandler.getRelPathForJavaClass(containingClass);
+        File javaClassFile = new File(pathToJavaSource + relPathForJavaClass + containingClass.getOnlyClassName() + ".java");
+
+        if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
+            throw new FileNotFoundException();
+        }
+
+        String contents = new String(Files.readAllBytes(javaClassFile.toPath()));
+        Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses = callGraph.getAllNecessaryClasses(methodCorresToSE);
+
+        String keyCompatibleContents = keyCompatibleListener.transformCode(
+                contents, allNecessaryClasses.get(methodCorresToSE.getContainingClass()));
+
+        methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
+
         String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
         String sinkDescr = generateSinkDescr(formalOutNode);
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
@@ -157,7 +175,7 @@ public class JavaForKeyCreator {
             }
         }
         String sourceBC = currentStructSource.getBytecodeName();
-        while (!sourceBC.startsWith("<param>")) {
+        while (!sourceBC.startsWith("<param>") && !sourceBC.startsWith("<exception>")) {
             String[] sourceBCSplit = sourceBC.split("\\.");
             inputNameForKey = sourceBCSplit[sourceBCSplit.length - 1] + "." + inputNameForKey;
             incomingParamStructEdges = sdg.getIncomingEdgesOfKind(currentStructSource, SDGEdge.Kind.PARAMETER_STRUCTURE);
@@ -170,8 +188,12 @@ public class JavaForKeyCreator {
             }
             sourceBC = currentStructSource.getBytecodeName();
         }
-        String nameForParam = getNameForParam(sourceBC, methodCorresToSE);
-        return nameForParam + "." + inputNameForKey;
+        if (sourceBC.startsWith("<param>")) {
+            String nameForParam = getNameForParam(sourceBC, methodCorresToSE);
+            return nameForParam + "." + inputNameForKey;
+        } else {
+            return "<exception>" + inputNameForKey;
+        }
 
     }
 

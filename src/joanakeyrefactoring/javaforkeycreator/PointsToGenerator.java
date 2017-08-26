@@ -15,7 +15,9 @@ import com.ibm.wala.util.intset.OrdinalSet;
 import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGNode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.persistence.PersistentCGNode;
 import joanakeyrefactoring.persistence.PersistentIR;
@@ -46,7 +48,7 @@ public class PointsToGenerator {
         List<PersistentLocalPointerKey> persistentLocalPointerKeys = stateSaver.getPersistentLocalPointerKeys(persistentCGNode);
 
         // calculate individual non-alias clauses
-        ArrayList<String> pointsToResult = calculateNonAliases(persistentLocalPointerKeys, stateSaver, persistentIR);
+        Set<String> pointsToResult = calculateNonAliases(persistentLocalPointerKeys, stateSaver, persistentIR);
         StringBuilder stringBuilder = new StringBuilder();
         String delim = "";
         //chain clauses together by conjunction
@@ -64,11 +66,11 @@ public class PointsToGenerator {
         }
         return stringBuilder.toString();
     }
-
-    private static ArrayList<String> calculateNonAliases(
+    
+    private static Set<String> calculateNonAliases(
             List<PersistentLocalPointerKey> localPointerKeys,
             StateSaver stateSaver, PersistentIR ir) {
-        ArrayList<String> result = new ArrayList<String>();
+        Set<String> result = new HashSet<String>();
         // enumerate all two element subsets of pointer keys and check if those two have disjunct points-to sets
         for (PersistentLocalPointerKey persistentLocalPointerKey : localPointerKeys) {
             String o1 = ir.getLocalName(persistentLocalPointerKey.getValueNumber());
@@ -80,11 +82,13 @@ public class PointsToGenerator {
                 String o2 = ir.getLocalName(currentDisjunctOtherPk.getValueNumber());
                 // if points-to sets are disjunct, o1 and o2 cannot alias
                 if (o1 != null && o2 != null) {
-                    result.add(o1 + " != " + o2);
+                    if (!result.contains(o1 + " != " + o2)) {
+                        result.add(o1 + " != " + o2);
+                    }
                 }
             }
         }
         return result;
     }
-
+    
 }

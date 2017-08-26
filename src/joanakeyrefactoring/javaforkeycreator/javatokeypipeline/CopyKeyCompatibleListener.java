@@ -40,7 +40,7 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
     Set<StaticCGJavaMethod> neededMethods;
     
     public CopyKeyCompatibleListener(String mainPackageName) throws FileNotFoundException, IOException {
-        InputStream is = new FileInputStream("dep/JAVALANG.txt");
+        InputStream is = new FileInputStream("otherdata/JAVALANG.txt");
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
         this.mainPackageName = mainPackageName;
