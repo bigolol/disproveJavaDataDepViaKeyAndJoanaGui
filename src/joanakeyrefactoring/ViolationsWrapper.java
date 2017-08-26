@@ -77,10 +77,10 @@ public class ViolationsWrapper {
         StringBuilder created = new StringBuilder();
         created.append("{").append(System.lineSeparator());
         int lengthOfLineSep = System.lineSeparator().length();
-        
+
         created.append(ViolationsSaverLoader.generateSaveString(uncheckedViolations));
         created.append(",\n");
-        
+
         created.append("\"chops\" : [").append(System.lineSeparator());
         for (ViolationChop vc : violationChops) {
             created.append(vc.generateSaveString())
@@ -169,10 +169,10 @@ public class ViolationsWrapper {
     public static ViolationsWrapper generateFromJsonObj(
             JSONObject jSONObject, SDG sdg, JCallGraph callGraph) {
         ViolationsWrapper created = new ViolationsWrapper();
-        
+
         JSONArray violArr = jSONObject.getJSONArray("violations");
         created.uncheckedViolations = ViolationsSaverLoader.generateFromJSON(violArr, sdg);
-        
+
         JSONArray chopArr = jSONObject.getJSONArray("chops");
         for (int i = 0; i < chopArr.length(); ++i) {
             created.violationChops.add(ViolationChop.generateFromJsonObj(
@@ -259,7 +259,13 @@ public class ViolationsWrapper {
         for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
             sortedEdgesToCheck.add(e);
         }
-        sortedEdgesToCheck.sort(new SummaryEdgeComparator(this));
+        for (int i = 0; i < 10; ++i) {
+            try {
+                sortedEdgesToCheck.sort(new SummaryEdgeComparator(this));
+                break;
+            } catch (Exception e) {
+            }
+        }
     }
 
     private void putEdgesInSet() {
@@ -479,7 +485,5 @@ public class ViolationsWrapper {
     public Map<SDGEdge, StaticCGJavaMethod> getSummaryEdgesAndCorresJavaMethods() {
         return summaryEdgesAndCorresJavaMethods;
     }
-    
-    
-    
+
 }

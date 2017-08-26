@@ -1,7 +1,47 @@
 {"path_to_jar" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar",
 "path_to_java_source" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src",
 "path_to_sdg" : "savedata/MultipleClassesFalsePos/sdg.pdg",
-"state_saver" : {"cgNodes" : [
+"state_saver" : {"formal_ins_to_pers_cg" : [
+{ "sdg_node" : 65, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 66, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 163, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 164, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 38, "cg_node" : {"id" : 3, "cg_node_id" :8, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 202, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 204, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 205, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 206, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 207, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 208, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 209, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 154, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
+"1" : "this"
+}}}],
+"cgNodes" : [
 {"id" : 0, "cg_node_id" :0, "ir" : {
 "1" : "this"
 }},
@@ -75,20 +115,20 @@
 168,
 170,
 11,
+203,
 12,
-217,
+215,
 126,
-63,
-191]
+63]
 }],
 "summary_edges_sorted" : [
 {"src" : 11, "sink" : 12},
-{"src" : 126, "sink" : 217}],
+{"src" : 126, "sink" : 215}],
 "summary_edges_methods": [
-{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"},
-{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"}],"summary_edges_chops" : [
-{"pos" :0, "chops" : [
-{"src" : 11, "sink" : 12}]},
+{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"},
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"}],"summary_edges_chops" : [
 {"pos" :1, "chops" : [
+{"src" : 11, "sink" : 12}]},
+{"pos" :0, "chops" : [
 {"src" : 11, "sink" : 12}]}]
 }}

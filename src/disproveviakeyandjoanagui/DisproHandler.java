@@ -13,6 +13,7 @@ import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -26,6 +27,7 @@ import joanakeyrefactoring.javaforkeycreator.LoopInvariantGenerator;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.fxmisc.richtext.CodeArea;
+import org.reactfx.util.TriConsumer;
 
 /**
  *
@@ -65,6 +67,7 @@ public class DisproHandler {
     private StaticCGJavaMethod currentSelectedMethod;
 
     private HashMap<Integer, SDGNodeTuple> currentIndexToNodeTuple = new HashMap<>();
+    private Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods;
 
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
@@ -116,7 +119,16 @@ public class DisproHandler {
         labelProjName.setText("");
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
-
+        
+        listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            onSummaryEdgeSelectionChange((int) newValue);
+        });
+        listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            onFormalPairSelectionChange((int) newValue);
+        });
+        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            onLoopInvSelectionChanged(newValue);
+        });
     }
 
     private void addCodeAreaToAnchorPane(CodeArea codeArea, AnchorPane anchorPane) {
@@ -152,8 +164,11 @@ public class DisproHandler {
     }
 
     private void resetListView(ListView<String> listView) {
-        listView.getSelectionModel().clearSelection();
-        listView.getItems().clear();
+        try {
+            listView.getSelectionModel().clearSelection();
+            listView.getItems().clear();
+        } catch (Exception e) {
+        }
     }
 
     private void clearCodeAreaForNewCode(CodeArea codeArea, String newCode) {
@@ -162,6 +177,79 @@ public class DisproHandler {
             codeArea.replaceText(0, 0, newCode);
         } catch (Exception e) {
         }
+    }
+    
+    
+    //#######################################################################
+    //this gets run whenever the selected SUMMARY EDGE changes-------------->
+    //#######################################################################
+    private void onSummaryEdgeSelectionChange(int newValue) {
+        if (newValue < 0) {
+            return;
+        }
+        SDGEdge e = itemIndexToSummaryEdge.get(newValue);
+
+        currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(e);
+
+        //handle the code areas
+        String methodBody = currentSelectedMethod.getMethodBody();
+
+        clearCodeAreaForNewCode(loopInvariantCodeArea, "");
+        clearCodeAreaForNewCode(keyContractCodeArea, "");
+        clearCodeAreaForNewCode(methodCodeArea, methodBody);
+
+        //populate the other list views
+        resetListView(listViewCalledMethodsInSE);
+        resetListView(listViewLoopsInSE);
+        resetListView(listViewFormalInoutPairs);
+
+        for (int relPos : currentSelectedMethod.getRelPosOfLoops()) {
+            listViewLoopsInSE.getItems().add(String.valueOf(relPos));
+        }
+        for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
+            listViewCalledMethodsInSE.getItems().add(m.toString());
+        }
+
+        Collection<SDGNodeTuple> allFormalPairs = disprovingProject.getSdg().getAllFormalPairs(e.getSource(), e.getTarget());
+        currentIndexToNodeTuple.clear();
+        int index = 0;
+        for (SDGNodeTuple t : allFormalPairs) {
+            listViewFormalInoutPairs.getItems().add(t.toString());
+            currentIndexToNodeTuple.put(index++, t);
+        }
+    }
+
+    //#######################################################################
+    //this gets run whenever the selected FORMAL NODE TUPLE changes-------------->
+    //#######################################################################
+    private void onFormalPairSelectionChange(int newValue) {
+        if (newValue < 0) {
+            return;
+        }
+        SDGNodeTuple nodeTuple = currentIndexToNodeTuple.get(newValue);
+        clearCodeAreaForNewCode(
+                keyContractCodeArea,
+                joanaKeyInterfacer.getKeyContractFor(nodeTuple, currentSelectedMethod));
+    }
+
+    //#######################################################################
+    //this gets run whenever the selected LOOP INVARIANT changes-------------->
+    //#######################################################################
+    private void onLoopInvSelectionChanged(String newValue) {
+        if (newValue == null) {
+            return;
+        }
+        int relPos = Integer.valueOf(newValue);
+        clearCodeAreaForNewCode(loopInvariantCodeArea, currentSelectedMethod.getLoopInvariant(relPos));
+
+        buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
+            String template = LoopInvariantGenerator.getTemplate();
+            setLoopInvInCurrent(relPos, template);
+            clearCodeAreaForNewCode(loopInvariantCodeArea, template);
+        });
+        buttonSaveLoopInvariant.setOnAction((event) -> {
+            setLoopInvInCurrent(relPos, loopInvariantCodeArea.getText());
+        });
     }
 
     /**
@@ -175,7 +263,6 @@ public class DisproHandler {
                 disprovingProject.getCallGraph(),
                 disprovingProject.getSdg(),
                 disprovingProject.getStateSaver());
-
         //
         //do view stuff
         //
@@ -195,7 +282,7 @@ public class DisproHandler {
             listViewUncheckedChops.getItems().add(v.toString());
         }
 
-        Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
+        summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
 
         int i = 0;
         for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
@@ -203,74 +290,5 @@ public class DisproHandler {
                     + summaryEdgesAndCorresJavaMethods.get(e).toString());
             itemIndexToSummaryEdge.put(i++, e);
         }
-
-        //#######################################################################
-        //this gets run whenever the selected SUMMARY EDGE changes-------------->
-        //#######################################################################
-        listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            SDGEdge e = itemIndexToSummaryEdge.get(newValue);
-
-            currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(e);
-
-            //handle the code areas
-            String methodBody = currentSelectedMethod.getMethodBody();
-
-            clearCodeAreaForNewCode(loopInvariantCodeArea, "");
-            clearCodeAreaForNewCode(keyContractCodeArea, "");
-            clearCodeAreaForNewCode(methodCodeArea, methodBody);
-
-            //populate the other list views
-            resetListView(listViewCalledMethodsInSE);
-            resetListView(listViewLoopsInSE);
-            resetListView(listViewFormalInoutPairs);
-
-            for (int relPos : currentSelectedMethod.getRelPosOfLoops()) {
-                listViewLoopsInSE.getItems().add(String.valueOf(relPos));
-            }
-            for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
-                listViewCalledMethodsInSE.getItems().add(m.toString());
-            }
-
-            Collection<SDGNodeTuple> allFormalPairs = disprovingProject.getSdg().getAllFormalPairs(e.getSource(), e.getTarget());
-            currentIndexToNodeTuple.clear();
-            int index = 0;
-            for (SDGNodeTuple t : allFormalPairs) {
-                listViewFormalInoutPairs.getItems().add(t.toString());
-                currentIndexToNodeTuple.put(index++, t);
-            }
-
-        });
-
-        //#######################################################################
-        //this gets run whenever the selected LOOP INVARIANT changes-------------->
-        //#######################################################################
-        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            int relPos = Integer.valueOf(newValue);
-            clearCodeAreaForNewCode(loopInvariantCodeArea, currentSelectedMethod.getLoopInvariant(relPos));
-
-            buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
-                String template = LoopInvariantGenerator.getTemplate();
-                setLoopInvInCurrent(relPos, template);
-                clearCodeAreaForNewCode(loopInvariantCodeArea, template);
-            });
-            buttonSaveLoopInvariant.setOnAction((event) -> {
-                setLoopInvInCurrent(relPos, loopInvariantCodeArea.getText());
-            });
-        });
-
-        //#######################################################################
-        //this gets run whenever the selected FORMAL NODE TUPLE changes-------------->
-        //#######################################################################
-        listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            int index = (int) newValue;
-            SDGNodeTuple nodeTuple = currentIndexToNodeTuple.get(index);
-            clearCodeAreaForNewCode(
-                    keyContractCodeArea,
-                    joanaKeyInterfacer.getKeyContractFor(nodeTuple, currentSelectedMethod));
-        });
-
     }
 }
