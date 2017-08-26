@@ -20,6 +20,9 @@ public class ClassB {
     
     int[] putDataInArr(int high) {
         arr[4] = high;
+        for(int i = 0; i < 10; ++i) {
+            
+        }
         return arr;
     }
     

@@ -12,6 +12,7 @@ import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGSerializer;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -58,6 +59,10 @@ public class DisprovingProject {
         return sdg;
     }
 
+    public StateSaver getStateSaver() {
+        return stateSaver;
+    }
+
     public JCallGraph getCallGraph() {
         return callGraph;
     }
@@ -85,7 +90,6 @@ public class DisprovingProject {
     }
 
     public void saveSDG() throws FileNotFoundException {
-        String saveStr = SDGSerializer.toPDGFormat(sdg);
         String saveFilePos = "savedata/" + getProjName() + "/sdg.pdg";
         File f = new File(saveFilePos);
         if (f.exists()) {
@@ -93,8 +97,7 @@ public class DisprovingProject {
         }
         f.getParentFile().mkdirs();
         PrintWriter out = new PrintWriter(f);
-        out.write(saveStr);
-        out.close();
+        SDGSerializer.toPDGFormat(sdg, out);
         pathToSDG = saveFilePos;
     }
 
@@ -127,7 +130,7 @@ public class DisprovingProject {
         disprovingProject.pathToJava = pathToJava;
         disprovingProject.pathToSDG = pathToSdg;
         disprovingProject.pathToJar = pathToJar;
-        disprovingProject.sdg = SDGProgram.loadSDG(pathToSdg).getSDG();
+        disprovingProject.sdg = SDG.readFrom(new FileReader(new File(pathToSdg)));
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj);

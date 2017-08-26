@@ -44,8 +44,9 @@ public class ViolationsDisproverSemantic {
         this.pathToJava = checkData.getPathToJavaFile();
         javaForKeyCreator = new JavaForKeyCreator(
                 checkData.getPathToJavaFile(),
-                callGraph, checkData.getAnalysis().getProgram().getSDG(),
-                stateSaver, checkData.getAnalysis());
+                callGraph,
+                checkData.getAnalysis().getProgram().getSDG(),
+                stateSaver);
 
         callGraph.generateCG(new File(pathToJar));
     }

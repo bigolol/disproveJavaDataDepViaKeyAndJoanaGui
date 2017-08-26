@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,7 @@ public class StateSaver implements CGConsumer {
     private Map<CGNode, PersistentCGNode> cgNodesToPersistentCGNodes = new HashMap<>();
     private Map<PersistentLocalPointerKey, List<PersistentLocalPointerKey>> disjunctPointsToSets
             = new HashMap<>();
+    private HashMap<SDGNode, PersistentCGNode> callSiteInsToPersistenCGNodes = new HashMap<>();
 
     @Override
     public void consume(CallGraph callGraph, PointerAnalysis<? extends InstanceKey> pointerAnalyis) {
@@ -180,9 +182,8 @@ public class StateSaver implements CGConsumer {
                 }
             }
         }
-
         generateIRsAndPersistentLocalPointerKeys(localPointerKeys);
-        calculateDisjunctPointsToKeys(localPointerKeys);
+        calculateDisjunctPointsToKeys(localPointerKeys);  
     }
 
     private void generateIRsAndPersistentLocalPointerKeys(ArrayList<LocalPointerKey> localPointerKeys) {

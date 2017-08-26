@@ -40,10 +40,10 @@ public class PointsToGenerator {
      */
     public static String generatePreconditionFromPointsToSet(SDG sdg, SDGNode methodNode, StateSaver stateSaver) {
         //get the call graph node corresponding to the SDG method node
-        PersistentCGNode persistentCGNode = stateSaver.getNode(sdg.getCGNodeId(methodNode));
+        int cgNodeId = sdg.getCGNodeId(methodNode);
+        PersistentCGNode persistentCGNode = stateSaver.getNode(cgNodeId);
         // get IR for parameter names
         PersistentIR persistentIR = persistentCGNode.getIR();
-
         List<PersistentLocalPointerKey> persistentLocalPointerKeys = stateSaver.getPersistentLocalPointerKeys(persistentCGNode);
 
         // calculate individual non-alias clauses

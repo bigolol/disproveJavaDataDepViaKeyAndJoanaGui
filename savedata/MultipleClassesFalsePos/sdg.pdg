@@ -32,7 +32,7 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":0,0-0,0;
 B "<exit>":-2;
 Z 0;
-RF 217;
+RF 227;
 }
 FRMO 3 {
 O form-out;
@@ -81,14 +81,14 @@ CE 8;
 PS 7;
 PS 8;
 CL 35: "virtual";
-CE 180;
-CE 181;
-CF 215;
-CE 215;
+CE 192;
+CE 193;
+CF 225;
+CE 225;
 HE 7;
 HE 8;
-HE 180;
-HE 181;
+HE 192;
+HE 193;
 }
 ACTI 7 {
 O act-in;
@@ -101,11 +101,11 @@ Z 0;
 CF 6;
 CD 6;
 PI 38;
-PS 180;
-PS 181;
+PS 192;
+PS 193;
 SU 8;
-SU 180;
-SU 181;
+SU 192;
+SU 193;
 }
 ACTO 8 {
 O act-out;
@@ -116,8 +116,8 @@ S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "<exception>":-2;
 Z 0;
 CF 10;
-CE 215;
-HE 215;
+CE 225;
+HE 225;
 }
 CALL 9 {
 O call;
@@ -136,32 +136,32 @@ PS 11;
 PS 12;
 PS 13;
 CL 62: "virtual";
-CE 182;
-CE 183;
-CE 184;
-CE 185;
-CE 186;
-CE 187;
-CE 188;
-CE 189;
-CE 190;
-CE 191;
-CF 216;
-CE 216;
+CE 194;
+CE 195;
+CE 196;
+CE 197;
+CE 198;
+CE 199;
+CE 200;
+CE 201;
+CE 202;
+CE 203;
+CF 226;
+CE 226;
 HE 10;
 HE 11;
 HE 12;
 HE 13;
-HE 182;
-HE 183;
-HE 184;
-HE 185;
-HE 186;
-HE 187;
-HE 188;
-HE 189;
-HE 190;
-HE 191;
+HE 194;
+HE 195;
+HE 196;
+HE 197;
+HE 198;
+HE 199;
+HE 200;
+HE 201;
+HE 202;
+HE 203;
 }
 ACTI 10 {
 O act-in;
@@ -174,13 +174,13 @@ Z 0;
 CF 11;
 CD 9;
 PI 65;
-PS 182;
-PS 187;
+PS 194;
+PS 199;
 SU 13;
-SU 188;
-SU 189;
-SU 190;
-SU 191;
+SU 200;
+SU 201;
+SU 202;
+SU 203;
 SU 12;
 }
 ACTI 11 {
@@ -192,9 +192,9 @@ S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "<param> 1":-2;
 Z 0;
 PI 66;
-CF 182;
+CF 194;
 SU 12;
-SU 190;
+SU 202;
 }
 ACTO 12 {
 O act-out;
@@ -217,8 +217,8 @@ B "<exception>":-2;
 Z 0;
 CF 3: "exc";
 DD 3;
-CE 216;
-HE 216;
+CE 226;
+HE 226;
 }
 NORM 14 {
 O compound;
@@ -282,11 +282,11 @@ CF 22: "exc";
 CD 23;
 CE 22;
 PS 22;
-CE 211;
-CF 211;
+CE 221;
+CF 221;
 HE 23;
 HE 22;
-HE 211;
+HE 221;
 }
 ACTO 22 {
 O act-out;
@@ -402,14 +402,14 @@ CE 30;
 CE 31;
 PS 30;
 PS 31;
-CE 208;
-CE 212;
-CF 212;
+CE 218;
+CE 222;
+CF 222;
 HE 32;
 HE 30;
 HE 31;
-HE 208;
-HE 212;
+HE 218;
+HE 222;
 }
 ACTI 30 {
 O act-in;
@@ -421,7 +421,7 @@ B "<param> 0":-2;
 Z 0;
 CF 29;
 CD 29;
-DD 212;
+DD 222;
 }
 ACTO 31 {
 O act-out;
@@ -433,7 +433,7 @@ B "<exception>":-2;
 Z 0;
 CF 20: "exc";
 DD 20;
-DD 208;
+DD 218;
 }
 CALL 32 {
 O call;
@@ -449,8 +449,8 @@ CE 34;
 PS 33;
 PS 34;
 CL 1: "virtual";
-CF 217;
-CE 217;
+CF 227;
+CE 227;
 HE 33;
 HE 34;
 }
@@ -475,8 +475,8 @@ B "<exception>":-2;
 Z 0;
 CF 20: "exc";
 DD 20;
-CE 217;
-HE 217;
+CE 227;
+HE 227;
 }
 ENTR 35 {
 O entry;
@@ -493,16 +493,16 @@ CE 37;
 CE 38;
 PS 37;
 PS 38;
-CE 194;
-CE 195;
-CF 194;
+CE 204;
+CE 205;
+CF 204;
 CF 36;
 HE 36;
 HE 39;
 HE 37;
 HE 38;
-HE 194;
-HE 195;
+HE 204;
+HE 205;
 }
 EXIT 36 {
 O exit;
@@ -512,7 +512,7 @@ P 6;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<exit>":-2;
 Z 0;
-RF 215;
+RF 225;
 }
 FRMO 37 {
 O form-out;
@@ -523,7 +523,7 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<exception>":-2;
 Z 0;
 PO 8;
-CF 194: "exc";
+CF 204: "exc";
 }
 FRMI 38 {
 O form-in;
@@ -538,8 +538,8 @@ DD 40;
 DD 47;
 DD 54;
 CF 40;
-PS 194;
-PS 195;
+PS 204;
+PS 205;
 }
 CALL 39 {
 O call;
@@ -557,15 +557,15 @@ CE 40;
 CE 41;
 PS 40;
 PS 41;
-CE 209;
-CE 213;
-CF 213;
+CE 219;
+CE 223;
+CF 223;
 HE 42;
 HE 43;
 HE 40;
 HE 41;
-HE 209;
-HE 213;
+HE 219;
+HE 223;
 }
 ACTI 40 {
 O act-in;
@@ -578,7 +578,7 @@ Z 0;
 LU ["this"];
 CF 39;
 CD 39;
-DD 213;
+DD 223;
 }
 ACTO 41 {
 O act-out;
@@ -590,7 +590,7 @@ B "<exception>":-2;
 Z 0;
 CF 37: "exc";
 DD 37;
-DD 209;
+DD 219;
 }
 NORM 42 {
 O declaration;
@@ -618,8 +618,8 @@ CE 45;
 PS 44;
 PS 45;
 CL 151: "virtual";
-CF 218;
-CE 218;
+CF 228;
+CE 228;
 HE 44;
 HE 45;
 }
@@ -646,8 +646,8 @@ B "<exception>":-2;
 Z 0;
 CF 37: "exc";
 DD 37;
-CE 218;
-HE 218;
+CE 228;
+HE 228;
 }
 EXPR 46 {
 O modify;
@@ -687,7 +687,7 @@ S "multipleclassesfalsepos/ClassA.java":14,0-14,0;
 B "Lmultipleclassesfalsepos/ClassA.b":-4;
 Z 0;
 CF 47;
-DH 194;
+DH 204;
 }
 NORM 49 {
 O declaration;
@@ -715,8 +715,8 @@ CE 52;
 PS 51;
 PS 52;
 CL 151: "virtual";
-CF 219;
-CE 219;
+CF 229;
+CE 229;
 HE 51;
 HE 52;
 }
@@ -743,8 +743,8 @@ B "<exception>":-2;
 Z 0;
 CF 37: "exc";
 DD 37;
-CE 219;
-HE 219;
+CE 229;
+HE 229;
 }
 EXPR 53 {
 O modify;
@@ -784,7 +784,7 @@ S "multipleclassesfalsepos/ClassA.java":15,0-15,0;
 B "Lmultipleclassesfalsepos/ClassA.c":-4;
 Z 0;
 CF 54;
-DH 195;
+DH 205;
 }
 NORM 56 {
 O compound;
@@ -794,7 +794,7 @@ P 6;
 S "multipleclassesfalsepos/ClassA.java":18,0-18,0;
 B "multipleclassesfalsepos.ClassA.<init>()V":26;
 Z 0;
-CF 194;
+CF 204;
 }
 ENTR 62 {
 O entry;
@@ -815,17 +815,17 @@ PS 63;
 PS 64;
 PS 65;
 PS 66;
-CE 196;
-CE 197;
-CE 198;
-CE 199;
-CE 200;
-CE 201;
-CE 202;
-CE 203;
-CE 204;
-CE 205;
-CF 196;
+CE 206;
+CE 207;
+CE 208;
+CE 209;
+CE 210;
+CE 211;
+CE 212;
+CE 213;
+CE 214;
+CE 215;
+CF 206;
 CF 63;
 HE 63;
 HE 68;
@@ -833,16 +833,16 @@ HE 70;
 HE 72;
 HE 65;
 HE 66;
-HE 196;
-HE 197;
-HE 198;
-HE 199;
-HE 200;
-HE 201;
-HE 202;
-HE 203;
-HE 204;
-HE 205;
+HE 206;
+HE 207;
+HE 208;
+HE 209;
+HE 210;
+HE 211;
+HE 212;
+HE 213;
+HE 214;
+HE 215;
 }
 EXIT 63 {
 O exit;
@@ -853,7 +853,7 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<exit>":-2;
 Z 0;
 PO 12;
-RF 216;
+RF 226;
 }
 FRMO 64 {
 O form-out;
@@ -864,7 +864,7 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<exception>":-2;
 Z 0;
 PO 13;
-CF 202: "exc";
+CF 212: "exc";
 }
 FRMI 65 {
 O form-in;
@@ -883,8 +883,8 @@ DD 92;
 DD 102;
 DD 108;
 DD 122;
-PS 196;
-PS 201;
+PS 206;
+PS 211;
 }
 FRMI 66 {
 O form-in;
@@ -995,8 +995,8 @@ Z 0;
 CF 72;
 DH 79;
 DH 106;
-DH 202;
-DH 206;
+DH 212;
+DH 216;
 }
 EXPR 74 {
 O reference;
@@ -1127,7 +1127,7 @@ B "<[]>":-5;
 Z 0;
 CF 81;
 DH 131;
-DH 204;
+DH 214;
 }
 NORM 83 {
 O compound;
@@ -1239,7 +1239,7 @@ Z 0;
 CF 89;
 DH 96;
 DH 112;
-DH 203;
+DH 213;
 }
 EXPR 91 {
 O reference;
@@ -1368,7 +1368,7 @@ B "<[]>":-5;
 Z 0;
 CF 98;
 DH 115;
-DH 205;
+DH 215;
 }
 NORM 100 {
 O compound;
@@ -1653,7 +1653,7 @@ B "<[]>":-5;
 Z 0;
 CF 118;
 DH 131;
-DH 204;
+DH 214;
 }
 NORM 120 {
 O compound;
@@ -1726,16 +1726,16 @@ PS 126;
 PS 127;
 PS 128;
 CL 160: "virtual";
-CE 206;
-CE 207;
-CF 220;
-CE 220;
+CE 216;
+CE 217;
+CF 230;
+CE 230;
 HE 125;
 HE 126;
 HE 127;
 HE 128;
-HE 206;
-HE 207;
+HE 216;
+HE 217;
 }
 ACTI 125 {
 O act-in;
@@ -1748,10 +1748,10 @@ Z 0;
 CF 126;
 CD 124;
 PI 163;
-PS 206;
+PS 216;
 SU 127;
 SU 128;
-SU 207;
+SU 217;
 }
 ACTI 126 {
 O act-in;
@@ -1763,8 +1763,8 @@ B "<param> 1":-2;
 Z 0;
 LU ["high"];
 PI 164;
-CF 206;
-SU 207;
+CF 216;
+SU 217;
 }
 ACTO 127 {
 O act-out;
@@ -1777,7 +1777,7 @@ Z 0;
 CF 128: "exc";
 DD 130;
 CF 130;
-PS 207;
+PS 217;
 }
 ACTO 128 {
 O act-out;
@@ -1789,8 +1789,8 @@ B "<exception>":-2;
 Z 0;
 CF 64: "exc";
 DD 64;
-CE 220;
-HE 220;
+CE 230;
+HE 230;
 }
 EXPR 129 {
 O reference;
@@ -1858,7 +1858,7 @@ S "multipleclassesfalsepos/ClassA.java":26,0-26,0;
 B "multipleclassesfalsepos.ClassA.falsePos(I)I":68;
 Z 0;
 DD 63;
-CF 202;
+CF 212;
 }
 ENTR 151 {
 O entry;
@@ -1889,8 +1889,8 @@ P 8;
 S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
 B "<exit>":-2;
 Z 0;
-RF 218;
-RF 219;
+RF 228;
+RF 229;
 }
 FRMO 153 {
 O form-out;
@@ -1931,14 +1931,14 @@ CE 156;
 CE 157;
 PS 156;
 PS 157;
-CE 210;
-CE 214;
-CF 214;
+CE 220;
+CE 224;
+CF 224;
 HE 158;
 HE 156;
 HE 157;
-HE 210;
-HE 214;
+HE 220;
+HE 224;
 }
 ACTI 156 {
 O act-in;
@@ -1951,7 +1951,7 @@ Z 0;
 LU ["this"];
 CF 155;
 CD 155;
-DD 214;
+DD 224;
 }
 ACTO 157 {
 O act-out;
@@ -1963,7 +1963,7 @@ B "<exception>":-2;
 Z 0;
 CF 153: "exc";
 DD 153;
-DD 210;
+DD 220;
 }
 NORM 158 {
 O compound;
@@ -1993,17 +1993,17 @@ PS 161;
 PS 162;
 PS 163;
 PS 164;
-CE 192;
-CE 193;
-CF 192;
+CE 190;
+CE 191;
+CF 190;
 CF 161;
 HE 161;
 HE 166;
 HE 169;
 HE 163;
 HE 164;
-HE 192;
-HE 193;
+HE 190;
+HE 191;
 }
 EXIT 161 {
 O exit;
@@ -2014,8 +2014,8 @@ S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
 B "<exit>":-2;
 Z 0;
 PO 127;
-PS 193;
-RF 220;
+PS 191;
+RF 230;
 }
 FRMO 162 {
 O form-out;
@@ -2026,7 +2026,7 @@ S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
 B "<exception>":-2;
 Z 0;
 PO 128;
-CF 193: "exc";
+CF 191: "exc";
 }
 FRMI 163 {
 O form-in;
@@ -2039,8 +2039,8 @@ Z 0;
 LD ["this"];
 CF 164;
 DD 166;
-DD 173;
-PS 192;
+DD 176;
+PS 190;
 }
 FRMI 164 {
 O form-in;
@@ -2122,13 +2122,16 @@ PS 170;
 CF 171;
 CF 162: "exc";
 CD 162;
-CD 173;
-CD 175;
-CF 173;
+CD 172;
+CD 176;
+CD 178;
+CD 179;
+CF 179;
 HE 171;
 HE 162;
-HE 173;
-HE 175;
+HE 172;
+HE 176;
+HE 178;
 }
 NORM 170 {
 O compound;
@@ -2139,7 +2142,7 @@ S "multipleclassesfalsepos/ClassB.java":22,0-22,0;
 B "<[]>":-5;
 Z 0;
 CF 169;
-DH 193;
+DH 191;
 }
 NORM 171 {
 O compound;
@@ -2155,58 +2158,135 @@ DD 168;
 CF 168;
 HE 168;
 }
-EXPR 172 {
-O reference;
-V "v6 = p0 $this .arr";
-T "[I";
+PRED 172 {
+O IF;
+V "if (v10 >= #(10)) goto 22";
+T "Z";
 P 9;
 S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
-B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":8;
+B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":12;
+Z 0;
+LU ["i"];
+CD 173;
+CD 174;
+CD 179;
+CF 173;
+CF 176;
+HE 173;
+HE 174;
+HE 179;
+}
+EXPR 173 {
+O assign;
+V "v9 = v10 + #(1)";
+T "Ljava/lang/Object";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
+B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":15;
+Z 0;
+LD ["i"];
+DD 179;
+CF 174;
+}
+NORM 174 {
+O compound;
+V "goto 12";
+T "Ljava/lang/Object";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
+B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":18;
+Z 0;
+CF 179;
+}
+EXPR 175 {
+O reference;
+V "v11 = p0 $this .arr";
+T "[I";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":26,0-26,0;
+B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":22;
 Z 0;
 LU ["this"];
-CE 174;
-CF 173;
-DD 175;
-HE 174;
+CE 177;
+CF 176;
+DD 178;
+HE 177;
 }
-NORM 173 {
+NORM 176 {
 O compound;
 V "base";
 T "Lmultipleclassesfalsepos/ClassB";
 P 9;
-S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
+S "multipleclassesfalsepos/ClassB.java":26,0-26,0;
 B "<base>":-6;
 Z 0;
-DD 172;
-CE 172;
-PS 174;
-CF 174;
-CF 175;
-HE 172;
+DD 175;
+CE 175;
+PS 177;
+CF 177;
+CF 178;
+HE 175;
 }
-NORM 174 {
+NORM 177 {
 O compound;
 V "field arr";
 T "[I";
 P 9;
-S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
+S "multipleclassesfalsepos/ClassB.java":26,0-26,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-DD 172;
-CF 172;
+DD 175;
+CF 175;
 }
-NORM 175 {
+NORM 178 {
 O compound;
-V "return v6";
+V "return v11";
 T "[I";
 P 9;
-S "multipleclassesfalsepos/ClassB.java":23,0-23,0;
-B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":11;
+S "multipleclassesfalsepos/ClassB.java":26,0-26,0;
+B "multipleclassesfalsepos.ClassB.putDataInArr(I)[I":25;
 Z 0;
 DD 161;
-CF 193;
+CF 191;
 }
-ACTO 180 {
+EXPR 179 {
+O assign;
+V "PHI v10 = v9, #(0)";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
+B "<phi>":-8;
+Z 0;
+LD ["i"];
+DD 172;
+DD 173;
+CF 172;
+}
+FRMI 190 {
+O form-in;
+V "[R] |0|UNIQ(arr)";
+T "[I";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
+B "Lmultipleclassesfalsepos/ClassB.arr":-4;
+Z 0;
+CF 163;
+CF 191;
+DH 167;
+DH 177;
+PS 191;
+}
+FRMO 191 {
+O form-out;
+V "[M] |0|UNIQ([])";
+T "I";
+P 9;
+S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
+B "<[]>":-5;
+Z 0;
+CF 161;
+PO 217;
+}
+ACTO 192 {
 O act-out;
 V "[M] |0|UNIQ(b)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2214,10 +2294,10 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassA.b":-4;
 Z 0;
-CF 181;
-DH 182;
+CF 193;
+DH 194;
 }
-ACTO 181 {
+ACTO 193 {
 O act-out;
 V "[M] |0|UNIQ(c)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2226,9 +2306,9 @@ S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassA.c":-4;
 Z 0;
 CF 8;
-DH 187;
+DH 199;
 }
-ACTI 182 {
+ACTI 194 {
 O act-in;
 V "[R] |0|UNIQ(b)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2236,18 +2316,18 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassA.b":-4;
 Z 0;
-CF 183;
-PI 196;
-PS 183;
-PS 188;
+CF 195;
+PI 206;
+PS 195;
+PS 200;
 SU 13;
-SU 188;
-SU 190;
+SU 200;
+SU 202;
 SU 12;
-SU 189;
-SU 191;
+SU 201;
+SU 203;
 }
-ACTI 183 {
+ACTI 195 {
 O act-in;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2255,16 +2335,16 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 184;
-PI 197;
-PS 185;
-PS 190;
-SU 188;
+CF 196;
+PI 207;
+PS 197;
+PS 202;
+SU 200;
 SU 12;
 SU 13;
-SU 190;
+SU 202;
 }
-ACTI 184 {
+ACTI 196 {
 O act-in;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2272,13 +2352,13 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 185;
-PI 198;
-PS 186;
-PS 191;
-SU 189;
+CF 197;
+PI 208;
+PS 198;
+PS 203;
+SU 201;
 }
-ACTI 185 {
+ACTI 197 {
 O act-in;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2286,12 +2366,12 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "<[]>":-5;
 Z 0;
-CF 186;
-PI 199;
-SU 190;
+CF 198;
+PI 209;
+SU 202;
 SU 12;
 }
-ACTI 186 {
+ACTI 198 {
 O act-in;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2299,11 +2379,11 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "<[]>":-5;
 Z 0;
-CF 187;
-PI 200;
-SU 191;
+CF 199;
+PI 210;
+SU 203;
 }
-ACTI 187 {
+ACTI 199 {
 O act-in;
 V "[R] |0|UNIQ(c)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2312,16 +2392,16 @@ S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassA.c":-4;
 Z 0;
 CF 9;
-PI 201;
-PS 184;
-PS 189;
+PI 211;
+PS 196;
+PS 201;
 SU 13;
-SU 189;
-SU 191;
-SU 190;
+SU 201;
+SU 203;
+SU 202;
 SU 12;
 }
-ACTO 188 {
+ACTO 200 {
 O act-out;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2329,11 +2409,11 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 189;
-PS 185;
-PS 190;
+CF 201;
+PS 197;
+PS 202;
 }
-ACTO 189 {
+ACTO 201 {
 O act-out;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2341,11 +2421,11 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 190;
-PS 186;
-PS 191;
+CF 202;
+PS 198;
+PS 203;
 }
-ACTO 190 {
+ACTO 202 {
 O act-out;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2353,9 +2433,9 @@ P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "<[]>":-5;
 Z 0;
-CF 191;
+CF 203;
 }
-ACTO 191 {
+ACTO 203 {
 O act-out;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2365,32 +2445,7 @@ B "<[]>":-5;
 Z 0;
 CF 12;
 }
-FRMI 192 {
-O form-in;
-V "[R] |0|UNIQ(arr)";
-T "[I";
-P 9;
-S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
-B "Lmultipleclassesfalsepos/ClassB.arr":-4;
-Z 0;
-CF 163;
-CF 193;
-DH 167;
-DH 174;
-PS 193;
-}
-FRMO 193 {
-O form-out;
-V "[M] |0|UNIQ([])";
-T "I";
-P 9;
-S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
-B "<[]>":-5;
-Z 0;
-CF 161;
-PO 207;
-}
-FRMO 194 {
+FRMO 204 {
 O form-out;
 V "[M] |0|UNIQ(b)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2398,10 +2453,10 @@ P 6;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassA.b":-4;
 Z 0;
-CF 195;
-PO 180;
+CF 205;
+PO 192;
 }
-FRMO 195 {
+FRMO 205 {
 O form-out;
 V "[M] |0|UNIQ(c)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2410,9 +2465,9 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassA.c":-4;
 Z 0;
 CF 36;
-PO 181;
+PO 193;
 }
-FRMI 196 {
+FRMI 206 {
 O form-in;
 V "[R] |0|UNIQ(b)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2420,15 +2475,15 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassA.b":-4;
 Z 0;
-CF 197;
+CF 207;
 DH 69;
 DH 76;
 DH 103;
 DH 123;
-PS 197;
-PS 202;
+PS 207;
+PS 212;
 }
-FRMI 197 {
+FRMI 207 {
 O form-in;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2436,13 +2491,13 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 198;
-DH 202;
-DH 206;
-PS 199;
-PS 204;
+CF 208;
+DH 212;
+DH 216;
+PS 209;
+PS 214;
 }
-FRMI 198 {
+FRMI 208 {
 O form-in;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2450,12 +2505,12 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 199;
-DH 203;
-PS 200;
-PS 205;
+CF 209;
+DH 213;
+PS 210;
+PS 215;
 }
-FRMI 199 {
+FRMI 209 {
 O form-in;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2463,11 +2518,11 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<[]>":-5;
 Z 0;
-CF 200;
+CF 210;
 DH 131;
-DH 204;
+DH 214;
 }
-FRMI 200 {
+FRMI 210 {
 O form-in;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2475,10 +2530,10 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<[]>":-5;
 Z 0;
-CF 201;
-DH 205;
+CF 211;
+DH 215;
 }
-FRMI 201 {
+FRMI 211 {
 O form-in;
 V "[R] |0|UNIQ(c)";
 T "Lmultipleclassesfalsepos/ClassB";
@@ -2487,14 +2542,14 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassA.c":-4;
 Z 0;
 CF 65;
-CF 202;
+CF 212;
 DH 86;
 DH 93;
 DH 109;
-PS 198;
-PS 203;
+PS 208;
+PS 213;
 }
-FRMO 202 {
+FRMO 212 {
 O form-out;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2502,12 +2557,12 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 203;
-PO 188;
-PS 199;
-PS 204;
+CF 213;
+PO 200;
+PS 209;
+PS 214;
 }
-FRMO 203 {
+FRMO 213 {
 O form-out;
 V "[MR] |0|UNIQ(arr)";
 T "[I";
@@ -2515,12 +2570,12 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
-CF 204;
-PO 189;
-PS 200;
-PS 205;
+CF 214;
+PO 201;
+PS 210;
+PS 215;
 }
-FRMO 204 {
+FRMO 214 {
 O form-out;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2528,10 +2583,10 @@ P 7;
 S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<[]>":-5;
 Z 0;
-CF 205;
-PO 190;
+CF 215;
+PO 202;
 }
-FRMO 205 {
+FRMO 215 {
 O form-out;
 V "[MR] |0|UNIQ([])";
 T "I";
@@ -2540,9 +2595,9 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "<[]>":-5;
 Z 0;
 CF 63;
-PO 191;
+PO 203;
 }
-ACTI 206 {
+ACTI 216 {
 O act-in;
 V "[R] |0|UNIQ(arr)";
 T "[I";
@@ -2551,13 +2606,13 @@ S "multipleclassesfalsepos/ClassA.java":26,0-26,0;
 B "Lmultipleclassesfalsepos/ClassB.arr":-4;
 Z 0;
 CF 124;
-PI 192;
-PS 207;
+PI 190;
+PS 217;
 SU 127;
 SU 128;
-SU 207;
+SU 217;
 }
-ACTO 207 {
+ACTO 217 {
 O act-out;
 V "[M] |0|UNIQ([])";
 T "I";
@@ -2567,9 +2622,9 @@ B "<[]>":-5;
 Z 0;
 CF 127;
 DH 131;
-DH 204;
+DH 214;
 }
-NORM 208 {
+NORM 218 {
 O compound;
 V "immutable";
 P 5;
@@ -2579,7 +2634,7 @@ Z 0;
 DD 23;
 CF 33;
 }
-NORM 209 {
+NORM 219 {
 O compound;
 V "immutable";
 P 6;
@@ -2589,7 +2644,7 @@ Z 0;
 DD 38;
 CF 42;
 }
-NORM 210 {
+NORM 220 {
 O compound;
 V "immutable";
 P 8;
@@ -2599,7 +2654,7 @@ Z 0;
 DD 154;
 CF 158;
 }
-NORM 211 {
+NORM 221 {
 O compound;
 V "many2many";
 P 5;
@@ -2609,7 +2664,7 @@ Z 0;
 DD 22;
 CF 23;
 }
-NORM 212 {
+NORM 222 {
 O compound;
 V "many2many";
 P 5;
@@ -2617,9 +2672,9 @@ S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
 B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
 Z 0;
 DD 31;
-CF 208;
+CF 218;
 }
-NORM 213 {
+NORM 223 {
 O compound;
 V "many2many";
 P 6;
@@ -2627,9 +2682,9 @@ S "multipleclassesfalsepos/ClassA.java":0,0-0,0;
 B "multipleclassesfalsepos.ClassA.<init>()V":-1;
 Z 0;
 DD 41;
-CF 209;
+CF 219;
 }
-NORM 214 {
+NORM 224 {
 O compound;
 V "many2many";
 P 8;
@@ -2637,29 +2692,29 @@ S "multipleclassesfalsepos/ClassB.java":0,0-0,0;
 B "multipleclassesfalsepos.ClassB.<init>()V":-1;
 Z 0;
 DD 157;
-CF 210;
+CF 220;
 }
-NORM 215 {
+NORM 225 {
 O compound;
 V "CALL_RET";
 P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "multipleclassesfalsepos.MultipleClassesFalsePos.main([Ljava/lang/String;)V":-9;
 Z 0;
-CF 180;
+CF 192;
 }
-NORM 216 {
+NORM 226 {
 O compound;
 V "CALL_RET";
 P 4;
 S "multipleclassesfalsepos/MultipleClassesFalsePos.java":18,0-18,0;
 B "multipleclassesfalsepos.MultipleClassesFalsePos.main([Ljava/lang/String;)V":-9;
 Z 0;
-CF 188;
+CF 200;
 CD 14;
 HE 14;
 }
-NORM 217 {
+NORM 227 {
 O compound;
 V "CALL_RET";
 P 5;
@@ -2668,7 +2723,7 @@ B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-9;
 Z 0;
 CF 19;
 }
-NORM 218 {
+NORM 228 {
 O compound;
 V "CALL_RET";
 P 6;
@@ -2683,7 +2738,7 @@ HE 47;
 HE 49;
 HE 50;
 }
-NORM 219 {
+NORM 229 {
 O compound;
 V "CALL_RET";
 P 6;
@@ -2696,14 +2751,14 @@ CD 56;
 HE 54;
 HE 56;
 }
-NORM 220 {
+NORM 230 {
 O compound;
 V "CALL_RET";
 P 7;
 S "multipleclassesfalsepos/ClassA.java":26,0-26,0;
 B "multipleclassesfalsepos.ClassA.falsePos(I)I":-9;
 Z 0;
-CF 207;
+CF 217;
 CD 130;
 HE 130;
 }

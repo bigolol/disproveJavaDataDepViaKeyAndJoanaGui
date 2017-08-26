@@ -80,6 +80,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ListView<String> listViewCalledMethodsOfSE;
+    
+    @FXML
+    private ListView<String> listViewFormalInoutPairs;
 
     @FXML
     private AnchorPane anchorPaneMethodCode;
@@ -88,10 +91,16 @@ public class MainWindowController implements Initializable {
     private AnchorPane anchorPaneLoopInvariant;
 
     @FXML
+    private AnchorPane anchorPaneKeyContract;
+    
+    @FXML
     private Button buttonSaveLoopInvariant;
 
     @FXML
     private Button buttonResetLoopInvariant;
+
+    @FXML
+    private Button buttonCalcKeYContract;
 
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
@@ -206,10 +215,13 @@ public class MainWindowController implements Initializable {
                 listViewUncheckedChops,
                 listViewCalledMethodsOfSE,
                 listViewLoopsOfSE,
+                listViewFormalInoutPairs,
                 anchorPaneMethodCode,
                 anchorPaneLoopInvariant,
+                anchorPaneKeyContract,
                 buttonSaveLoopInvariant,
-                buttonResetLoopInvariant);
+                buttonResetLoopInvariant,
+                buttonCalcKeYContract);
 
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 

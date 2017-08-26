@@ -68,7 +68,6 @@
 "sink" : 12,
 "nodes_in_chop" : [
 129,
-193,
 66,
 131,
 164,
@@ -77,18 +76,19 @@
 170,
 11,
 12,
-207,
+217,
 126,
-63]
+63,
+191]
 }],
 "summary_edges_sorted" : [
 {"src" : 11, "sink" : 12},
-{"src" : 126, "sink" : 207}],
+{"src" : 126, "sink" : 217}],
 "summary_edges_methods": [
-{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"},
-{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"}],"summary_edges_chops" : [
-{"pos" :1, "chops" : [
-{"src" : 11, "sink" : 12}]},
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"},
+{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"}],"summary_edges_chops" : [
 {"pos" :0, "chops" : [
+{"src" : 11, "sink" : 12}]},
+{"pos" :1, "chops" : [
 {"src" : 11, "sink" : 12}]}]
 }}

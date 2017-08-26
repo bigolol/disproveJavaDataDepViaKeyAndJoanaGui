@@ -36,24 +36,21 @@ public class JavaForKeyCreator {
     private JCallGraph callGraph;
     private SDG sdg;
     private StateSaver stateSaver;
-    private IFCAnalysis analysis;
     private JavaProjectCopyHandler javaProjectCopyHandler;
     private CopyKeyCompatibleListener keyCompatibleListener;
 
     private GetMethodBodyListener methodBodyListener = new GetMethodBodyListener();
 
-    public JavaForKeyCreator(String pathToJavaSource, JCallGraph callGraph, SDG sdg, StateSaver stateSaver, IFCAnalysis analysis) throws IOException {
+    public JavaForKeyCreator(String pathToJavaSource, JCallGraph callGraph, SDG sdg, StateSaver stateSaver) {
         this.pathToJavaSource = pathToJavaSource;
         this.callGraph = callGraph;
         this.sdg = sdg;
         this.stateSaver = stateSaver;
-        this.analysis = analysis;
-
     }
 
     public static String getPathToJavaClassFile(String pathToSource, StaticCGJavaClass javaClass) {
-        return pathToSource + JavaProjectCopyHandler.getRelPathForJavaClass(javaClass) +
-                javaClass.getOnlyClassName() + ".java";
+        return pathToSource + JavaProjectCopyHandler.getRelPathForJavaClass(javaClass)
+                + javaClass.getOnlyClassName() + ".java";
     }
 
     public String generateJavaForFormalNodeTuple(
@@ -80,15 +77,12 @@ public class JavaForKeyCreator {
 
         methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
 
-        String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
-        String sinkDescr = generateSinkDescr(formalNodeTuple.getSecondNode());
-        String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
-                sdg, sdg.getEntry(formalInNode), stateSaver);
-
         javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
         javaProjectCopyHandler.copyClasses(allNecessaryClasses);
+        
+        String descriptionForKey = getMethodContractFor(formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE);
 
-        List<String> classFileForKey = generateClassFileForKey(inputDescrExceptFormalIn, sinkDescr, pointsToDecsr, keyCompatibleContents);
+        List<String> classFileForKey = generateClassFileForKey(descriptionForKey, keyCompatibleContents);
 
         javaProjectCopyHandler.addClassToTest(classFileForKey, containingClass);
 
@@ -98,10 +92,24 @@ public class JavaForKeyCreator {
         return pathToTestJava;
     }
 
+    public String getMethodContractFor(
+            SDGNode formalInNode,
+            SDGNode formalOutNode,
+            StaticCGJavaMethod methodCorresToSE) {
+        String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
+        String sinkDescr = generateSinkDescr(formalOutNode);
+        String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
+                sdg, sdg.getEntry(formalInNode), stateSaver);
+        String descriptionForKey
+                = "\t/*@ requires "
+                + pointsToDecsr
+                + ";\n\t  @ determines " + sinkDescr + " \\by "
+                + inputDescrExceptFormalIn + "; */";
+        return descriptionForKey;
+    }
+
     private List<String> generateClassFileForKey(
-            String inputDescrExceptFormalIn,
-            String sinkDescr,
-            String pointsToDecsr,
+            String descriptionForKey,
             String classContents) {
 
         List<String> lines = new ArrayList<>();
@@ -117,12 +125,6 @@ public class JavaForKeyCreator {
         for (int i = 0; i <= stopLine - startLine; ++i) {
             lines.remove(startLine);
         }
-
-        String descriptionForKey
-                = "\t/*@ requires "
-                + pointsToDecsr
-                + ";\n\t  @ determines " + sinkDescr + " \\by "
-                + inputDescrExceptFormalIn + "; */";
 
         lines.add(startLine - 1, descriptionForKey);
 
