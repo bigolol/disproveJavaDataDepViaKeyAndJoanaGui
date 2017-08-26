@@ -40,8 +40,7 @@ public class PointsToGenerator {
      */
     public static String generatePreconditionFromPointsToSet(SDG sdg, SDGNode methodNode, StateSaver stateSaver) {
         //get the call graph node corresponding to the SDG method node
-        int cgNodeId = sdg.getCGNodeId(methodNode);
-        PersistentCGNode persistentCGNode = stateSaver.getNode(cgNodeId);
+        PersistentCGNode persistentCGNode = stateSaver.getCGNodeForFormalIn(methodNode);
         // get IR for parameter names
         PersistentIR persistentIR = persistentCGNode.getIR();
         List<PersistentLocalPointerKey> persistentLocalPointerKeys = stateSaver.getPersistentLocalPointerKeys(persistentCGNode);
@@ -73,7 +72,11 @@ public class PointsToGenerator {
         // enumerate all two element subsets of pointer keys and check if those two have disjunct points-to sets
         for (PersistentLocalPointerKey persistentLocalPointerKey : localPointerKeys) {
             String o1 = ir.getLocalName(persistentLocalPointerKey.getValueNumber());
-            for (PersistentLocalPointerKey currentDisjunctOtherPk : stateSaver.getDisjunctLPKs(persistentLocalPointerKey)) {
+            List<PersistentLocalPointerKey> disjunctLPKs = stateSaver.getDisjunctLPKs(persistentLocalPointerKey);
+            if (disjunctLPKs == null) {
+                continue;
+            }
+            for (PersistentLocalPointerKey currentDisjunctOtherPk : disjunctLPKs) {
                 String o2 = ir.getLocalName(currentDisjunctOtherPk.getValueNumber());
                 // if points-to sets are disjunct, o1 and o2 cannot alias
                 if (o1 != null && o2 != null) {

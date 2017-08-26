@@ -93,7 +93,6 @@ public class MethodVisitor extends EmptyVisitor {
 
     @Override
     public void visitINVOKEVIRTUAL(INVOKEVIRTUAL i) {
-        System.out.println(String.format(format,"M",i.getReferenceType(cp),i.getMethodName(cp),argumentList(i.getArgumentTypes(cp))));
         addCalledMethod(i);
     }
 
@@ -106,26 +105,21 @@ public class MethodVisitor extends EmptyVisitor {
 
     @Override
     public void visitINVOKEINTERFACE(INVOKEINTERFACE i) {
-        System.out.println(String.format(format,"I",i.getReferenceType(cp),i.getMethodName(cp),argumentList(i.getArgumentTypes(cp))));
         addCalledMethod(i);
     }
 
     @Override
     public void visitINVOKESPECIAL(INVOKESPECIAL i) {
-        System.out.println(String.format(format,"O",i.getReferenceType(cp),i.getMethodName(cp),argumentList(i.getArgumentTypes(cp))));
         addCalledMethod(i);
     }
 
     @Override
     public void visitINVOKESTATIC(INVOKESTATIC i) {
-        System.out.println(String.format(format,"S",i.getReferenceType(cp),i.getMethodName(cp),argumentList(i.getArgumentTypes(cp))));
         addCalledMethod(i);
     }
 
     @Override
     public void visitINVOKEDYNAMIC(INVOKEDYNAMIC i) {
-        System.out.println(String.format(format,"D",i.getType(cp),i.getMethodName(cp),
-                argumentList(i.getArgumentTypes(cp))));
         addCalledMethod(i);
     }
 }

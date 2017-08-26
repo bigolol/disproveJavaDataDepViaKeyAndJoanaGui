@@ -115,7 +115,6 @@ public class DisprovingProject {
         addKeyValueToJsonStringbuilder(created, "violation_wrapper",
                 violationsWrapper.generateSaveString());
         created.append("}");
-        System.out.println(created.toString());
         return created.toString();
     }
 
@@ -133,7 +132,7 @@ public class DisprovingProject {
         disprovingProject.sdg = SDG.readFrom(new FileReader(new File(pathToSdg)));
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
-        disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj);
+        disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
 

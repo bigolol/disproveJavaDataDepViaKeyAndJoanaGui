@@ -80,8 +80,6 @@ public class ClassVisitor extends EmptyVisitor {
             if (constant.getTag() == 7) {
                 String referencedClass
                         = constantPool.constantToString(constant);
-                System.out.println(String.format(classReferenceFormat,
-                        referencedClass));
                 StaticCGJavaClass staticCGRefJavaClass = new StaticCGJavaClass(referencedClass);
                 if (!alreadyFoundClasses.contains(staticCGRefJavaClass)) {
                     alreadyFoundClasses.add(staticCGRefJavaClass);

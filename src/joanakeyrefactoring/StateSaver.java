@@ -40,7 +40,7 @@ public class StateSaver implements CGConsumer {
     private Map<CGNode, PersistentCGNode> cgNodesToPersistentCGNodes = new HashMap<>();
     private Map<PersistentLocalPointerKey, List<PersistentLocalPointerKey>> disjunctPointsToSets
             = new HashMap<>();
-    private HashMap<SDGNode, PersistentCGNode> callSiteInsToPersistenCGNodes = new HashMap<>();
+    private HashMap<SDGNode, PersistentCGNode> formalInsToPersistentCGNodes = new HashMap<>();
 
     @Override
     public void consume(CallGraph callGraph, PointerAnalysis<? extends InstanceKey> pointerAnalyis) {
@@ -48,11 +48,19 @@ public class StateSaver implements CGConsumer {
         this.pointerAnalyis = pointerAnalyis;
     }
 
-    public static StateSaver generateFromJson(JSONObject jsonObj) throws IOException {
+    public static StateSaver generateFromJson(JSONObject jsonObj, SDG sdg) throws IOException {
         StateSaver stateSaver = new StateSaver();
 
-        JSONArray cgNodeArr = jsonObj.getJSONArray("cgNodes");
+        JSONArray formalNodeToCGNodeArr = jsonObj.getJSONArray("formal_ins_to_pers_cg");
+        for (int i = 0; i < formalNodeToCGNodeArr.length(); ++i) {
+            JSONObject currentPair = formalNodeToCGNodeArr.getJSONObject(i);
+            int sdgIndex = currentPair.getInt("sdg_node");
+            JSONObject persistentCGNode = currentPair.getJSONObject("cg_node");
+            SDGNode node = sdg.getNode(sdgIndex);
+            stateSaver.formalInsToPersistentCGNodes.put(node, PersistentCGNode.generateFromJsonObj(persistentCGNode));
+        }
 
+        JSONArray cgNodeArr = jsonObj.getJSONArray("cgNodes");
         for (int i = 0; i < cgNodeArr.length(); ++i) {
             JSONObject currentCGNodeSaveObj = cgNodeArr.getJSONObject(i);
             PersistentCGNode currentPersistentCGNode = PersistentCGNode.generateFromJsonObj(currentCGNodeSaveObj);
@@ -87,6 +95,17 @@ public class StateSaver implements CGConsumer {
     public String getSaveString() {
         StringBuilder created = new StringBuilder();
         created.append("{");
+
+        created.append("\"formal_ins_to_pers_cg\" : [\n");
+
+        formalInsToPersistentCGNodes.forEach((t, u) -> {
+            created.append("{ \"sdg_node\" : " + t.getId() + ", \"cg_node\" : {" + u.generateSaveString() + "}},\n");
+        });
+        if (created.lastIndexOf("[") != created.length() - 1) {
+            created.replace(created.length() - 2, created.length(), "");
+        }
+        created.append("],\n");
+
         created.append("\"cgNodes\" : [").append('\n');
         for (PersistentCGNode persistentCGNode : persistentCGNodes) {
             created.append("{");
@@ -176,6 +195,7 @@ public class StateSaver implements CGConsumer {
                     int cgNodeId = sdg.getCGNodeId(methodNode);
                     CGNode cgNode = callGraph.getNode(cgNodeId);
                     PersistentCGNode corresPersCGNode = cgNodesToPersistentCGNodes.get(cgNode);
+                    formalInsToPersistentCGNodes.put(formalInNode, corresPersCGNode);
                     if (corresPersCGNode != null) {
                         corresPersCGNode.setCgNodeId(cgNodeId);
                     }
@@ -183,7 +203,8 @@ public class StateSaver implements CGConsumer {
             }
         }
         generateIRsAndPersistentLocalPointerKeys(localPointerKeys);
-        calculateDisjunctPointsToKeys(localPointerKeys);  
+        calculateDisjunctPointsToKeys(localPointerKeys);
+
     }
 
     private void generateIRsAndPersistentLocalPointerKeys(ArrayList<LocalPointerKey> localPointerKeys) {
@@ -295,6 +316,10 @@ public class StateSaver implements CGConsumer {
         }
 
         return true;
+    }
+
+    public PersistentCGNode getCGNodeForFormalIn(SDGNode methodNode) {
+        return formalInsToPersistentCGNodes.get(methodNode);
     }
 
 }

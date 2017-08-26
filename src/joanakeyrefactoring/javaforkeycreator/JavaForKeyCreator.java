@@ -99,7 +99,7 @@ public class JavaForKeyCreator {
         String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
         String sinkDescr = generateSinkDescr(formalOutNode);
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
-                sdg, sdg.getEntry(formalInNode), stateSaver);
+                sdg, formalInNode, stateSaver);
         String descriptionForKey
                 = "\t/*@ requires "
                 + pointsToDecsr

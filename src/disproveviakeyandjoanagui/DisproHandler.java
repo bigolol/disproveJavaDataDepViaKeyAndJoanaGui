@@ -41,7 +41,7 @@ public class DisproHandler {
     private CodeArea methodCodeArea;
     private CodeArea loopInvariantCodeArea;
     private CodeArea keyContractCodeArea;
-    
+
     private Label labelProjName;
     private Label labelSummaryEdge;
     private Label labelSomeOtherData;
@@ -63,7 +63,7 @@ public class DisproHandler {
 
     private Map<Integer, SDGEdge> itemIndexToSummaryEdge = new HashMap<>();
     private StaticCGJavaMethod currentSelectedMethod;
-    
+
     private HashMap<Integer, SDGNodeTuple> currentIndexToNodeTuple = new HashMap<>();
 
     public DisproHandler(
@@ -101,17 +101,17 @@ public class DisproHandler {
         this.buttonCalcKeYContract = buttonCalcKeYContract;
 
         JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
-        
+
         methodCodeArea = javaCodeEditor.getCodeArea();
         addCodeAreaToAnchorPane(methodCodeArea, anchorPaneMethodCode);
         methodCodeArea.setDisable(true);
-        
+
         keyContractCodeArea = javaCodeEditor.getCodeArea();
         addCodeAreaToAnchorPane(keyContractCodeArea, this.anchorPaneKeyContract);
         keyContractCodeArea.setDisable(true);
-        
+
         loopInvariantCodeArea = javaCodeEditor.getCodeArea();
-        addCodeAreaToAnchorPane(loopInvariantCodeArea, this.anchorPaneLoopInvariant);     
+        addCodeAreaToAnchorPane(loopInvariantCodeArea, this.anchorPaneLoopInvariant);
 
         labelProjName.setText("");
         labelSummaryEdge.setText("");
@@ -151,6 +151,19 @@ public class DisproHandler {
         currentSelectedMethod.setLoopInvariant(pos, inv);
     }
 
+    private void resetListView(ListView<String> listView) {
+        listView.getSelectionModel().clearSelection();
+        listView.getItems().clear();
+    }
+
+    private void clearCodeAreaForNewCode(CodeArea codeArea, String newCode) {
+        try {
+            codeArea.clear();
+            codeArea.replaceText(0, 0, newCode);
+        } catch (Exception e) {
+        }
+    }
+
     /**
      * this gets called whenever a new .dispro file is loaded or a new
      * DisprovingProject is created from a .joak file.
@@ -169,10 +182,11 @@ public class DisproHandler {
         labelProjName.setText(disprovingProject.getProjName());
         violationsWrapper = disprovingProject.getViolationsWrapper();
 
-        listViewSummaryEdges.getItems().clear();
-        listViewUncheckedChops.getItems().clear();
-        listViewCalledMethodsInSE.getItems().clear();
-        listViewLoopsInSE.getItems().clear();
+        resetListView(listViewSummaryEdges);
+        resetListView(listViewUncheckedChops);
+        resetListView(listViewCalledMethodsInSE);
+        resetListView(listViewLoopsInSE);
+        resetListView(listViewFormalInoutPairs);
 
         itemIndexToSummaryEdge = new HashMap<>();
 
@@ -197,18 +211,18 @@ public class DisproHandler {
             SDGEdge e = itemIndexToSummaryEdge.get(newValue);
 
             currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(e);
-            
+
             //handle the code areas
             String methodBody = currentSelectedMethod.getMethodBody();
-            
-            methodCodeArea.replaceText(0, methodCodeArea.getText().length(), methodBody);
-            loopInvariantCodeArea.clear();
-            keyContractCodeArea.clear();
+
+            clearCodeAreaForNewCode(loopInvariantCodeArea, "");
+            clearCodeAreaForNewCode(keyContractCodeArea, "");
+            clearCodeAreaForNewCode(methodCodeArea, methodBody);
 
             //populate the other list views
-            listViewCalledMethodsInSE.getItems().clear();
-            listViewLoopsInSE.getItems().clear();
-            listViewFormalInoutPairs.getItems().clear();
+            resetListView(listViewCalledMethodsInSE);
+            resetListView(listViewLoopsInSE);
+            resetListView(listViewFormalInoutPairs);
 
             for (int relPos : currentSelectedMethod.getRelPosOfLoops()) {
                 listViewLoopsInSE.getItems().add(String.valueOf(relPos));
@@ -216,11 +230,11 @@ public class DisproHandler {
             for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
                 listViewCalledMethodsInSE.getItems().add(m.toString());
             }
-            
+
             Collection<SDGNodeTuple> allFormalPairs = disprovingProject.getSdg().getAllFormalPairs(e.getSource(), e.getTarget());
             currentIndexToNodeTuple.clear();
             int index = 0;
-            for(SDGNodeTuple t : allFormalPairs) {
+            for (SDGNodeTuple t : allFormalPairs) {
                 listViewFormalInoutPairs.getItems().add(t.toString());
                 currentIndexToNodeTuple.put(index++, t);
             }
@@ -235,14 +249,12 @@ public class DisproHandler {
                 return;
             }
             int relPos = Integer.valueOf(newValue);
-            loopInvariantCodeArea.replaceText(
-                    0,
-                    loopInvariantCodeArea.getText().length(),
-                    currentSelectedMethod.getLoopInvariant(relPos));
+            clearCodeAreaForNewCode(loopInvariantCodeArea, currentSelectedMethod.getLoopInvariant(relPos));
+
             buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
                 String template = LoopInvariantGenerator.getTemplate();
                 setLoopInvInCurrent(relPos, template);
-                loopInvariantCodeArea.replaceText(0, loopInvariantCodeArea.getText().length(), template);
+                clearCodeAreaForNewCode(loopInvariantCodeArea, template);
             });
             buttonSaveLoopInvariant.setOnAction((event) -> {
                 setLoopInvInCurrent(relPos, loopInvariantCodeArea.getText());
@@ -255,7 +267,9 @@ public class DisproHandler {
         listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             int index = (int) newValue;
             SDGNodeTuple nodeTuple = currentIndexToNodeTuple.get(index);
-            keyContractCodeArea.replaceText(0, 0, joanaKeyInterfacer.getKeyContractFor(nodeTuple, currentSelectedMethod));
+            clearCodeAreaForNewCode(
+                    keyContractCodeArea,
+                    joanaKeyInterfacer.getKeyContractFor(nodeTuple, currentSelectedMethod));
         });
 
     }
