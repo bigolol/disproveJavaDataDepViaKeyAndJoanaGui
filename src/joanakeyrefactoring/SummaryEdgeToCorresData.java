@@ -25,6 +25,7 @@ public class SummaryEdgeToCorresData {
 
     private HashMap<SDGNodeTuple, String> formalTupleToContract = new HashMap<>();
     private HashMap<SDGEdge, ArrayList<String>> edgeToLoopInvariant = new HashMap<>();
+    private HashMap<SDGEdge, String> edgeToLoopInvariantTemplate = new HashMap<>();
 
     public SummaryEdgeToCorresData(
             Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
@@ -32,13 +33,17 @@ public class SummaryEdgeToCorresData {
             JavaForKeyCreator javaForKeyCreator) throws IOException {
         for (SDGEdge e : edgesToMethods.keySet()) {            
             Collection<SDGNodeTuple> allFormalPairs = sdg.getAllFormalPairs(e.getSource(), e.getTarget());
-            ArrayList<String> loopInvList = new ArrayList<>();
             for (SDGNodeTuple t : allFormalPairs) {
-                String contract = javaForKeyCreator.getMethodContractAndSetLoopInvariants(
-                        t.getFirstNode(), t.getSecondNode(), edgesToMethods.get(e), loopInvList);
+                String contract = javaForKeyCreator.getMethodContractAndSetLoopInvariant(
+                        t.getFirstNode(), t.getSecondNode(), edgesToMethods.get(e),
+                        edgeToLoopInvariantTemplate, e);
                 formalTupleToContract.put(t, contract);
             }
-            edgeToLoopInvariant.put(e, loopInvList);
+            ArrayList<String> loopInvariants = new ArrayList<>();
+            for(int i = 0; i < edgesToMethods.get(e).getRelPosOfLoops().size(); ++i) {
+                loopInvariants.add(null);
+            }
+            edgeToLoopInvariant.put(e, loopInvariants);
         }
     }
 
@@ -47,11 +52,19 @@ public class SummaryEdgeToCorresData {
     }
     
     public String getLoopInvariantFor(SDGEdge e, int index) {
-        return edgeToLoopInvariant.get(e).get(index);
+        String get = edgeToLoopInvariant.get(e).get(index);
+        if(get == null) {
+            return edgeToLoopInvariantTemplate.get(e);
+        }
+        return get;
     }   
     
     public void setLoopInvariantFor(SDGEdge e, int index, String val) {
         edgeToLoopInvariant.get(e).set(index, val);
+    }
+
+    public void resetLoopInvariant(SDGEdge currentSelectedEdge, int newValue) {
+        edgeToLoopInvariant.get(currentSelectedEdge).set(newValue, null);
     }
     
 }

@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,8 +80,9 @@ public class JavaForKeyCreator {
         javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
         javaProjectCopyHandler.copyClasses(allNecessaryClasses);
 
-        List<String> l = new ArrayList<>();
-        String descriptionForKey = getMethodContractAndSetLoopInvariants(formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE, l);
+        String descriptionForKey
+                = getMethodContract(
+                        formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE);
 
         List<String> classFileForKey = generateClassFileForKey(descriptionForKey, keyCompatibleContents);
 
@@ -92,11 +94,10 @@ public class JavaForKeyCreator {
         return pathToTestJava;
     }
 
-    public String getMethodContractAndSetLoopInvariants(
+    private String getMethodContract(
             SDGNode formalInNode,
             SDGNode formalOutNode,
-            StaticCGJavaMethod methodCorresToSE,
-            List<String> loopInvariantList) throws IOException {
+            StaticCGJavaMethod methodCorresToSE) throws IOException {
         this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
 
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
@@ -121,9 +122,47 @@ public class JavaForKeyCreator {
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
                 sdg, formalInNode, stateSaver);
 
-        for (int pos : methodCorresToSE.getRelPosOfLoops()) {
-            loopInvariantList.add(LoopInvariantGenerator.createLoopInvariant(sinkDescr, inputDescrExceptFormalIn));
+        String descriptionForKey
+                = "\t/*@ requires "
+                + pointsToDecsr
+                + ";\n\t  @ determines " + sinkDescr + " \\by "
+                + inputDescrExceptFormalIn + "; */";
+        return descriptionForKey;
+    }
+
+    public String getMethodContractAndSetLoopInvariant(
+            SDGNode formalInNode,
+            SDGNode formalOutNode,
+            StaticCGJavaMethod methodCorresToSE,
+            Map<SDGEdge, String> edgeToInvariantTempltate,
+            SDGEdge e) throws IOException {
+        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+
+        StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
+        String relPathForJavaClass
+                = JavaProjectCopyHandler.getRelPathForJavaClass(containingClass);
+        File javaClassFile = new File(pathToJavaSource + relPathForJavaClass + containingClass.getOnlyClassName() + ".java");
+
+        if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
+            throw new FileNotFoundException();
         }
+
+        String contents = new String(Files.readAllBytes(javaClassFile.toPath()));
+        Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses = callGraph.getAllNecessaryClasses(methodCorresToSE);
+
+        String keyCompatibleContents = keyCompatibleListener.transformCode(
+                contents, allNecessaryClasses.get(methodCorresToSE.getContainingClass()));
+
+        methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
+
+        String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
+        String sinkDescr = generateSinkDescr(formalOutNode);
+        String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
+                sdg, formalInNode, stateSaver);
+
+        edgeToInvariantTempltate.put(e,
+                LoopInvariantGenerator.createLoopInvariant(
+                        sinkDescr, inputDescrExceptFormalIn));
 
         String descriptionForKey
                 = "\t/*@ requires "

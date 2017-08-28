@@ -248,11 +248,11 @@ public class DisproHandler {
 
         clearCodeAreaForNewCode(loopInvariantCodeArea, joanaKeyInterfacer.getLoopInvariantFor(currentSelectedEdge, newValue));
 
-//        buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
-//            String template = LoopInvariantGenerator.getTemplate();
-//            setLoopInvInCurrent(relPos, template);
-//            clearCodeAreaForNewCode(loopInvariantCodeArea, template);
-//        });
+        buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
+            joanaKeyInterfacer.resetLoopInvariant(currentSelectedEdge, newValue);
+            clearCodeAreaForNewCode(loopInvariantCodeArea,
+                    joanaKeyInterfacer.getLoopInvariantFor(currentSelectedEdge, newValue));
+        });
 
         buttonSaveLoopInvariant.setOnAction((event) -> {
             joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, newValue, loopInvariantCodeArea.getText());

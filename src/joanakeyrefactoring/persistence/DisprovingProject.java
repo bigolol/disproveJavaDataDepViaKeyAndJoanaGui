@@ -20,7 +20,9 @@ import java.util.Collection;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.loopinvarianthandling.LoopInvariants;
 import joanakeyrefactoring.StateSaver;
+import joanakeyrefactoring.SummaryEdgeToCorresData;
 import joanakeyrefactoring.ViolationsWrapper;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -38,6 +40,7 @@ public class DisprovingProject {
     private JCallGraph callGraph;
     private ViolationsWrapper violationsWrapper;
     private SDG sdg;
+    private SummaryEdgeToCorresData summaryEdgeToCorresData;
     private LoopInvariants loopInvariants;
 
     private DisprovingProject() {
@@ -125,7 +128,15 @@ public class DisprovingProject {
         disprovingProject.loopInvariants.findAllLoopPositions(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
                 disprovingProject.pathToJava);
-
+        disprovingProject.summaryEdgeToCorresData
+                = new SummaryEdgeToCorresData(
+                        disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods(),
+                        disprovingProject.sdg,
+                        new JavaForKeyCreator(
+                                disprovingProject.pathToJava,
+                                disprovingProject.callGraph,
+                                disprovingProject.sdg,
+                                disprovingProject.stateSaver));
         return disprovingProject;
     }
 

@@ -5,6 +5,7 @@
  */
 package joanakeyrefactoring;
 
+import disproveviakeyandjoanagui.ViolationsWrapperListener;
 import edu.kit.joana.api.IFCAnalysis;
 import edu.kit.joana.api.sdg.SDGMethod;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
@@ -28,7 +29,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import joanakeyrefactoring.persistence.ViolationsSaverLoader;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -53,6 +53,7 @@ public class ViolationsWrapper {
     private JCallGraph callGraph = new JCallGraph();
     private IFCAnalysis ana;
     private List<String> keyCompatibleJavaFeatures = new ArrayList<>();
+    private List<ViolationsWrapperListener> listener = new ArrayList<>();
 
     public ViolationsWrapper(
             Collection<? extends IViolation<SecurityNode>> violations,
@@ -387,6 +388,9 @@ public class ViolationsWrapper {
             vc.findSummaryEdges(sdg);
             if (vc.isEmpty()) {
                 violationChops.remove(vc);
+                listener.forEach((l) -> {
+                    l.disprovedChop(vc);
+                });
             }
         });
         summaryEdgesAndContainingChops.remove(e);
@@ -394,6 +398,9 @@ public class ViolationsWrapper {
         if (sortedEdgesToCheck.isEmpty()) {
             prepareNextSummaryEdges();
         }
+        listener.forEach((l) -> {
+            l.disprovedEdge(e);
+        });
     }
 
     public void checkedEdge(SDGEdge e) {
@@ -484,6 +491,10 @@ public class ViolationsWrapper {
 
     public Map<SDGEdge, StaticCGJavaMethod> getSummaryEdgesAndCorresJavaMethods() {
         return summaryEdgesAndCorresJavaMethods;
+    }
+
+    void addListener(ViolationsWrapperListener listener) {
+        this.listener.add(listener);
     }
 
 }

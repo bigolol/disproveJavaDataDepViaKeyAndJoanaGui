@@ -55,4 +55,8 @@ public class JoanaKeyInterfacer {
     public void setLoopInvariantFor(SDGEdge e, int index, String val) {
         summaryEdgeToCorresData.setLoopInvariantFor(e, index, val);
     }
+
+    public void resetLoopInvariant(SDGEdge currentSelectedEdge, int newValue) {
+        summaryEdgeToCorresData.resetLoopInvariant(currentSelectedEdge, newValue);
+    }
 }
