@@ -44,22 +44,6 @@ public class StaticCGJavaClass {
         return referencedClasses;
     }
 
-    public String getSaveString() {
-        String template
-                = "{\"id\" : \"ID\","
-                + "\"referenced_classes\" : [REFERENCEDCLASSES]}";
-        StringBuilder refClassesSB = new StringBuilder();
-        for (StaticCGJavaClass c : referencedClasses) {
-            refClassesSB.append("\"" + c.getId() + "\"").append(", ");
-        }
-        if (refClassesSB.lastIndexOf(",") != -1) {
-            refClassesSB.replace(refClassesSB.length() - 2, refClassesSB.length(), "");
-        }
-        template = template.replace("ID", id);
-        template = template.replace("REFERENCEDCLASSES", refClassesSB.toString());
-        return template;
-    }
-
     public String getOnlyClassName() {
         int packageDeclIndex = id.lastIndexOf(".");
         if (packageDeclIndex == -1) {

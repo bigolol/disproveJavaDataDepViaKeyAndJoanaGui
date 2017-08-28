@@ -1,6 +1,6 @@
 {"path_to_jar" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar",
 "path_to_java_source" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src",
-"path_to_sdg" : "savedata/MultipleClassesFalsePos/sdg.pdg",
+"path_to_sdg" : "null",
 "state_saver" : {"formal_ins_to_pers_cg" : [
 { "sdg_node" : 65, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
 "1" : "this"
@@ -17,13 +17,7 @@
 { "sdg_node" : 38, "cg_node" : {"id" : 3, "cg_node_id" :8, "ir" : {
 "1" : "this"
 }}},
-{ "sdg_node" : 202, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
-"1" : "this"
-}}},
-{ "sdg_node" : 204, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
-"1" : "this"
-}}},
-{ "sdg_node" : 205, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+{ "sdg_node" : 204, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
 "1" : "this"
 }}},
 { "sdg_node" : 206, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
@@ -36,6 +30,12 @@
 "1" : "this"
 }}},
 { "sdg_node" : 209, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 210, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 211, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
 "1" : "this"
 }}},
 { "sdg_node" : 154, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
@@ -100,6 +100,11 @@
 }],
 "disjunctPointsTo" : []
 },
+"edges_methods_to_values" : {"formal_node_tuple_to_contract" : [{"in" : 164, "out" : 205, "contract" : "	/*@ requires true	  @ determines this \\by this, this.arr; "},
+{"in" : 66, "out" : 63, "contract" : "	/*@ requires true	  @ determines \\result \\by this.c.arr, this, this.c, this.b, this.b.arr;"}],"edge_to_loop_invariant_template" : [{"in" : 11, "out" : 12, "invariant" : "	/*	@ loop_invariant	 	 @ assignable	 	 @ determines \\result \\by this.c.arr, this, this.c, this.b, this.b.arr;	 	 @ decreas"},
+{"in" : 126, "out" : 217, "invariant" : "	/*	@ loop_invariant	 	 @ assignable	 	 @ determines this \\by this, this.arr;	 	 @ decrease"}],"method_to_most_general_contract" : [{"method" : "multipleclassesfalsepos.ClassA/falsePos/int", "most_general_contract" : "	/*@ requires true	  @ determines this \\by this.c.arr, this, high, this.c, this.b, this.b.arr; "},
+{"method" : "multipleclassesfalsepos.ClassB/putDataInArr/int", "most_general_contract" : "	/*@ requires true	  @ determines this \\by this, high, this.arr; "}],"edge_to_loop_invariant" : [{"in" : 11, "out" : 12, "loop_invariants" : []},
+{"in" : 126, "out" : 217, "loop_invariants" : ["null"]}]},
 "violation_wrapper" : {
 "violations" : [],
 "chops" : [
@@ -115,20 +120,20 @@
 168,
 170,
 11,
-203,
 12,
-215,
+205,
+217,
 126,
 63]
 }],
 "summary_edges_sorted" : [
 {"src" : 11, "sink" : 12},
-{"src" : 126, "sink" : 215}],
+{"src" : 126, "sink" : 217}],
 "summary_edges_methods": [
-{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"},
-{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"}],"summary_edges_chops" : [
-{"pos" :1, "chops" : [
-{"src" : 11, "sink" : 12}]},
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"},
+{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"}],"summary_edges_chops" : [
 {"pos" :0, "chops" : [
+{"src" : 11, "sink" : 12}]},
+{"pos" :1, "chops" : [
 {"src" : 11, "sink" : 12}]}]
 }}

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import joanakeyrefactoring.StateSaver;
-import joanakeyrefactoring.SummaryEdgeToCorresData;
+import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.javaforkeycreator.PointsToGenerator;
@@ -27,7 +27,7 @@ public class JoanaKeyInterfacer {
 
     private ViolationsWrapper violationsWrapper;
     private JavaForKeyCreator javaForKeyCreator;
-    private SummaryEdgeToCorresData summaryEdgeToCorresData;
+    private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
 
     public JoanaKeyInterfacer(
             ViolationsWrapper violationsWrapper,
@@ -38,7 +38,7 @@ public class JoanaKeyInterfacer {
         this.violationsWrapper = violationsWrapper;
         this.javaForKeyCreator = new JavaForKeyCreator(pathToJavaSource, callGraph, sdg, stateSaver);
         Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
-        summaryEdgeToCorresData = new SummaryEdgeToCorresData(
+        summaryEdgeToCorresData = new SummaryEdgeAndMethodToCorresData(
                 summaryEdgesAndCorresJavaMethods,
                 sdg,
                 javaForKeyCreator);

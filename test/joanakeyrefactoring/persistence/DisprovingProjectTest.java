@@ -57,11 +57,17 @@ public class DisprovingProjectTest {
 //        writer.close();
         //DisprovingProject generateFromSavestring = DisprovingProject.generateFromSavestring(generateSaveString);
     }
-    
+
     @Test
-    public void testLoading() throws IOException, IOException {
-        String readFileToString = FileUtils.readFileToString(new File("testdata/jzip.dispro"), Charset.defaultCharset());
-        DisprovingProject generateFromSavestring = DisprovingProject.generateFromSavestring(readFileToString);
+    public void testLoading() throws
+            IOException, ClassHierarchyException,
+            GraphIntegrity.UnsoundGraphException,
+            CancelException {
+        DisprovingProject generateFromCheckdata = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
+        generateFromCheckdata.saveSDG();
+        String saveStr = generateFromCheckdata.generateSaveString();
+        
+        DisprovingProject.generateFromSavestring(saveStr);
     }
 
     @Test
@@ -69,7 +75,6 @@ public class DisprovingProjectTest {
             IOException, ClassHierarchyException,
             GraphIntegrity.UnsoundGraphException,
             CancelException {
-                
     }
 
     @Test

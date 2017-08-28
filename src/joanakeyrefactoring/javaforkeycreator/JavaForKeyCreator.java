@@ -6,7 +6,6 @@
 package joanakeyrefactoring.javaforkeycreator;
 
 import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
-import edu.kit.joana.api.IFCAnalysis;
 import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNode;
@@ -16,10 +15,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -117,7 +117,9 @@ public class JavaForKeyCreator {
 
         methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
 
-        String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
+        String inputDescrExceptFormalIn = getAllInputIf((n) -> {
+            return n != formalInNode;
+        }, formalInNode, methodCorresToSE, sdg);
         String sinkDescr = generateSinkDescr(formalOutNode);
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
                 sdg, formalInNode, stateSaver);
@@ -130,12 +132,13 @@ public class JavaForKeyCreator {
         return descriptionForKey;
     }
 
-    public String getMethodContractAndSetLoopInvariant(
+    public String getMethodContractAndSetLoopInvariantAndSetMostGeneralContract(
             SDGNode formalInNode,
             SDGNode formalOutNode,
             StaticCGJavaMethod methodCorresToSE,
             Map<SDGEdge, String> edgeToInvariantTempltate,
-            SDGEdge e) throws IOException {
+            SDGEdge e,
+            Map<StaticCGJavaMethod, String> methodToGeneralContract) throws IOException {
         this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
 
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
@@ -155,7 +158,20 @@ public class JavaForKeyCreator {
 
         methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
 
-        String inputDescrExceptFormalIn = getInputExceptFormalIn(formalInNode, methodCorresToSE, sdg);
+        //
+        //most general contract, if it hasnt already been computed
+        //
+        String generalContract = methodToGeneralContract.get(methodCorresToSE);
+        if (generalContract == null) {
+            String mostGeneralContract = generateMostGeneralContract(
+                    formalInNode, formalOutNode, methodCorresToSE);
+            methodToGeneralContract.put(
+                    methodCorresToSE, mostGeneralContract);
+        }
+
+        String inputDescrExceptFormalIn = getAllInputIf((n) -> {
+            return n != formalInNode;
+        }, formalInNode, methodCorresToSE, sdg);
         String sinkDescr = generateSinkDescr(formalOutNode);
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
                 sdg, formalInNode, stateSaver);
@@ -170,6 +186,32 @@ public class JavaForKeyCreator {
                 + ";\n\t  @ determines " + sinkDescr + " \\by "
                 + inputDescrExceptFormalIn + "; */";
         return descriptionForKey;
+    }
+
+    private String generateMostGeneralContract(SDGNode formalIn, SDGNode formalOut, StaticCGJavaMethod method) {
+        String allInput = getAllInputIf((n) -> {
+            return true;
+        }, formalIn, method, sdg);
+        SDGNode methodNode = sdg.getEntry(formalIn);
+        Set<SDGNode> formalOuts = sdg.getFormalInsOfProcedure(methodNode);
+        HashSet<String> allOutStrings = new HashSet<>();
+        String allOutput = "";
+        for (SDGNode n : formalOuts) {
+            String sinkDescr = generateSinkDescr(n);
+            if (!allOutStrings.contains(sinkDescr)) {
+                allOutStrings.add(sinkDescr);
+                allOutput += sinkDescr + ", ";
+            }
+        }
+        if (allOutput.lastIndexOf(",") != -1) {
+            allOutput = allOutput.substring(0, allOutput.length() - 2);
+        }
+        String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
+                sdg, formalIn, stateSaver);
+        return "\t/*@ requires "
+                + pointsToDecsr
+                + ";\n\t  @ determines " + allOutput + " \\by "
+                + allInput + "; */";
     }
 
     private List<String> generateClassFileForKey(
@@ -256,7 +298,8 @@ public class JavaForKeyCreator {
         }
     }
 
-    private String getInputExceptFormalIn(
+    private String getAllInputIf(
+            Predicate<SDGNode> predicate,
             SDGNode formalInNode,
             StaticCGJavaMethod methodCorresToSE,
             SDG sdg) {
@@ -266,7 +309,7 @@ public class JavaForKeyCreator {
         final String param = "<param>";
         for (SDGNode currentFormalInNode : formalInNodesOfProcedure) {
             String nameOfKind = currentFormalInNode.getKind().name();
-            if (currentFormalInNode == formalInNode
+            if (!(predicate.test(currentFormalInNode))
                     || (!nameOfKind.startsWith(param) && !nameOfKind.equals("FORMAL_IN"))) {
                 continue;
             }

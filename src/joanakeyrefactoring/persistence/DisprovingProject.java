@@ -20,7 +20,7 @@ import java.util.Collection;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.loopinvarianthandling.LoopInvariants;
 import joanakeyrefactoring.StateSaver;
-import joanakeyrefactoring.SummaryEdgeToCorresData;
+import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -40,7 +40,7 @@ public class DisprovingProject {
     private JCallGraph callGraph;
     private ViolationsWrapper violationsWrapper;
     private SDG sdg;
-    private SummaryEdgeToCorresData summaryEdgeToCorresData;
+    private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
     private LoopInvariants loopInvariants;
 
     private DisprovingProject() {
@@ -101,8 +101,12 @@ public class DisprovingProject {
         created.append(",\n");
         JsonHelper.addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
         created.append(",\n");
+        JsonHelper.addKeyValueToJsonStringbuilder(created, "edges_methods_to_values",
+                summaryEdgeToCorresData.generateSaveString());
+        created.append(",\n");
         JsonHelper.addKeyValueToJsonStringbuilder(created, "violation_wrapper",
                 violationsWrapper.generateSaveString());
+        
         created.append("}");
         return created.toString();
     }
@@ -129,14 +133,9 @@ public class DisprovingProject {
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
                 disprovingProject.pathToJava);
         disprovingProject.summaryEdgeToCorresData
-                = new SummaryEdgeToCorresData(
-                        disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods(),
-                        disprovingProject.sdg,
-                        new JavaForKeyCreator(
-                                disprovingProject.pathToJava,
-                                disprovingProject.callGraph,
-                                disprovingProject.sdg,
-                                disprovingProject.stateSaver));
+                = SummaryEdgeAndMethodToCorresData.generateFromjson(
+                        jSONObject.getJSONObject("edges_methods_to_values"),
+                        disprovingProject.callGraph, disprovingProject.sdg);
         return disprovingProject;
     }
 
@@ -161,6 +160,14 @@ public class DisprovingProject {
         disprovingProject.loopInvariants.findAllLoopPositions(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
                 disprovingProject.pathToJava);
+        
+        disprovingProject.summaryEdgeToCorresData = new SummaryEdgeAndMethodToCorresData(
+                disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods(),
+                disprovingProject.sdg, 
+                new JavaForKeyCreator(checkData.getPathToJavaFile(),
+                        disprovingProject.callGraph, 
+                        disprovingProject.sdg, 
+                        disprovingProject.stateSaver));
 
         return disprovingProject;
     }
