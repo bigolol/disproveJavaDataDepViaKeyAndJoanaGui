@@ -52,7 +52,6 @@ public class DisproHandler {
 
     private Button buttonSaveLoopInvariant;
     private Button buttonResetLoopInvariant;
-    private Button buttonCalcKeYContract;
 
     private ListView<String> listViewSummaryEdges;
     private ListView<String> listViewUncheckedChops;
@@ -70,6 +69,8 @@ public class DisproHandler {
     private HashMap<Integer, SDGNodeTuple> currentIndexToNodeTuple = new HashMap<>();
     private Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods;
 
+    private SDGEdge currentSelectedEdge;
+
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
             Label labelProjName,
@@ -85,8 +86,7 @@ public class DisproHandler {
             AnchorPane anchorPaneLoopInvariant,
             AnchorPane anchorPaneKeyContract,
             Button buttonSaveLoopInvariant,
-            Button buttonResetLoopInvariant,
-            Button buttonCalcKeYContract) {
+            Button buttonResetLoopInvariant) {
         backgroundDisproCreator = new AsyncBackgroundDisproCreator(currentActionLogger);
         this.labelProjName = labelProjName;
         this.labelSummaryEdge = labelSummaryEdge;
@@ -102,13 +102,12 @@ public class DisproHandler {
         this.anchorPaneKeyContract = anchorPaneKeyContract;
         this.buttonResetLoopInvariant = buttonResetLoopInvariant;
         this.buttonSaveLoopInvariant = buttonSaveLoopInvariant;
-        this.buttonCalcKeYContract = buttonCalcKeYContract;
 
         JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
 
         methodCodeArea = javaCodeEditor.getCodeArea();
         addCodeAreaToAnchorPane(methodCodeArea, anchorPaneMethodCode);
-        methodCodeArea.setDisable(true);
+        methodCodeArea.setDisable(false);
 
         keyContractCodeArea = javaCodeEditor.getCodeArea();
         addCodeAreaToAnchorPane(keyContractCodeArea, this.anchorPaneKeyContract);
@@ -127,8 +126,8 @@ public class DisproHandler {
         listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             onFormalPairSelectionChange((int) newValue);
         });
-        listViewLoopsInSE.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            onLoopInvSelectionChanged(newValue);
+        listViewLoopsInSE.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            onLoopInvSelectionChanged((int) newValue);
         });
     }
 
@@ -169,7 +168,7 @@ public class DisproHandler {
     }
 
     private void setLoopInvInCurrent(int pos, String inv) {
-        currentSelectedMethod.setLoopInvariant(pos, inv);
+        joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, pos, inv);
     }
 
     private void resetListView(ListView<String> listView) {
@@ -182,8 +181,7 @@ public class DisproHandler {
 
     private void clearCodeAreaForNewCode(CodeArea codeArea, String newCode) {
         try {
-            codeArea.clear();
-            codeArea.replaceText(0, 0, newCode);
+            codeArea.replaceText(0, codeArea.getLength(), newCode);
         } catch (Exception e) {
         }
     }
@@ -195,15 +193,14 @@ public class DisproHandler {
         if (newValue < 0) {
             return;
         }
-        SDGEdge e = itemIndexToSummaryEdge.get(newValue);
+        currentSelectedEdge = itemIndexToSummaryEdge.get(newValue);
 
-        currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(e);
+        currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge);
 
         //handle the code areas
         String methodBody = currentSelectedMethod.getMethodBody();
 
         clearCodeAreaForNewCode(loopInvariantCodeArea, "");
-        clearCodeAreaForNewCode(keyContractCodeArea, "");
         clearCodeAreaForNewCode(methodCodeArea, methodBody);
 
         //populate the other list views
@@ -218,7 +215,8 @@ public class DisproHandler {
             listViewCalledMethodsInSE.getItems().add(m.toString());
         }
 
-        Collection<SDGNodeTuple> allFormalPairs = disprovingProject.getSdg().getAllFormalPairs(e.getSource(), e.getTarget());
+        Collection<SDGNodeTuple> allFormalPairs = disprovingProject.getSdg().getAllFormalPairs(
+                currentSelectedEdge.getSource(), currentSelectedEdge.getTarget());
         currentIndexToNodeTuple.clear();
         int index = 0;
         for (SDGNodeTuple t : allFormalPairs) {
@@ -243,20 +241,21 @@ public class DisproHandler {
     //#######################################################################
     //this gets run whenever the selected LOOP INVARIANT changes-------------->
     //#######################################################################
-    private void onLoopInvSelectionChanged(String newValue) {
-        if (newValue == null) {
+    private void onLoopInvSelectionChanged(int newValue) {
+        if (newValue == -1) {
             return;
         }
-        int relPos = Integer.valueOf(newValue);
-        clearCodeAreaForNewCode(loopInvariantCodeArea, currentSelectedMethod.getLoopInvariant(relPos));
 
-        buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
-            String template = LoopInvariantGenerator.getTemplate();
-            setLoopInvInCurrent(relPos, template);
-            clearCodeAreaForNewCode(loopInvariantCodeArea, template);
-        });
+        clearCodeAreaForNewCode(loopInvariantCodeArea, joanaKeyInterfacer.getLoopInvariantFor(currentSelectedEdge, newValue));
+
+//        buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
+//            String template = LoopInvariantGenerator.getTemplate();
+//            setLoopInvInCurrent(relPos, template);
+//            clearCodeAreaForNewCode(loopInvariantCodeArea, template);
+//        });
+
         buttonSaveLoopInvariant.setOnAction((event) -> {
-            setLoopInvInCurrent(relPos, loopInvariantCodeArea.getText());
+            joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, newValue, loopInvariantCodeArea.getText());
         });
     }
 

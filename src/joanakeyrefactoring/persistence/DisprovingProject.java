@@ -71,20 +71,6 @@ public class DisprovingProject {
         return violationsWrapper;
     }
 
-    private void addJsonStringToStringBuilder(StringBuilder stringBuilder, String key, String value) {
-        stringBuilder.append("\"" + key + "\" : " + "\"" + value + "\"");
-    }
-
-    private void addKeyValueToJsonStringbuilder(StringBuilder stringBuilder, String key, String value) {
-        stringBuilder.append("\"" + key + "\" : " + value);
-    }
-
-    private void addJsonObjValueToStringBuiler(StringBuilder stringBuilder, String key, String value) {
-        stringBuilder.append("\"" + key + "\" : {\n");
-        stringBuilder.append(value);
-        stringBuilder.append("}\n");
-    }
-
     public String getProjName() {
         return pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
     }
@@ -104,15 +90,15 @@ public class DisprovingProject {
     public String generateSaveString() {
         StringBuilder created = new StringBuilder();
         created.append("{");
-        addJsonStringToStringBuilder(created, "path_to_jar", pathToJar);
+        JsonHelper.addJsonStringToStringBuilder(created, "path_to_jar", pathToJar);
         created.append(",\n");
-        addJsonStringToStringBuilder(created, "path_to_java_source", pathToJava);
+        JsonHelper.addJsonStringToStringBuilder(created, "path_to_java_source", pathToJava);
         created.append(",\n");
-        addJsonStringToStringBuilder(created, "path_to_sdg", pathToSDG);
+        JsonHelper.addJsonStringToStringBuilder(created, "path_to_sdg", pathToSDG);
         created.append(",\n");
-        addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
+        JsonHelper.addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
         created.append(",\n");
-        addKeyValueToJsonStringbuilder(created, "violation_wrapper",
+        JsonHelper.addKeyValueToJsonStringbuilder(created, "violation_wrapper",
                 violationsWrapper.generateSaveString());
         created.append("}");
         return created.toString();
@@ -135,11 +121,10 @@ public class DisprovingProject {
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
-
         disprovingProject.loopInvariants = new LoopInvariants();
         disprovingProject.loopInvariants.findAllLoopPositions(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
-                pathToJava);
+                disprovingProject.pathToJava);
 
         return disprovingProject;
     }

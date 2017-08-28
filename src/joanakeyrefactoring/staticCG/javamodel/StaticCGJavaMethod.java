@@ -25,10 +25,9 @@ public class StaticCGJavaMethod {
     private boolean isStatic;
     private String returnType;
     private Set<StaticCGJavaMethod> calledFunctionsRec;
-    private String mostGeneralContract;
+    private String mostGeneralContract = "";
     private ArrayList<Integer> relPosOfLoops = new ArrayList<>();
-    private ArrayList<String> loopInvariants = new ArrayList<>();
-    private String methodBody;
+    private String methodBody = "";
 
     public StaticCGJavaMethod(
             StaticCGJavaClass containingClass,
@@ -94,6 +93,47 @@ public class StaticCGJavaMethod {
         return created;
     }
 
+    public String getSaveString() {
+        String template
+                = "{ \"parameter_types\" : \"ARGS\","
+                + "\"id\" : \"ID\","
+                + "\"is_static\" : STATIC,"
+                + "\"return_type\" : \"RETURNTYPE\","
+                + "\"containing_class_id\" : \"CONTAININGCLASS\","
+                + "\"most_general_contract\" : \"MOSTGENERALCONTRACT\","
+                + "\"loop_lines\" : [LOOPS],"
+                + "\"method_body\" : \"METHODBODY\","
+                + "\"called_methods_rec\" : [CALLEDMETHODSREC]}";
+        template = template.replace("ARGS", parameterTypes);
+        template = template.replace("ID", id);
+        template = template.replace("STATIC", String.valueOf(isStatic));
+        template = template.replace("CONTAININGCLASS", containingClass.getId());
+        template = template.replace("MOSTGENERALCONTRACT", mostGeneralContract);
+        template = template.replace("METHODBODY", methodBody);
+        template = template.replace("RETURNTYPE", returnType);
+
+        //loop lines
+        StringBuilder loops = new StringBuilder();
+        for (int pos : relPosOfLoops) {
+            loops.append(relPosOfLoops + ", ");
+        }
+        if (loops.lastIndexOf(",") != -1) {
+            loops.replace(loops.length() - 2, loops.length(), "");
+        }
+        template = template.replace("LOOPS", loops.toString());
+        //other methods
+        StringBuilder calledmethodsrecBuilder = new StringBuilder();
+        for (StaticCGJavaMethod cm : calledFunctionsRec) {
+            calledmethodsrecBuilder.append("\"" + cm.containingClass.getId() + "/" + cm.getId() + "/" + cm.parameterTypes + "\", ");
+        }
+        //remove last comma
+        if (calledmethodsrecBuilder.lastIndexOf(",") != -1) {
+            calledmethodsrecBuilder.replace(calledmethodsrecBuilder.length() - 2, calledmethodsrecBuilder.length(), "");
+        }
+        template = template.replace("CALLEDMETHODSREC", calledmethodsrecBuilder.toString());
+        return template;
+    }
+
     public void addCalledMethod(StaticCGJavaMethod m) {
         calledMethods.add(m);
     }
@@ -142,7 +182,6 @@ public class StaticCGJavaMethod {
 
     public void addRelativeLoopLinePos(int pos) {
         relPosOfLoops.add(pos);
-        loopInvariants.add(LoopInvariantGenerator.getTemplate());
     }
 
     public String getMethodBody() {
@@ -156,26 +195,9 @@ public class StaticCGJavaMethod {
     public void setMethodBody(String methodBody) {
         this.methodBody = methodBody;
     }
-    
-    public void setLoopInvariant(int relPos, String text) {
-        for(int i = 0; i < relPosOfLoops.size(); ++i) {
-            if(relPosOfLoops.get(i) == relPos) {
-                loopInvariants.add(i, text);
-                return;
-            }
-        }
-    }
 
-    public String getLoopInvariant(int relPos) {
-        for(int i = 0; i < relPosOfLoops.size(); ++i) {
-            if(relPosOfLoops.get(i) == relPos) {
-                return loopInvariants.get(i);
-            }
-        }
-        return null;
-    }
 
     public void getMethodParamName(int p_number) {
-        
+
     }
 }

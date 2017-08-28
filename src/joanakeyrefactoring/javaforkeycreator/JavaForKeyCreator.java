@@ -79,7 +79,8 @@ public class JavaForKeyCreator {
         javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
         javaProjectCopyHandler.copyClasses(allNecessaryClasses);
 
-        String descriptionForKey = getMethodContractFor(formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE);
+        List<String> l = new ArrayList<>();
+        String descriptionForKey = getMethodContractAndSetLoopInvariants(formalInNode, formalNodeTuple.getSecondNode(), methodCorresToSE, l);
 
         List<String> classFileForKey = generateClassFileForKey(descriptionForKey, keyCompatibleContents);
 
@@ -91,10 +92,11 @@ public class JavaForKeyCreator {
         return pathToTestJava;
     }
 
-    public String getMethodContractFor(
+    public String getMethodContractAndSetLoopInvariants(
             SDGNode formalInNode,
             SDGNode formalOutNode,
-            StaticCGJavaMethod methodCorresToSE) throws IOException {
+            StaticCGJavaMethod methodCorresToSE,
+            List<String> loopInvariantList) throws IOException {
         this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
 
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
@@ -118,6 +120,11 @@ public class JavaForKeyCreator {
         String sinkDescr = generateSinkDescr(formalOutNode);
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
                 sdg, formalInNode, stateSaver);
+
+        for (int pos : methodCorresToSE.getRelPosOfLoops()) {
+            loopInvariantList.add(LoopInvariantGenerator.createLoopInvariant(sinkDescr, inputDescrExceptFormalIn));
+        }
+
         String descriptionForKey
                 = "\t/*@ requires "
                 + pointsToDecsr

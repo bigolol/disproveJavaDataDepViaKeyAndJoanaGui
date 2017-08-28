@@ -165,7 +165,10 @@
                                                    <children>
                                                       <ButtonBar layoutX="99.0" layoutY="-6.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <buttons>
-                                                            <Button fx:id="buttonCalcKeYContract" mnemonicParsing="false" text="calc formal tuple key contract" />
+                                                            <Button fx:id="buttonMarkAsDisproved" mnemonicParsing="false" text="mark as disproved" />
+                                                            <Button fx:id="buttonOpenSelected" mnemonicParsing="false" text="open selected in key" />
+                                                            <Button fx:id="buttonTryDisprove" mnemonicParsing="false" text="try disprove selected" />
+                                                            <Button fx:id="buttonRunAtuo" mnemonicParsing="false" text="run auto" />
                                                           <Button fx:id="buttonSaveLoopInvariant" mnemonicParsing="false" text="save loop invariant" />
                                                             <Button fx:id="buttonResetLoopInvariant" minWidth="80.0" mnemonicParsing="false" prefHeight="26.0" text="reset loop invariant" />
                                                         </buttons>

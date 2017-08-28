@@ -94,13 +94,22 @@ public class MainWindowController implements Initializable {
     private AnchorPane anchorPaneKeyContract;
     
     @FXML
+    private Button buttonMarkAsDisproved;
+
+    @FXML
+    private Button buttonOpenSelected;
+
+    @FXML
+    private Button buttonTryDisprove;
+
+    @FXML
+    private Button buttonRunAtuo;
+
+    @FXML
     private Button buttonSaveLoopInvariant;
 
     @FXML
     private Button buttonResetLoopInvariant;
-
-    @FXML
-    private Button buttonCalcKeYContract;
 
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
@@ -220,9 +229,8 @@ public class MainWindowController implements Initializable {
                 anchorPaneLoopInvariant,
                 anchorPaneKeyContract,
                 buttonSaveLoopInvariant,
-                buttonResetLoopInvariant,
-                buttonCalcKeYContract);
-
+                buttonResetLoopInvariant);
+ 
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {

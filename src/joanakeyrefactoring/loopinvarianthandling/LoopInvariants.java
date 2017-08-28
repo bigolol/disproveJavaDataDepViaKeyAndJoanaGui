@@ -28,20 +28,21 @@ public class LoopInvariants {
     public void findAllLoopPositions(Collection<StaticCGJavaMethod> methods, String pathToSource) throws IOException {
         AddLoopPosAndMethodBodiesListener listener = new AddLoopPosAndMethodBodiesListener();
         HashSet<StaticCGJavaClass> neededClasses = new HashSet<>();
-        
-        for(StaticCGJavaMethod m : methods) {
-            if(!neededClasses.contains(m.getContainingClass())) {
+
+        for (StaticCGJavaMethod m : methods) {
+            if (!neededClasses.contains(m.getContainingClass())) {
                 neededClasses.add(m.getContainingClass());
             }
         }
-        
+
         for (StaticCGJavaClass c : neededClasses) {
-            String pathToClassesJavaFile = JavaForKeyCreator.getPathToJavaClassFile(pathToSource, c);
-            String javaClassContents = FileUtils.readFileToString(new File(pathToClassesJavaFile), Charset.defaultCharset());
-            listener.findAllLoopsAndAddToMethods(javaClassContents, methods);
+            try {
+                String pathToClassesJavaFile = JavaForKeyCreator.getPathToJavaClassFile(pathToSource, c);
+                String javaClassContents = FileUtils.readFileToString(new File(pathToClassesJavaFile), Charset.defaultCharset());
+                listener.findAllLoopsAndAddToMethods(javaClassContents, methods);
+            } catch (Exception e) {
+            }
         }
     }
-    
-    
-    
+
 }

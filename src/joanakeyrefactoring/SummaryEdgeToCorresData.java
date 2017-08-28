@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
@@ -29,16 +30,28 @@ public class SummaryEdgeToCorresData {
             Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
             SDG sdg,
             JavaForKeyCreator javaForKeyCreator) throws IOException {
-        for (SDGEdge e : edgesToMethods.keySet()) {
+        for (SDGEdge e : edgesToMethods.keySet()) {            
             Collection<SDGNodeTuple> allFormalPairs = sdg.getAllFormalPairs(e.getSource(), e.getTarget());
+            ArrayList<String> loopInvList = new ArrayList<>();
             for (SDGNodeTuple t : allFormalPairs) {
-                String contract = javaForKeyCreator.getMethodContractFor(t.getFirstNode(), t.getSecondNode(), edgesToMethods.get(e));
+                String contract = javaForKeyCreator.getMethodContractAndSetLoopInvariants(
+                        t.getFirstNode(), t.getSecondNode(), edgesToMethods.get(e), loopInvList);
                 formalTupleToContract.put(t, contract);
             }
+            edgeToLoopInvariant.put(e, loopInvList);
         }
     }
 
-    public String getEdgeFor(SDGNodeTuple t) {
+    public String getContractFor(SDGNodeTuple t) {
         return formalTupleToContract.get(t);
     }
+    
+    public String getLoopInvariantFor(SDGEdge e, int index) {
+        return edgeToLoopInvariant.get(e).get(index);
+    }   
+    
+    public void setLoopInvariantFor(SDGEdge e, int index, String val) {
+        edgeToLoopInvariant.get(e).set(index, val);
+    }
+    
 }

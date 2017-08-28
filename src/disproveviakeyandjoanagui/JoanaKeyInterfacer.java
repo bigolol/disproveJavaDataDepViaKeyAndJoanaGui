@@ -28,7 +28,7 @@ public class JoanaKeyInterfacer {
     private ViolationsWrapper violationsWrapper;
     private JavaForKeyCreator javaForKeyCreator;
     private SummaryEdgeToCorresData summaryEdgeToCorresData;
-    
+
     public JoanaKeyInterfacer(
             ViolationsWrapper violationsWrapper,
             String pathToJavaSource,
@@ -40,11 +40,19 @@ public class JoanaKeyInterfacer {
         Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
         summaryEdgeToCorresData = new SummaryEdgeToCorresData(
                 summaryEdgesAndCorresJavaMethods,
-                sdg, 
+                sdg,
                 javaForKeyCreator);
     }
 
     public String getKeyContractFor(SDGNodeTuple formalTuple, StaticCGJavaMethod methodCorresToSE) {
-        return summaryEdgeToCorresData.getEdgeFor(formalTuple);
+        return summaryEdgeToCorresData.getContractFor(formalTuple);
+    }
+
+    public String getLoopInvariantFor(SDGEdge e, int index) {
+        return summaryEdgeToCorresData.getLoopInvariantFor(e, index);
+    }
+
+    public void setLoopInvariantFor(SDGEdge e, int index, String val) {
+        summaryEdgeToCorresData.setLoopInvariantFor(e, index, val);
     }
 }

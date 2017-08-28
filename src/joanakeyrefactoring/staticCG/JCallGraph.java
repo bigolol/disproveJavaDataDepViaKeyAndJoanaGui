@@ -36,11 +36,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import joanakeyrefactoring.persistence.JsonHelper;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.misc.OrderedHashSet;
 
 import org.apache.bcel.classfile.ClassParser;
+import org.json.JSONObject;
 
 /**
  * Constructs a callgraph out of a JAR archive. Can combine multiple archives
@@ -102,11 +104,11 @@ public class JCallGraph {
                 packageName = visitor.getVisitedClass().getPackageString().split("\\.")[0];
             }
         }
-        
-        for(StaticCGJavaMethod m : alreadyFoundMethods) {
+
+        for (StaticCGJavaMethod m : alreadyFoundMethods) {
             m.setCalledFunctionsRec(getAllMethodsCalledByMethodRec(m));
         }
-        
+
     }
 
     public StaticCGJavaMethod getMethodFor(String className, String methodName, String argList) {
@@ -123,7 +125,8 @@ public class JCallGraph {
         return packageName;
     }
 
-    public Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> getAllNecessaryClasses(StaticCGJavaMethod method) {
+    public Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> getAllNecessaryClasses(
+            StaticCGJavaMethod method) {
         Set<StaticCGJavaMethod> allMethodsCalledByMethodRec = method.getCalledFunctionsRec();
         Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> created = new HashMap<>();
         Set<StaticCGJavaMethod> initialMethodSet = new HashSet<>();
@@ -141,4 +144,5 @@ public class JCallGraph {
         return created;
     }
 
+   
 }

@@ -15,10 +15,11 @@ import org.antlr.v4.runtime.misc.OrderedHashSet;
  * @author holger
  */
 public class StaticCGJavaClass {
+
     private String id;
     private OrderedHashSet<StaticCGJavaMethod> containedMethods = new OrderedHashSet<>();
     private OrderedHashSet<StaticCGJavaClass> referencedClasses = new OrderedHashSet<>();
-   
+
     public StaticCGJavaClass(String id) {
         this.id = id;
     }
@@ -30,7 +31,7 @@ public class StaticCGJavaClass {
     public void addReferencedClass(StaticCGJavaClass refC) {
         referencedClasses.add(refC);
     }
-    
+
     public void addContainedMethod(StaticCGJavaMethod method) {
         containedMethods.add(method);
     }
@@ -41,19 +42,35 @@ public class StaticCGJavaClass {
 
     public OrderedHashSet<StaticCGJavaClass> getReferencedClasses() {
         return referencedClasses;
-    } 
-    
+    }
+
+    public String getSaveString() {
+        String template
+                = "{\"id\" : \"ID\","
+                + "\"referenced_classes\" : [REFERENCEDCLASSES]}";
+        StringBuilder refClassesSB = new StringBuilder();
+        for (StaticCGJavaClass c : referencedClasses) {
+            refClassesSB.append("\"" + c.getId() + "\"").append(", ");
+        }
+        if (refClassesSB.lastIndexOf(",") != -1) {
+            refClassesSB.replace(refClassesSB.length() - 2, refClassesSB.length(), "");
+        }
+        template = template.replace("ID", id);
+        template = template.replace("REFERENCEDCLASSES", refClassesSB.toString());
+        return template;
+    }
+
     public String getOnlyClassName() {
         int packageDeclIndex = id.lastIndexOf(".");
-        if(packageDeclIndex == -1) {
+        if (packageDeclIndex == -1) {
             return id;
         }
         return id.substring(packageDeclIndex + 1, id.length());
     }
-    
+
     public String getPackageString() {
         int packageDeclIndex = id.lastIndexOf(".");
-        if(packageDeclIndex == -1) {
+        if (packageDeclIndex == -1) {
             return null;
         }
         return id.substring(0, packageDeclIndex);
@@ -83,7 +100,5 @@ public class StaticCGJavaClass {
         }
         return true;
     }
-    
-    
-    
+
 }

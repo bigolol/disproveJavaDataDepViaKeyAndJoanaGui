@@ -18,11 +18,10 @@ public class LoopInvariantGenerator {
      * @param descSinkG
      * @param descOtherParamsG
      * @param methodName
-     * @param loopJava
      * @return loop invariant
      */
     public static String createLoopInvariant(String descSinkG,
-            String descOtherParamsG, String methodName, String loopJava) {
+            String descOtherParamsG) {
         StringBuilder sb = new StringBuilder();
         String loopInvariant = "";
 
