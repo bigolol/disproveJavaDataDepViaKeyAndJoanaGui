@@ -25,8 +25,8 @@ public class JoanaKeyInterfacer {
     private ViolationsWrapper violationsWrapper;
     private JavaForKeyCreator javaForKeyCreator;
     private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
-    private String pathToKey = "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/dependencies/Key/KeY.jar";
-    private String pathToProofObs = "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/proofObs/proofs";
+    private String pathToKey = "dependencies/Key/KeY.jar";
+    private String pathToProofObs = "proofObs/proofs";
 
     public JoanaKeyInterfacer(
             DisprovingProject disprovingProject) throws IOException {

@@ -8,9 +8,6 @@
 { "sdg_node" : 66, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
 "1" : "this"
 }}},
-{ "sdg_node" : 194, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
-"1" : "this"
-}}},
 { "sdg_node" : 163, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
 "1" : "this"
 }}},
@@ -36,6 +33,9 @@
 "1" : "this"
 }}},
 { "sdg_node" : 201, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 182, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
 "1" : "this"
 }}},
 { "sdg_node" : 154, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
@@ -100,11 +100,11 @@
 }],
 "disjunctPointsTo" : []
 },
-"edges_methods_to_values" : {"formal_node_tuple_to_contract" : [{"in" : 164, "out" : 195, "contract" : "	/*@ requires true;	  @ determines this \\by this.arr, this; */"},
-{"in" : 66, "out" : 63, "contract" : "	/*@ requires true;	  @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; */"}],"edge_to_loop_invariant_template" : [{"in" : 126, "out" : 207, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines this \\by this.arr, this; 	 	 @ decreases */"},
-{"in" : 11, "out" : 12, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; 	 	 @ decreases */"}],"method_to_most_general_contract" : [{"method" : "multipleclassesfalsepos.ClassA/falsePos/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this, high, this.b, this.b.arr, this.c.arr, this.c; */", },
-{"method" : "multipleclassesfalsepos.ClassB/putDataInArr/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this.arr, this, high; */", }],"edge_to_loop_invariant" : [{"in" : 126, "out" : 207, "loop_invariants" : []},
-{"in" : 11, "out" : 12, "loop_invariants" : []}]},
+"edges_methods_to_values" : {"formal_node_tuple_to_contract" : [{"in" : 164, "out" : 183, "contract" : "	/*@ requires true;	  @ determines this \\by this, this.arr; */"},
+{"in" : 66, "out" : 63, "contract" : "	/*@ requires true;	  @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; */"}],"edge_to_loop_invariant_template" : [{"in" : 11, "out" : 12, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; 	 	 @ decreases */"},
+{"in" : 126, "out" : 207, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines this \\by this, this.arr; 	 	 @ decreases */"}],"method_to_most_general_contract" : [{"method" : "multipleclassesfalsepos.ClassA/falsePos/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this, high, this.b, this.b.arr, this.c.arr, this.c; */", },
+{"method" : "multipleclassesfalsepos.ClassB/putDataInArr/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this, high, this.arr; */", }],"edge_to_loop_invariant" : [{"in" : 11, "out" : 12, "loop_invariants" : []},
+{"in" : 126, "out" : 207, "loop_invariants" : []}]},
 "violation_wrapper" : {
 "violations" : [],
 "chops" : [
@@ -115,7 +115,6 @@
 129,
 66,
 131,
-195,
 164,
 133,
 168,
@@ -123,6 +122,7 @@
 11,
 12,
 207,
+183,
 126,
 63]
 }],
@@ -130,10 +130,10 @@
 {"src" : 11, "sink" : 12},
 {"src" : 126, "sink" : 207}],
 "summary_edges_methods": [
-{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"},
-{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"}],"summary_edges_chops" : [
-{"pos" :1, "chops" : [
-{"src" : 11, "sink" : 12}]},
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"},
+{"id" :1, "class_name" : "multipleclassesfalsepos.ClassB", "method_name" : "putDataInArr", "arg_string" : "int"}],"summary_edges_chops" : [
 {"pos" :0, "chops" : [
+{"src" : 11, "sink" : 12}]},
+{"pos" :1, "chops" : [
 {"src" : 11, "sink" : 12}]}]
 }}

@@ -158,6 +158,7 @@ public class MainWindowController implements Initializable {
             //might be more trouble than its worth though...idk
             menuBarMain.setDisable(true);
             if (joakordispro.equals(projectFileEnding)) {
+                disproHandler.setAllButtonsDisable(true);
                 asyncBackgroundLoader.loadJoakFile(file, (newCheckData, succes) -> {
                     if (succes) {
                         disproHandler.handleNewDispro(newCheckData);
@@ -166,6 +167,7 @@ public class MainWindowController implements Initializable {
                     }
                 });
             } else if (joakordispro.equals(disprovingProgressFileEnding)) {
+                disproHandler.setAllButtonsDisable(true);
                 asyncBackgroundLoader.loadDisproFie(file, (dispro, succes) -> {
                     if (succes) {
                         disproHandler.handleNewDispro(dispro);
@@ -234,7 +236,7 @@ public class MainWindowController implements Initializable {
                 buttonOpenSelected,
                 buttonTryDisprove,
                 buttonRunAtuo);
-
+        disproHandler.setAllButtonsDisable(true);
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {

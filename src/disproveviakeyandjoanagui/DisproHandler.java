@@ -146,13 +146,34 @@ public class DisproHandler implements ViolationsWrapperListener {
         });
     }
 
+    public void setAllButtonsDisable(boolean disable) {
+        buttonRunAuto.setDisable(disable);
+        buttonMarkAsDisproved.setDisable(disable);
+        buttonResetLoopInvariant.setDisable(disable);
+        buttonSaveLoopInvariant.setDisable(disable);
+        buttonOpenSelected.setDisable(disable);
+        buttonTryDisprove.setDisable(disable);
+    }
+
     private void onPressRunAuto() {
         if (AsyncAutoRunner.keepRunning.get()) {
             AsyncAutoRunner.stop();
             buttonRunAuto.setText("start auto modus");
+            buttonMarkAsDisproved.setDisable(false);
+            buttonResetLoopInvariant.setDisable(false);
+            buttonSaveLoopInvariant.setDisable(false);
+            buttonOpenSelected.setDisable(false);
+            buttonTryDisprove.setDisable(false);
+            mainMenu.setDisable(false);
         } else {
             currentActionLogger.startProgress("running auto pilot");
             buttonRunAuto.setText("stop auto modus");
+            buttonMarkAsDisproved.setDisable(true);
+            buttonResetLoopInvariant.setDisable(true);
+            buttonSaveLoopInvariant.setDisable(true);
+            buttonOpenSelected.setDisable(true);
+            buttonTryDisprove.setDisable(true);
+            mainMenu.setDisable(true);
             AsyncAutoRunner.startAutoDisproving(
                     violationsWrapper,
                     joanaKeyInterfacer.getJavaForKeyCreator(),
@@ -213,6 +234,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     }
 
     public void handleNewDispro(JoanaAndKeyCheckData checkData) {
+        setAllButtonsDisable(true);
         backgroundDisproCreator.generateFromCheckData(checkData, (dispro, worked) -> {
             if (worked) {
                 try {
@@ -222,11 +244,13 @@ public class DisproHandler implements ViolationsWrapperListener {
                     ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
                 }
             }
+            setAllButtonsDisable(false);
+            mainMenu.setDisable(false);
         });
-        mainMenu.setDisable(false);
     }
 
     public void handleNewDispro(DisprovingProject disprovingProject) {
+        setAllButtonsDisable(true);
         try {
             this.disprovingProject = disprovingProject;
             handleNewDisproSet();
@@ -234,6 +258,7 @@ public class DisproHandler implements ViolationsWrapperListener {
             ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
         }
         mainMenu.setDisable(false);
+        setAllButtonsDisable(false);
     }
 
     private void setLoopInvInCurrent(int pos, String inv) {
