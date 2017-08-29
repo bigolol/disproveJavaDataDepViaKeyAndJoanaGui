@@ -28,13 +28,13 @@ import org.apache.commons.io.FileUtils;
  * @author holger
  */
 public class JavaProjectCopyHandler {
-
+    
     private String pathToSource;
     private String pathToNew;
     private File newFile;
     private CopyKeyCompatibleListener copyKeyCompatibleListener;
     private Map<StaticCGJavaClass, ArrayList<LoopInvariant>> loopInvariants = new HashMap<>();
-
+    
     public JavaProjectCopyHandler(String pathToSource, String pathToNew, CopyKeyCompatibleListener copyKeyCompatibleListener) throws IOException {
         this.pathToSource = pathToSource;
         this.pathToNew = pathToNew;
@@ -45,11 +45,11 @@ public class JavaProjectCopyHandler {
             newFile.mkdirs();
         }
     }
-
+    
     public void clearFolder() throws IOException {
         FileUtils.deleteDirectory(newFile);
     }
-
+    
     public static String getRelPathForJavaClass(StaticCGJavaClass cgjs) {
         String packageString = cgjs.getPackageString();
         String packageToRelPathString = "";
@@ -58,28 +58,32 @@ public class JavaProjectCopyHandler {
         }
         return packageToRelPathString;
     }
-
-    public void addClassToTest(List<String> classContent, StaticCGJavaClass javaClass) throws FileNotFoundException, IOException {
+    
+    public void copyClassContentsIntoTestDir(String contents, StaticCGJavaClass javaClass) throws FileNotFoundException, IOException {
         String relPathForJavaClass = getRelPathForJavaClass(javaClass);
         String className = javaClass.getOnlyClassName();
         File relPathFile = new File(pathToNew + "/" + relPathForJavaClass);
         relPathFile.mkdirs();
         File javaFile = new File(pathToNew + relPathForJavaClass + "/" + className + ".java");
         javaFile.createNewFile();
-        String classFileAsOneString = "";
-        for (String l : classContent) {
-            classFileAsOneString += l + System.lineSeparator();
-        }
         PrintWriter out = new PrintWriter(javaFile);
-        out.print(classFileAsOneString);
+        out.print(contents);
         out.close();
     }
-
+    
+    public void addClassToTest(List<String> classContent, StaticCGJavaClass javaClass) throws FileNotFoundException, IOException {
+        StringBuilder builder = new StringBuilder();
+        classContent.forEach((s) -> {
+            builder.append(s).append('\n');
+        });
+        copyClassContentsIntoTestDir(builder.toString(), javaClass);
+    }
+    
     public void copyClasses(Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> classesToCopy) throws IOException {
         for (StaticCGJavaClass currentClassToCopy : classesToCopy.keySet()) {
             String relPathForJavaClass = getRelPathForJavaClass(currentClassToCopy);
             String className = currentClassToCopy.getOnlyClassName();
-
+            
             File folderPathNewNew = new File(pathToNew + relPathForJavaClass);
             if (!folderPathNewNew.exists()) {
                 folderPathNewNew.mkdirs();
@@ -87,23 +91,23 @@ public class JavaProjectCopyHandler {
             try {
                 File classFileToCopyTo = new File(pathToNew + relPathForJavaClass + className + ".java");
                 File classFileToCopyFrom = new File(pathToSource + relPathForJavaClass + className + ".java");
-
+                
                 String contents = new String(java.nio.file.Files.readAllBytes(classFileToCopyFrom.toPath()));
-
+                
                 String keyCompatibleContents = copyKeyCompatibleListener.transformCode(contents, classesToCopy.get(currentClassToCopy));
-
+                
                 String keyCompWithLoopInvariants = addLoopInvariantsIfNeeded(keyCompatibleContents, currentClassToCopy);
-
+                
                 FileUtils.writeStringToFile(classFileToCopyTo, keyCompWithLoopInvariants);
-
+                
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
+            
         }
     }
-
-    private String addLoopInvariantsIfNeeded(String code, StaticCGJavaClass c) {      
+    
+    private String addLoopInvariantsIfNeeded(String code, StaticCGJavaClass c) {
         if (!loopInvariants.containsKey(c)) {
             createLoopInvarsFor(code, c);
         }
@@ -112,11 +116,11 @@ public class JavaProjectCopyHandler {
             code = code.substring(0, loopInvariant.getStartChar() + amtCharsAdded)
                     + loopInvariant.getInvariant()
                     + code.substring(loopInvariant.getStartChar() + amtCharsAdded, code.length());
-            amtCharsAdded+= loopInvariant.getInvariant().length();
-        }        
+            amtCharsAdded += loopInvariant.getInvariant().length();
+        }
         return code;
     }
-
+    
     private void createLoopInvarsFor(String code, StaticCGJavaClass c) {
         LoopListener loopListener = new LoopListener();
         List<Integer> loopLines = loopListener.findLoopLines(code);
@@ -129,5 +133,5 @@ public class JavaProjectCopyHandler {
         }
         loopInvariants.put(c, created);
     }
-
+    
 }

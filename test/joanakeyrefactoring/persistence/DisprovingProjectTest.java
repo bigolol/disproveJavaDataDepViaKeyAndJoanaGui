@@ -8,11 +8,16 @@ package joanakeyrefactoring.persistence;
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.graph.GraphIntegrity;
+import edu.kit.joana.ifc.sdg.graph.SDGEdge;
+import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import joanakeyrefactoring.CombinedApproach;
+import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -63,12 +68,34 @@ public class DisprovingProjectTest {
             IOException, ClassHierarchyException,
             GraphIntegrity.UnsoundGraphException,
             CancelException {
-        DisprovingProject generateFromCheckdata = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
-        generateFromCheckdata.saveSDG();
-        String saveStr = generateFromCheckdata.generateSaveString();
+//        DisprovingProject generateFromCheckdata = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
+//        generateFromCheckdata.saveSDG();
+//        String generateSaveString = generateFromCheckdata.generateSaveString();
+//        FileWriter fileWriter = new FileWriter(new File("testdata/multipleClassesArrFalsePos.dispro"));
+//        fileWriter.write(generateSaveString);
+//        fileWriter.close();
         
-        DisprovingProject.generateFromSavestring(saveStr);
+        DisprovingProject generateFromSavestring = DisprovingProject.generateFromSavestring(
+                FileUtils.readFileToString(
+                        new File("testdata/multipleClassesArrFalsePos.dispro"), 
+                        Charset.defaultCharset()));
+        JavaForKeyCreator creator = new JavaForKeyCreator(generateFromSavestring.getPathToJava(), generateFromSavestring.getCallGraph(),
+                generateFromSavestring.getSdg(), generateFromSavestring.getStateSaver());
+        SDGEdge e = generateFromSavestring.getViolationsWrapper().getSummaryEdgesAndCorresJavaMethods().keySet().iterator().next();
+        StaticCGJavaMethod corresMethod = generateFromSavestring.getViolationsWrapper().getMethodCorresToSummaryEdge(e);
+        SDGNodeTuple tuple = generateFromSavestring.getSdg().getAllFormalPairs(e.getSource(), e.getTarget()).iterator().next();
+        SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData = generateFromSavestring.getSummaryEdgeToCorresData();
+        
+        creator.
+                generateJavaForFormalTupleCalledFromGui(
+                        summaryEdgeToCorresData.getContractFor(tuple),
+                        corresMethod,
+                        summaryEdgeToCorresData.getEdgeToLoopInvariantTemplate().get(e),
+                        summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
+                        summaryEdgeToCorresData.getMethodToMostGeneralContract()
+                );
     }
+    
 
     @Test
     public void testStateSaverSaveIds() throws

@@ -14,6 +14,7 @@ import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
 import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
+import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -31,7 +32,10 @@ public class AddLoopPosAndMethodBodiesListener extends Java8BaseListener {
     private int startLinePosOfMethod;
     private List<String> currentClassFileContents;
 
-    public void findAllLoopsAndAddToMethods(String classFileContents, Collection<StaticCGJavaMethod> methods) {
+    public void findAllLoopsAndAddToMethods(
+            String classFileContents, 
+            Collection<StaticCGJavaMethod> methods,
+            StaticCGJavaClass javaclass) {
         currentmethods = methods;
         currentClassFileContents = Arrays.asList(classFileContents.split("\n"));
         

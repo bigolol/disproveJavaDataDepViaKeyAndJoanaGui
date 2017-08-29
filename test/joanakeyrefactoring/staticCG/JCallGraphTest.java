@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import joanakeyrefactoring.loopinvarianthandling.LoopInvariant;
-import joanakeyrefactoring.loopinvarianthandling.LoopInvariants;
+import joanakeyrefactoring.loopinvarianthandling.LoopInvPosAndMethBodExtracter;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.misc.OrderedHashSet;

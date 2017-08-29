@@ -80,7 +80,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ListView<String> listViewCalledMethodsOfSE;
-    
+
     @FXML
     private ListView<String> listViewFormalInoutPairs;
 
@@ -92,7 +92,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private AnchorPane anchorPaneKeyContract;
-    
+
     @FXML
     private Button buttonMarkAsDisproved;
 
@@ -229,8 +229,12 @@ public class MainWindowController implements Initializable {
                 anchorPaneLoopInvariant,
                 anchorPaneKeyContract,
                 buttonSaveLoopInvariant,
-                buttonResetLoopInvariant);
- 
+                buttonResetLoopInvariant,
+                buttonMarkAsDisproved,
+                buttonOpenSelected,
+                buttonTryDisprove,
+                buttonRunAtuo);
+
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {

@@ -74,6 +74,10 @@ public class ViolationsWrapper {
         prepareNextSummaryEdges();
     }
 
+    public void addListener(ViolationsWrapperListener listener) {
+        this.listener.add(listener);
+    }
+
     public String generateSaveString() {
         StringBuilder created = new StringBuilder();
         created.append("{").append(System.lineSeparator());
@@ -249,6 +253,7 @@ public class ViolationsWrapper {
 
     private void prepareNextSummaryEdges() {
         Collection<? extends IViolation<SecurityNode>> nextViolationsToHandle = getNextViolationsToHandle();
+
         nextViolationsToHandle.forEach((v) -> {
             violationChops.add(createViolationChop(v, sdg));
         });
@@ -267,6 +272,15 @@ public class ViolationsWrapper {
             } catch (Exception e) {
             }
         }
+
+        violationChops.forEach((vc) -> {
+            listener.forEach((l) -> {
+                l.parsedChop(vc);
+            });
+        });
+        listener.forEach((l) -> {
+            l.addedNewEdges(summaryEdgesAndCorresJavaMethods, sortedEdgesToCheck, sdg);
+        });
     }
 
     private void putEdgesInSet() {
@@ -384,6 +398,9 @@ public class ViolationsWrapper {
     public void removeEdge(SDGEdge e) {
         sdg.removeEdge(e);
         sortedEdgesToCheck.remove(e);
+        listener.forEach((l) -> {
+            l.disprovedEdge(e);
+        });
         summaryEdgesAndContainingChops.get(e).forEach((vc) -> {
             vc.findSummaryEdges(sdg);
             if (vc.isEmpty()) {
@@ -398,9 +415,11 @@ public class ViolationsWrapper {
         if (sortedEdgesToCheck.isEmpty()) {
             prepareNextSummaryEdges();
         }
-        listener.forEach((l) -> {
-            l.disprovedEdge(e);
-        });
+        if (sortedEdgesToCheck.isEmpty() && violationChops.isEmpty() && uncheckedViolations.isEmpty()) {
+            listener.forEach((l) -> {
+                l.disprovedAll();
+            });
+        }
     }
 
     public void checkedEdge(SDGEdge e) {
@@ -491,10 +510,6 @@ public class ViolationsWrapper {
 
     public Map<SDGEdge, StaticCGJavaMethod> getSummaryEdgesAndCorresJavaMethods() {
         return summaryEdgesAndCorresJavaMethods;
-    }
-
-    void addListener(ViolationsWrapperListener listener) {
-        this.listener.add(listener);
     }
 
 }

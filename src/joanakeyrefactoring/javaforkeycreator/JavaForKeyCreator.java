@@ -15,11 +15,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import joanakeyrefactoring.CustomListener.AddContractsAndLoopInvariantsListener;
 import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -52,6 +54,42 @@ public class JavaForKeyCreator {
     public static String getPathToJavaClassFile(String pathToSource, StaticCGJavaClass javaClass) {
         return pathToSource + JavaProjectCopyHandler.getRelPathForJavaClass(javaClass)
                 + javaClass.getOnlyClassName() + ".java";
+    }
+
+    public String generateJavaForFormalTupleCalledFromGui(
+            String contract,
+            StaticCGJavaMethod method,
+            String loopInvariantTemplate,
+            List<String> loopInvariants,
+            Map<StaticCGJavaMethod, String> methodsToMostGeneralContract) throws IOException {
+        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+        AddContractsAndLoopInvariantsListener addContractsAndLoopInvariantsListener = new AddContractsAndLoopInvariantsListener();
+        Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses = callGraph.getAllNecessaryClasses(method);
+        javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
+        for (StaticCGJavaClass c : allNecessaryClasses.keySet()) {
+            Set<StaticCGJavaMethod> set = allNecessaryClasses.get(c);
+            String relPathForJavaClass
+                    = JavaProjectCopyHandler.getRelPathForJavaClass(c);
+            File javaClassFile = new File(pathToJavaSource + relPathForJavaClass + c.getOnlyClassName() + ".java");
+            if (!javaClassFile.exists()) {
+                //it is a library class since it doesnt exist in the project
+                //but since the violationswrapper sorts out all methods which arent key compatible
+                //it should be a key compatible library method 
+                continue;
+            }
+            String rawFileContents = new String(Files.readAllBytes(javaClassFile.toPath()));
+            String keyCompatibleContents = keyCompatibleListener.transformCode(
+                    rawFileContents, allNecessaryClasses.get(c));
+            String codeContainingContractsAndInvariants
+                    = addContractsAndLoopInvariantsListener.addContractsAndLoopInvariants(
+                            method, contract, loopInvariants, loopInvariantTemplate, set, methodsToMostGeneralContract, keyCompatibleContents);
+            javaProjectCopyHandler.copyClassContentsIntoTestDir(codeContainingContractsAndInvariants, c);
+        }
+
+        KeyFileCreator.createKeYFileIF(method, pathToTestJava);
+        KeyFileCreator.createKeYFileFunctional(method, pathToTestJava);
+
+        return pathToTestJava;
     }
 
     public String generateJavaForFormalNodeTuple(

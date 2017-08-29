@@ -5,26 +5,26 @@
  */
 package joanakeyrefactoring.persistence;
 
+import disproveviakeyandjoanagui.ViolationsWrapperListener;
 import edu.kit.joana.api.sdg.SDGProgram;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.graph.SDG;
+import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGSerializer;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
-import joanakeyrefactoring.loopinvarianthandling.LoopInvariants;
+import joanakeyrefactoring.loopinvarianthandling.LoopInvPosAndMethBodExtracter;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
+import joanakeyrefactoring.ViolationChop;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
-import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 /**
@@ -41,7 +41,7 @@ public class DisprovingProject {
     private ViolationsWrapper violationsWrapper;
     private SDG sdg;
     private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
-    private LoopInvariants loopInvariants;
+    private LoopInvPosAndMethBodExtracter loopInvPosAndMethodBodyExtracter;
 
     private DisprovingProject() {
     }
@@ -102,11 +102,11 @@ public class DisprovingProject {
         JsonHelper.addKeyValueToJsonStringbuilder(created, "state_saver", stateSaver.getSaveString());
         created.append(",\n");
         JsonHelper.addKeyValueToJsonStringbuilder(created, "edges_methods_to_values",
-                summaryEdgeToCorresData.generateSaveString());
+                summaryEdgeToCorresData.generateSaveString(violationsWrapper));
         created.append(",\n");
         JsonHelper.addKeyValueToJsonStringbuilder(created, "violation_wrapper",
                 violationsWrapper.generateSaveString());
-        
+
         created.append("}");
         return created.toString();
     }
@@ -128,14 +128,15 @@ public class DisprovingProject {
         disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
-        disprovingProject.loopInvariants = new LoopInvariants();
-        disprovingProject.loopInvariants.findAllLoopPositions(
+        disprovingProject.loopInvPosAndMethodBodyExtracter = new LoopInvPosAndMethBodExtracter();
+        disprovingProject.loopInvPosAndMethodBodyExtracter.findAllLoopPositionsAndMethodBodies(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
                 disprovingProject.pathToJava);
         disprovingProject.summaryEdgeToCorresData
                 = SummaryEdgeAndMethodToCorresData.generateFromjson(
                         jSONObject.getJSONObject("edges_methods_to_values"),
                         disprovingProject.callGraph, disprovingProject.sdg);
+        disprovingProject.violationsWrapper.addListener(disprovingProject.summaryEdgeToCorresData);
         return disprovingProject;
     }
 
@@ -156,20 +157,26 @@ public class DisprovingProject {
                         viols, disprovingProject.sdg, checkData.getAnalysis(),
                         disprovingProject.callGraph);
 
-        disprovingProject.loopInvariants = new LoopInvariants();
-        disprovingProject.loopInvariants.findAllLoopPositions(
+        disprovingProject.loopInvPosAndMethodBodyExtracter = new LoopInvPosAndMethBodExtracter();
+        disprovingProject.loopInvPosAndMethodBodyExtracter.findAllLoopPositionsAndMethodBodies(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods().values(),
                 disprovingProject.pathToJava);
-        
+
         disprovingProject.summaryEdgeToCorresData = new SummaryEdgeAndMethodToCorresData(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods(),
-                disprovingProject.sdg, 
+                disprovingProject.sdg,
                 new JavaForKeyCreator(checkData.getPathToJavaFile(),
-                        disprovingProject.callGraph, 
-                        disprovingProject.sdg, 
+                        disprovingProject.callGraph,
+                        disprovingProject.sdg,
                         disprovingProject.stateSaver));
 
+        disprovingProject.violationsWrapper.addListener(disprovingProject.summaryEdgeToCorresData);
+
         return disprovingProject;
+    }
+
+    public SummaryEdgeAndMethodToCorresData getSummaryEdgeToCorresData() {
+        return summaryEdgeToCorresData;
     }
 
 }

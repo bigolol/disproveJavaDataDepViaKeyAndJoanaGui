@@ -230,7 +230,7 @@ public class AutomationHelper {
      * @param obligation
      * @return result of the proof
      */
-    public boolean runKeY(String pathKeY, String obligation) throws IOException {
+    public static boolean runKeY(String pathKeY, String obligation) throws IOException {
         boolean result = false;
         String cmd = "";
         if (obligation.equals("functional")) {

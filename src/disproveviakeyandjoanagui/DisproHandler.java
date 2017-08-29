@@ -8,14 +8,14 @@ package disproveviakeyandjoanagui;
 import disproveviakeyandjoanagui.asynctaskhandler.AsyncBackgroundDisproCreator;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
+import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,18 +23,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.ViolationChop;
 import joanakeyrefactoring.ViolationsWrapper;
-import joanakeyrefactoring.javaforkeycreator.LoopInvariantGenerator;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.fxmisc.richtext.CodeArea;
-import org.reactfx.util.TriConsumer;
 
 /**
  *
  * @author holger
  */
-public class DisproHandler {
+public class DisproHandler implements ViolationsWrapperListener {
 
     private AsyncBackgroundDisproCreator backgroundDisproCreator;
     private DisprovingProject disprovingProject;
@@ -52,6 +51,10 @@ public class DisproHandler {
 
     private Button buttonSaveLoopInvariant;
     private Button buttonResetLoopInvariant;
+    private Button buttonMarkAsDisproved;
+    private Button buttonOpenSelected;
+    private Button buttonTryDisprove;
+    private Button buttonRunAuto;
 
     private ListView<String> listViewSummaryEdges;
     private ListView<String> listViewUncheckedChops;
@@ -86,7 +89,11 @@ public class DisproHandler {
             AnchorPane anchorPaneLoopInvariant,
             AnchorPane anchorPaneKeyContract,
             Button buttonSaveLoopInvariant,
-            Button buttonResetLoopInvariant) {
+            Button buttonResetLoopInvariant,
+            Button buttonMarkAsDisproved,
+            Button buttonOpenSelected,
+            Button buttonTryDisprove,
+            Button buttonRunAtuo) {
         backgroundDisproCreator = new AsyncBackgroundDisproCreator(currentActionLogger);
         this.labelProjName = labelProjName;
         this.labelSummaryEdge = labelSummaryEdge;
@@ -102,6 +109,10 @@ public class DisproHandler {
         this.anchorPaneKeyContract = anchorPaneKeyContract;
         this.buttonResetLoopInvariant = buttonResetLoopInvariant;
         this.buttonSaveLoopInvariant = buttonSaveLoopInvariant;
+        this.buttonMarkAsDisproved = buttonMarkAsDisproved;
+        this.buttonOpenSelected = buttonOpenSelected;
+        this.buttonTryDisprove = buttonTryDisprove;
+        this.buttonRunAuto = buttonRunAtuo;
 
         JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
 
@@ -129,6 +140,26 @@ public class DisproHandler {
         listViewLoopsInSE.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             onLoopInvSelectionChanged((int) newValue);
         });
+    }
+
+    private void onPressTryDisprove() {
+        SDGNodeTuple formalNodeTuple = currentIndexToNodeTuple.get(0);
+        try {
+            boolean worked = joanaKeyInterfacer.tryDisproveEdge(
+                    currentSelectedEdge,
+                    formalNodeTuple,
+                    summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge));
+            labelSummaryEdge.setText(currentSelectedEdge.toString());
+            if(worked) {
+                labelSomeOtherData.setText("disproving worked");
+                violationsWrapper.removeEdge(currentSelectedEdge);
+            } else {
+                labelSomeOtherData.setText("could not disprove edge");
+            }
+        } catch (Exception e) {
+            ErrorLogger.logError("an error occured while trying to create the jave code to disprove",
+                    ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK);
+        }
     }
 
     private void addCodeAreaToAnchorPane(CodeArea codeArea, AnchorPane anchorPane) {
@@ -265,13 +296,9 @@ public class DisproHandler {
      */
     private void handleNewDisproSet() throws IOException {
         violationsWrapper = disprovingProject.getViolationsWrapper();
-
-        joanaKeyInterfacer = new JoanaKeyInterfacer(
-                violationsWrapper,
-                disprovingProject.getPathToJava(),
-                disprovingProject.getCallGraph(),
-                disprovingProject.getSdg(),
-                disprovingProject.getStateSaver());
+        violationsWrapper.addListener(this);
+        
+        joanaKeyInterfacer = new JoanaKeyInterfacer(disprovingProject);
         //
         //do view stuff
         //
@@ -298,5 +325,33 @@ public class DisproHandler {
                     + summaryEdgesAndCorresJavaMethods.get(e).toString());
             itemIndexToSummaryEdge.put(i++, e);
         }
+
+        //
+        //setup disproving buttons
+        //
+        buttonTryDisprove.setOnAction((event) -> {
+            onPressTryDisprove();
+        });
     }
+
+    @Override
+    public void parsedChop(ViolationChop chop) {
+    }
+
+    @Override
+    public void disprovedEdge(SDGEdge e) {
+    }
+
+    @Override
+    public void disprovedChop(ViolationChop chop) {
+    }
+
+    @Override
+    public void disprovedAll() {
+    }
+
+    @Override
+    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg) {
+    }
+
 }
