@@ -5,6 +5,7 @@
  */
 package disproveviakeyandjoanagui;
 
+import disproveviakeyandjoanagui.asynctaskhandler.AsyncAutoRunner;
 import disproveviakeyandjoanagui.asynctaskhandler.AsyncBackgroundDisproCreator;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
@@ -16,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -73,6 +75,7 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     private SDGEdge currentSelectedEdge;
     private StaticCGJavaMethod currentSelectedMethod;
+    private CurrentActionLogger currentActionLogger;
 
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
@@ -113,6 +116,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         this.buttonOpenSelected = buttonOpenSelected;
         this.buttonTryDisprove = buttonTryDisprove;
         this.buttonRunAuto = buttonRunAtuo;
+        this.currentActionLogger = currentActionLogger;
 
         JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
 
@@ -140,6 +144,22 @@ public class DisproHandler implements ViolationsWrapperListener {
         listViewLoopsInSE.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             onLoopInvSelectionChanged((int) newValue);
         });
+    }
+
+    private void onPressRunAuto() {
+        if (AsyncAutoRunner.keepRunning.get()) {
+            AsyncAutoRunner.stop();
+            buttonRunAuto.setText("start auto modus");
+        } else {
+            currentActionLogger.startProgress("running auto pilot");
+            buttonRunAuto.setText("stop auto modus");
+            AsyncAutoRunner.startAutoDisproving(
+                    violationsWrapper,
+                    joanaKeyInterfacer.getJavaForKeyCreator(),
+                    joanaKeyInterfacer.getSummaryEdgeToCorresData(),
+                    currentActionLogger,
+                    listViewSummaryEdges);
+        }
     }
 
     private void onPressMarkAsDisproved() {
@@ -331,6 +351,9 @@ public class DisproHandler implements ViolationsWrapperListener {
         buttonMarkAsDisproved.setOnAction((event) -> {
             onPressMarkAsDisproved();
         });
+        buttonRunAuto.setOnAction((event) -> {
+            onPressRunAuto();
+        });
     }
 
     private void resetViews() {
@@ -368,49 +391,57 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     @Override
     public void disprovedEdge(SDGEdge e) {
-        labelSomeOtherData.setText("disproved summary edge " + e.toString());
+        Platform.runLater(() -> {
+            labelSomeOtherData.setText("disproved summary edge " + e.toString());
 
-        int selectedIndex = listViewSummaryEdges.getSelectionModel().getSelectedIndex();
+            int selectedIndex = listViewSummaryEdges.getSelectionModel().getSelectedIndex();
 
-        currentIndexToNodeTuple.remove(selectedIndex);
-        itemIndexToSummaryEdge.remove(selectedIndex);
+            currentIndexToNodeTuple.remove(selectedIndex);
+            itemIndexToSummaryEdge.remove(selectedIndex);
 
-        for (int i = selectedIndex + 1; i < listViewSummaryEdges.getItems().size(); ++i) {
-            SDGEdge currentEdge = itemIndexToSummaryEdge.remove(i);
-            itemIndexToSummaryEdge.put(i - 1, currentEdge);
-            SDGNodeTuple currentRemovedNodeTuple = currentIndexToNodeTuple.remove(i);
-            currentIndexToNodeTuple.put(i - 1, currentRemovedNodeTuple);
-        }
+            for (int i = selectedIndex + 1; i < listViewSummaryEdges.getItems().size(); ++i) {
+                SDGEdge currentEdge = itemIndexToSummaryEdge.remove(i);
+                itemIndexToSummaryEdge.put(i - 1, currentEdge);
+                SDGNodeTuple currentRemovedNodeTuple = currentIndexToNodeTuple.remove(i);
+                currentIndexToNodeTuple.put(i - 1, currentRemovedNodeTuple);
+            }
 
-        clearCodeAreaForNewCode(methodCodeArea, "");
-        clearCodeAreaForNewCode(loopInvariantCodeArea, "");
-        clearCodeAreaForNewCode(keyContractCodeArea, "");
+            clearCodeAreaForNewCode(methodCodeArea, "");
+            clearCodeAreaForNewCode(loopInvariantCodeArea, "");
+            clearCodeAreaForNewCode(keyContractCodeArea, "");
 
-        resetListView(listViewLoopsInSE);
-        resetListView(listViewFormalInoutPairs);
-        resetListView(listViewCalledMethodsInSE);
+            resetListView(listViewLoopsInSE);
+            resetListView(listViewFormalInoutPairs);
+            resetListView(listViewCalledMethodsInSE);
 
-        listViewSummaryEdges.getItems().removeIf((s) -> {
-            return s.startsWith(e.toString());
+            listViewSummaryEdges.getItems().removeIf((s) -> {
+                return s.startsWith(e.toString());
+            });
+            listViewSummaryEdges.getSelectionModel().clearSelection();
+            listViewSummaryEdges.getSelectionModel().select(0);
         });
-        listViewSummaryEdges.getSelectionModel().clearSelection();
-        listViewSummaryEdges.getSelectionModel().select(0);
     }
 
     @Override
     public void disprovedChop(ViolationChop chop) {
-        labelSomeOtherData.setText("the chop " + chop.toString() + " was completely disproved");
+        Platform.runLater(() -> {
+            labelSomeOtherData.setText("the chop " + chop.toString() + " was completely disproved");
+        });
     }
 
     @Override
     public void disprovedAll() {
-        labelSomeOtherData.setText("disproved the information flow! hourayyyy! Incredible!");
-        AutomationHelper.playSound("Victory Sound Effect.wav");
+        Platform.runLater(() -> {
+            labelSomeOtherData.setText("disproved the information flow! hourayyyy! Incredible!");
+            AutomationHelper.playSound("Victory Sound Effect.wav");
+        });
     }
 
     @Override
     public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg) {
-        resetViews();
+        Platform.runLater(() -> {
+            resetViews();
+        });
     }
 
 }

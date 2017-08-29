@@ -247,7 +247,7 @@ public class AutomationHelper {
                 result = true;
             }
             if (s.contains("Proof loading failed")) {
-                throw new IOException("Proof loading failed");
+                result = false;
             }
         }
         return result;

@@ -96,4 +96,16 @@ public class JoanaKeyInterfacer {
     public void markAsDisproved(SDGEdge currentSelectedEdge) {
         violationsWrapper.removeEdge(currentSelectedEdge);
     }
+
+    public JavaForKeyCreator getJavaForKeyCreator() {
+        return javaForKeyCreator;
+    }
+
+    public SummaryEdgeAndMethodToCorresData getSummaryEdgeToCorresData() {
+        return summaryEdgeToCorresData;
+    }
+    
+    
+
+    
 }

@@ -512,4 +512,8 @@ public class ViolationsWrapper {
         return summaryEdgesAndCorresJavaMethods;
     }
 
+    public SDG getSdg() {
+        return sdg;
+    }
+
 }
