@@ -272,6 +272,7 @@ public class DisproHandler implements ViolationsWrapperListener {
             listViewFormalInoutPairs.getItems().add(t.toString());
             currentIndexToNodeTuple.put(index++, t);
         }
+        listViewFormalInoutPairs.getSelectionModel().select(0);
     }
 
     //#######################################################################
@@ -317,6 +318,22 @@ public class DisproHandler implements ViolationsWrapperListener {
         violationsWrapper.addListener(this);
 
         joanaKeyInterfacer = new JoanaKeyInterfacer(disprovingProject);
+        resetViews();
+        //
+        //setup disproving buttons
+        //
+        buttonTryDisprove.setOnAction((event) -> {
+            onPressTryDisprove();
+        });
+        buttonOpenSelected.setOnAction((event) -> {
+            onPressOpenInKey();
+        });
+        buttonMarkAsDisproved.setOnAction((event) -> {
+            onPressMarkAsDisproved();
+        });
+    }
+
+    private void resetViews() {
         //
         //do view stuff
         //
@@ -343,19 +360,6 @@ public class DisproHandler implements ViolationsWrapperListener {
                     + summaryEdgesAndCorresJavaMethods.get(e).toString());
             itemIndexToSummaryEdge.put(i++, e);
         }
-
-        //
-        //setup disproving buttons
-        //
-        buttonTryDisprove.setOnAction((event) -> {
-            onPressTryDisprove();
-        });
-        buttonOpenSelected.setOnAction((event) -> {
-            onPressOpenInKey();
-        });
-        buttonMarkAsDisproved.setOnAction((event) -> {
-            onPressMarkAsDisproved();
-        });
     }
 
     @Override
@@ -381,10 +385,10 @@ public class DisproHandler implements ViolationsWrapperListener {
         clearCodeAreaForNewCode(methodCodeArea, "");
         clearCodeAreaForNewCode(loopInvariantCodeArea, "");
         clearCodeAreaForNewCode(keyContractCodeArea, "");
-        
-        listViewLoopsInSE.getItems().clear();
-        listViewFormalInoutPairs.getItems().clear();
-        listViewCalledMethodsInSE.getItems().clear();
+
+        resetListView(listViewLoopsInSE);
+        resetListView(listViewFormalInoutPairs);
+        resetListView(listViewCalledMethodsInSE);
 
         listViewSummaryEdges.getItems().removeIf((s) -> {
             return s.startsWith(e.toString());
@@ -395,6 +399,7 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     @Override
     public void disprovedChop(ViolationChop chop) {
+        labelSomeOtherData.setText("the chop " + chop.toString() + " was completely disproved");
     }
 
     @Override
@@ -405,6 +410,7 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     @Override
     public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg) {
+        resetViews();
     }
 
 }

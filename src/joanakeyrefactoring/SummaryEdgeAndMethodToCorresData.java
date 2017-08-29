@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
@@ -220,9 +221,15 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
                     currentJsonObj.getString("invariant"));
             SDGNode in = sdg.getNode(idin);
             SDGNode out = sdg.getNode(idout);
-            SDGEdge edge = sdg.getEdge(in, out);
-            assert (edge.getKind() == SDGEdge.Kind.SUMMARY);
-            created.edgeToLoopInvariantTemplate.put(edge, invariantTemplate);
+            Set<SDGEdge> allEdges = sdg.getAllEdges(in, out);
+            SDGEdge found = null;
+            for (SDGEdge e : allEdges) {
+                if (e.getKind() == SDGEdge.Kind.SUMMARY) {
+                    found = e;
+                    created.edgeToLoopInvariantTemplate.put(e, invariantTemplate);
+                    break;
+                }
+            }
         }
 
         currentJsonArray = jsonObject.getJSONArray("method_to_most_general_contract");
@@ -232,7 +239,12 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
             String[] split = methodDescr.split("/");
             String classId = split[0];
             String methodid = split[1];
-            String argtypes = split[2];
+            String argtypes;
+            if (split.length == 3) {
+                argtypes = split[2];
+            } else {
+                argtypes = "";
+            }
             String mostGeneralContract = currentJsonObj.getString("most_general_contract");
             StaticCGJavaMethod method = callGraph.getMethodFor(classId, methodid, argtypes);
             created.methodToMostGeneralContract.put(method, mostGeneralContract);

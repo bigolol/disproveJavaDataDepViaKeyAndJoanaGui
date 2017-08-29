@@ -68,16 +68,19 @@ public class DisprovingProjectTest {
             IOException, ClassHierarchyException,
             GraphIntegrity.UnsoundGraphException,
             CancelException {
-        DisprovingProject generateFromCheckdata = DisprovingProject.generateFromCheckdata(CombinedApproach.parseInputFile(new File("testdata/multipleClassesArrFalsePos.joak")));
-        generateFromCheckdata.saveSDG();
-        String generateSaveString = generateFromCheckdata.generateSaveString();
-        FileWriter fileWriter = new FileWriter(new File("testdata/multipleClassesArrFalsePos.dispro"));
-        fileWriter.write(generateSaveString);
-        fileWriter.close();
-        
+//        DisprovingProject generateFromCheckdata =
+//                DisprovingProject.generateFromCheckdata(
+//                        CombinedApproach.parseInputFile(new File("testdata/jzip.joak")));
+//        
+//        generateFromCheckdata.saveSDG();
+//        String generateSaveString = generateFromCheckdata.generateSaveString();
+//        FileWriter fileWriter = new FileWriter(new File("testdata/jzip.dispro"));
+//        fileWriter.write(generateSaveString);
+//        fileWriter.close();
+
         DisprovingProject generateFromSavestring = DisprovingProject.generateFromSavestring(
                 FileUtils.readFileToString(
-                        new File("testdata/multipleClassesArrFalsePos.dispro"), 
+                        new File("testdata/jzip.dispro"),
                         Charset.defaultCharset()));
         JavaForKeyCreator creator = new JavaForKeyCreator(generateFromSavestring.getPathToJava(), generateFromSavestring.getCallGraph(),
                 generateFromSavestring.getSdg(), generateFromSavestring.getStateSaver());
@@ -85,7 +88,7 @@ public class DisprovingProjectTest {
         StaticCGJavaMethod corresMethod = generateFromSavestring.getViolationsWrapper().getMethodCorresToSummaryEdge(e);
         SDGNodeTuple tuple = generateFromSavestring.getSdg().getAllFormalPairs(e.getSource(), e.getTarget()).iterator().next();
         SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData = generateFromSavestring.getSummaryEdgeToCorresData();
-        
+
         creator.
                 generateJavaForFormalTupleCalledFromGui(
                         summaryEdgeToCorresData.getContractFor(tuple),
@@ -95,7 +98,6 @@ public class DisprovingProjectTest {
                         summaryEdgeToCorresData.getMethodToMostGeneralContract()
                 );
     }
-    
 
     @Test
     public void testStateSaverSaveIds() throws
