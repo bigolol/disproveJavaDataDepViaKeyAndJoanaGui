@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
+import joanakeyrefactoring.AutomationHelper;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.ViolationChop;
 import joanakeyrefactoring.ViolationsWrapper;
@@ -67,12 +68,11 @@ public class DisproHandler implements ViolationsWrapperListener {
     private AnchorPane anchorPaneKeyContract;
 
     private Map<Integer, SDGEdge> itemIndexToSummaryEdge = new HashMap<>();
-    private StaticCGJavaMethod currentSelectedMethod;
-
     private HashMap<Integer, SDGNodeTuple> currentIndexToNodeTuple = new HashMap<>();
     private Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods;
 
     private SDGEdge currentSelectedEdge;
+    private StaticCGJavaMethod currentSelectedMethod;
 
     public DisproHandler(
             CurrentActionLogger currentActionLogger,
@@ -142,6 +142,23 @@ public class DisproHandler implements ViolationsWrapperListener {
         });
     }
 
+    private void onPressMarkAsDisproved() {
+        joanaKeyInterfacer.markAsDisproved(currentSelectedEdge);
+    }
+
+    private void onPressOpenInKey() {
+        SDGNodeTuple formalNodeTuple = currentIndexToNodeTuple.get(0);
+        try {
+            joanaKeyInterfacer.openInKey(
+                    currentSelectedEdge,
+                    formalNodeTuple,
+                    summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge));
+            labelSummaryEdge.setText(currentSelectedEdge.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void onPressTryDisprove() {
         SDGNodeTuple formalNodeTuple = currentIndexToNodeTuple.get(0);
         try {
@@ -150,13 +167,14 @@ public class DisproHandler implements ViolationsWrapperListener {
                     formalNodeTuple,
                     summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge));
             labelSummaryEdge.setText(currentSelectedEdge.toString());
-            if(worked) {
+            if (worked) {
                 labelSomeOtherData.setText("disproving worked");
                 violationsWrapper.removeEdge(currentSelectedEdge);
             } else {
                 labelSomeOtherData.setText("could not disprove edge");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             ErrorLogger.logError("an error occured while trying to create the jave code to disprove",
                     ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK);
         }
@@ -297,7 +315,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     private void handleNewDisproSet() throws IOException {
         violationsWrapper = disprovingProject.getViolationsWrapper();
         violationsWrapper.addListener(this);
-        
+
         joanaKeyInterfacer = new JoanaKeyInterfacer(disprovingProject);
         //
         //do view stuff
@@ -332,6 +350,12 @@ public class DisproHandler implements ViolationsWrapperListener {
         buttonTryDisprove.setOnAction((event) -> {
             onPressTryDisprove();
         });
+        buttonOpenSelected.setOnAction((event) -> {
+            onPressOpenInKey();
+        });
+        buttonMarkAsDisproved.setOnAction((event) -> {
+            onPressMarkAsDisproved();
+        });
     }
 
     @Override
@@ -340,6 +364,33 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     @Override
     public void disprovedEdge(SDGEdge e) {
+        labelSomeOtherData.setText("disproved summary edge " + e.toString());
+
+        int selectedIndex = listViewSummaryEdges.getSelectionModel().getSelectedIndex();
+
+        currentIndexToNodeTuple.remove(selectedIndex);
+        itemIndexToSummaryEdge.remove(selectedIndex);
+
+        for (int i = selectedIndex + 1; i < listViewSummaryEdges.getItems().size(); ++i) {
+            SDGEdge currentEdge = itemIndexToSummaryEdge.remove(i);
+            itemIndexToSummaryEdge.put(i - 1, currentEdge);
+            SDGNodeTuple currentRemovedNodeTuple = currentIndexToNodeTuple.remove(i);
+            currentIndexToNodeTuple.put(i - 1, currentRemovedNodeTuple);
+        }
+
+        clearCodeAreaForNewCode(methodCodeArea, "");
+        clearCodeAreaForNewCode(loopInvariantCodeArea, "");
+        clearCodeAreaForNewCode(keyContractCodeArea, "");
+        
+        listViewLoopsInSE.getItems().clear();
+        listViewFormalInoutPairs.getItems().clear();
+        listViewCalledMethodsInSE.getItems().clear();
+
+        listViewSummaryEdges.getItems().removeIf((s) -> {
+            return s.startsWith(e.toString());
+        });
+        listViewSummaryEdges.getSelectionModel().clearSelection();
+        listViewSummaryEdges.getSelectionModel().select(0);
     }
 
     @Override
@@ -348,6 +399,8 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     @Override
     public void disprovedAll() {
+        labelSomeOtherData.setText("disproved the information flow! hourayyyy! Incredible!");
+        AutomationHelper.playSound("Victory Sound Effect.wav");
     }
 
     @Override

@@ -78,8 +78,8 @@ public class ViolationsDisproverSemantic {
                 StaticCGJavaMethod methodCorresToSummaryEdge = violationsWrapper.getMethodCorresToSummaryEdge(se);
                 String pathToTestJava = javaForKeyCreator.generateJavaForFormalNodeTuple(
                         formalNodeTuple, methodCorresToSummaryEdge);
-                result = automationHelper.runKeY(pathToKeyJar, "information flow");
-                resultFunc = automationHelper.runKeY(pathToKeyJar, "functional");
+                result = automationHelper.runKeY(pathToKeyJar, "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/proofObs/proofs" ,"information flow");
+                resultFunc = automationHelper.runKeY(pathToKeyJar, "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/proofObs/proofs", "functional");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(ViolationsDisproverSemantic.class.getName()).log(Level.SEVERE, null, ex);
                 return false;

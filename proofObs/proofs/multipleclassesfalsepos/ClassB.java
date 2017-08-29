@@ -1,21 +1,10 @@
 package multipleclassesfalsepos;
 public class ClassB{
 public int[] arr;
-	/*@ requires true
-	  @ determines this \by this, this.arr; */
+	/*@ requires true;
+	  @ determines this \by this.arr, this; */
     int[] putDataInArr(int high) {
      arr[4] = high;
-	/*
-	@ loop_invariant
-	 
-	 @ assignable
-	 
-	 @ determines this \by this, this.arr;
-	 
-	 @ decreases */
-        for(int i = 0; i < 10; ++i) {
-            
-        }
         return arr;
     }
 

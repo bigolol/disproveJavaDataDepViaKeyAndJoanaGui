@@ -1,6 +1,6 @@
 package joanakeyrefactoring;
 
-import java.awt.Desktop;
+import edu.kit.joana.wala.core.Main;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 /**
  * This class handles all automation processes of the Combined Approach.
@@ -119,22 +119,15 @@ public class AutomationHelper {
         }
     }
 
-   
-
-   
     private static boolean isConstructor(String methodName) {
         return methodName.contains("<init>");
     }
-
 
     private String extractOnlyMethodBody(String completeMethod) {
         completeMethod = completeMethod.trim();
         int openCurlyIndex = completeMethod.indexOf("{");
         return completeMethod.substring(openCurlyIndex);
-    }    
-    
-
-   
+    }
 
     private void generateKeyFileFrom(
             String profileString, String javaSourceString,
@@ -230,13 +223,15 @@ public class AutomationHelper {
      * @param obligation
      * @return result of the proof
      */
-    public static boolean runKeY(String pathKeY, String obligation) throws IOException {
+    private static String pathToJava = "/home/holger/jre1.8.0_144/bin/java";
+
+    public static boolean runKeY(String pathKeY, String pathProofObs, String obligation) throws IOException {
         boolean result = false;
         String cmd = "";
         if (obligation.equals("functional")) {
-            cmd = "java -Xmx512m -jar " + pathKeY + " --auto proofObs/proofs/proofObligationFunctional.key";
+            cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " --auto " + pathProofObs + "/proofObligationFunctional.key";
         } else {
-            cmd = "java -Xmx512m -jar " + pathKeY + " --auto proofObs/proofs/proofObligationIF.key";
+            cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " --auto " + pathProofObs + "/proofObligationIF.key";
         }
         Runtime r = Runtime.getRuntime();
         Process pr;
@@ -247,6 +242,7 @@ public class AutomationHelper {
 
         String s;
         while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
             if (s.contains("Number of goals remaining open: 0")) {
                 result = true;
             }
@@ -260,13 +256,10 @@ public class AutomationHelper {
     /**
      * Opens the program KeY for a manual proof.
      *
-     * @param fileName
-     * @param methodName
      * @return the result of the proof
      */
-    public boolean openKeY(String fileName, String methodName) {
-        boolean result = false;
-        String cmd = "java -Xmx1024m -jar dep\\KeY.jar";
+    public static void openKeY(String pathKeY, String pathProofObs) {
+        String cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " " + pathProofObs;
         Runtime r = Runtime.getRuntime();
         Process pr;
         try {
@@ -277,35 +270,30 @@ public class AutomationHelper {
             String s;
             while ((s = stdInput.readLine()) != null) {
                 System.out.println(s);
-                if (s.contains("Number of goals remaining open: 0")) {
-                    result = true;
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
     }
 
-    /**
-     * Opens a file on the desktop. Is used to open the java .java file for the
-     * key proof.
-     *
-     * @param file
-     */
-    public void openJava(File file) {
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().edit(file);
-
-            } else {
-                System.out
-                        .println("System is not DesktopSupported. Was not able to open .java File.");
+    public static synchronized void playSound(final String url) {
+        new Thread(new Runnable() {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            new File("dependencies/" + url)
+                    );
+                    clip.open(inputStream);
+                    clip.start();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
+        ).start();
     }
 
     /**

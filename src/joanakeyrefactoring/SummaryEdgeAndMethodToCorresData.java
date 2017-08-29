@@ -87,7 +87,7 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
                 contract = contract.substring(0, i) + '\\' + '\\' + contract.substring(i + 1);
                 i += 2;
             } else if (contract.charAt(i) == '\n') {
-                contract = contract.substring(0, i - 1) + contract.substring(i + 1);
+                contract = contract.substring(0, i) + contract.substring(i + 1);
             }
         }
         return contract;

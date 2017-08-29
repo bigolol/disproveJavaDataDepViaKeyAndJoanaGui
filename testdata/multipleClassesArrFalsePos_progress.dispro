@@ -1,0 +1,124 @@
+{"path_to_jar" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar",
+"path_to_java_source" : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src",
+"path_to_sdg" : "savedata/MultipleClassesFalsePos/sdg.pdg",
+"state_saver" : {"formal_ins_to_pers_cg" : [
+{ "sdg_node" : 65, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 66, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 194, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 163, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 164, "cg_node" : {"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 196, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 197, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 38, "cg_node" : {"id" : 3, "cg_node_id" :8, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 198, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 199, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 200, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 201, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}}},
+{ "sdg_node" : 154, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
+"1" : "this"
+}}}],
+"cgNodes" : [
+{"id" : 0, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 1, "cg_node_id" :0, "ir" : {
+"1" : "args"
+}},
+{"id" : 2, "cg_node_id" :0, "ir" : {
+
+}},
+{"id" : 3, "cg_node_id" :8, "ir" : {
+"1" : "this"
+}},
+{"id" : 4, "cg_node_id" :9, "ir" : {
+"1" : "this"
+}},
+{"id" : 5, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 6, "cg_node_id" :11, "ir" : {
+"1" : "this"
+}},
+{"id" : 7, "cg_node_id" :12, "ir" : {
+"1" : "this"
+}}],
+"localPointerKeys" : [{"id" : 0, "value_number" : 1, "node" : 0
+},
+{"id" : 1, "value_number" : 1, "node" : 1
+},
+{"id" : 2, "value_number" : 1, "node" : 2
+},
+{"id" : 3, "value_number" : 1, "node" : 3
+},
+{"id" : 4, "value_number" : 1, "node" : 4
+},
+{"id" : 5, "value_number" : 1, "node" : 5
+},
+{"id" : 6, "value_number" : 1, "node" : 6
+},
+{"id" : 7, "value_number" : 1, "node" : 7
+},
+{"id" : 0, "value_number" : 1, "node" : 0
+},
+{"id" : 1, "value_number" : 1, "node" : 1
+},
+{"id" : 2, "value_number" : 1, "node" : 2
+},
+{"id" : 3, "value_number" : 1, "node" : 3
+},
+{"id" : 4, "value_number" : 1, "node" : 4
+},
+{"id" : 5, "value_number" : 1, "node" : 5
+},
+{"id" : 6, "value_number" : 1, "node" : 6
+},
+{"id" : 7, "value_number" : 1, "node" : 7
+}],
+"disjunctPointsTo" : []
+},
+"edges_methods_to_values" : {"formal_node_tuple_to_contract" : [{"in" : 164, "out" : 195, "contract" : "	/*@ requires true;	  @ determines this \\by this.arr, this; */"},
+{"in" : 66, "out" : 63, "contract" : "	/*@ requires true;	  @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; */"}],"edge_to_loop_invariant_template" : [{"in" : 11, "out" : 12, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines \\result \\by this, this.b, this.b.arr, this.c.arr, this.c; 	 	 @ decreases */"},
+{"in" : 126, "out" : 207, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines this \\by this.arr, this; 	 	 @ decreases */"}],"method_to_most_general_contract" : [{"method" : "multipleclassesfalsepos.ClassA/falsePos/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this, high, this.b, this.b.arr, this.c.arr, this.c; */", },
+{"method" : "multipleclassesfalsepos.ClassB/putDataInArr/int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this.arr, this, high; */", }],"edge_to_loop_invariant" : [{"in" : 11, "out" : 12, "loop_invariants" : []},
+{"in" : 126, "out" : 207, "loop_invariants" : []}]},
+"violation_wrapper" : {
+"violations" : [],
+"chops" : [
+{
+"src" : 11,
+"sink" : 12,
+"nodes_in_chop" : [
+11,
+12]
+}],
+"summary_edges_sorted" : [
+{"src" : 11, "sink" : 12}],
+"summary_edges_methods": [
+{"id" :0, "class_name" : "multipleclassesfalsepos.ClassA", "method_name" : "falsePos", "arg_string" : "int"}],"summary_edges_chops" : [
+{"pos" :0, "chops" : [
+{"src" : 11, "sink" : 12}]}]
+}}

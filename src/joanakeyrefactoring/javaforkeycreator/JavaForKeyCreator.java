@@ -27,6 +27,7 @@ import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -62,10 +63,13 @@ public class JavaForKeyCreator {
             String loopInvariantTemplate,
             List<String> loopInvariants,
             Map<StaticCGJavaMethod, String> methodsToMostGeneralContract) throws IOException {
+        FileUtils.deleteDirectory(new File(pathToTestJava));
+
         this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
         AddContractsAndLoopInvariantsListener addContractsAndLoopInvariantsListener = new AddContractsAndLoopInvariantsListener();
         Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses = callGraph.getAllNecessaryClasses(method);
         javaProjectCopyHandler = new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
+
         for (StaticCGJavaClass c : allNecessaryClasses.keySet()) {
             Set<StaticCGJavaMethod> set = allNecessaryClasses.get(c);
             String relPathForJavaClass

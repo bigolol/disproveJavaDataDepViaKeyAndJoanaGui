@@ -21,11 +21,13 @@ import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
  * @author holger
  */
 public class JoanaKeyInterfacer {
-    
+
     private ViolationsWrapper violationsWrapper;
     private JavaForKeyCreator javaForKeyCreator;
     private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
-    
+    private String pathToKey = "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/dependencies/Key/KeY.jar";
+    private String pathToProofObs = "/home/holger/Code/hiwi/disproveJavaDataDepViaKeyAndJoanaGui/proofObs/proofs";
+
     public JoanaKeyInterfacer(
             DisprovingProject disprovingProject) throws IOException {
         this.violationsWrapper = disprovingProject.getViolationsWrapper();
@@ -38,24 +40,38 @@ public class JoanaKeyInterfacer {
         Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
         summaryEdgeToCorresData = disprovingProject.getSummaryEdgeToCorresData();
     }
-    
+
     public String getKeyContractFor(SDGNodeTuple formalTuple, StaticCGJavaMethod methodCorresToSE) {
         return summaryEdgeToCorresData.getContractFor(formalTuple);
     }
-    
+
     public String getLoopInvariantFor(SDGEdge e, int index) {
         return summaryEdgeToCorresData.getLoopInvariantFor(e, index);
     }
-    
+
     public void setLoopInvariantFor(SDGEdge e, int index, String val) {
         summaryEdgeToCorresData.setLoopInvariantFor(e, index, val);
     }
-    
+
     public void resetLoopInvariant(SDGEdge currentSelectedEdge, int newValue) {
         summaryEdgeToCorresData.resetLoopInvariant(currentSelectedEdge, newValue);
     }
-    
-    boolean tryDisproveEdge(
+
+    public void openInKey(SDGEdge e,
+            SDGNodeTuple tuple,
+            StaticCGJavaMethod corresMethod) throws IOException {
+        String pathToTestJava = javaForKeyCreator.
+                generateJavaForFormalTupleCalledFromGui(
+                        summaryEdgeToCorresData.getContractFor(tuple),
+                        corresMethod,
+                        summaryEdgeToCorresData.getEdgeToLoopInvariantTemplate().get(e),
+                        summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
+                        summaryEdgeToCorresData.getMethodToMostGeneralContract()
+                );
+        AutomationHelper.openKeY(pathToKey, pathToProofObs);
+    }
+
+    public boolean tryDisproveEdge(
             SDGEdge e,
             SDGNodeTuple tuple,
             StaticCGJavaMethod corresMethod) throws IOException {
@@ -67,13 +83,17 @@ public class JoanaKeyInterfacer {
                         summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
                         summaryEdgeToCorresData.getMethodToMostGeneralContract()
                 );
-        boolean worked = AutomationHelper.runKeY(pathToTestJava, "information flow");
+        boolean worked = AutomationHelper.runKeY(pathToKey, pathToProofObs, "information flow");
         if (worked) {
-            worked = AutomationHelper.runKeY(pathToTestJava, "functional");
+            worked = AutomationHelper.runKeY(pathToKey, pathToProofObs, "functional");
         }
         if (worked) {
             violationsWrapper.removeEdge(e);
         }
         return worked;
+    }
+
+    public void markAsDisproved(SDGEdge currentSelectedEdge) {
+        violationsWrapper.removeEdge(currentSelectedEdge);
     }
 }
