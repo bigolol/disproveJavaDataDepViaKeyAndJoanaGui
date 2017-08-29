@@ -78,16 +78,15 @@ public class DisprovingProject {
         return pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
     }
 
-    public void saveSDG() throws FileNotFoundException {
-        String saveFilePos = "savedata/" + getProjName() + "/sdg.pdg";
-        File f = new File(saveFilePos);
+    public void saveSDG() throws FileNotFoundException, IOException {
+        File f = File.createTempFile(getProjName(), ".pdg", new File("savedata"));
         if (f.exists()) {
             f.delete();
         }
         f.getParentFile().mkdirs();
         PrintWriter out = new PrintWriter(f);
         SDGSerializer.toPDGFormat(sdg, out);
-        pathToSDG = saveFilePos;
+        pathToSDG = "savedata/" + f.getName();
     }
 
     public String generateSaveString() {
