@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="proofObs/proofs"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="testdata/JZipWithException"/>
+	<classpathentry kind="src" path="testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src"/>
+	<classpathentry kind="src" path="testdata/plusMinusFalsePositive"/>
+	<classpathentry kind="lib" path="dependencies/antlr-runtime-4.5.3.jar"/>
+	<classpathentry kind="lib" path="dependencies/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="dependencies/flowless-fat-0.5.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/javacg-0.1-SNAPSHOT-static.jar"/>
+	<classpathentry kind="lib" path="dependencies/joana.api.jar"/>
+	<classpathentry kind="lib" path="dependencies/json.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.example.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.proof_references.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.symbolic_execution.example.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.symbolic_execution.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.core.testgen.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.removegenerics.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.ui.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/components/key.util.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/KeY.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/libs/antlr.jar"/>
+	<classpathentry kind="lib" path="dependencies/Key/libs/recoderKey.jar"/>
+	<classpathentry kind="lib" path="dependencies/richtext-java-keyword-demo.jar"/>
+	<classpathentry kind="lib" path="dependencies/richtextfx-fat-0.6.10.jar"/>
+	<classpathentry kind="lib" path="testdata/JZipWithException.jar"/>
+	<classpathentry kind="lib" path="dependencies/commons-cli-1.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
