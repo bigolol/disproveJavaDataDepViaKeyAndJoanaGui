@@ -5,22 +5,12 @@
  */
 package joanakeyrefactoring.staticCG;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import joanakeyrefactoring.loopinvarianthandling.LoopInvariant;
-import joanakeyrefactoring.loopinvarianthandling.LoopInvPosAndMethBodExtracter;
-import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
-import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
-import org.antlr.v4.runtime.misc.OrderedHashSet;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

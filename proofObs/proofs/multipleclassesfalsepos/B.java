@@ -1,5 +1,5 @@
 package multipleclassesfalsepos;
-public class ClassB{
+public class B{
 public int[] arr;
 	/*@ requires true;
 	  @ determines this \by this, this.arr; */

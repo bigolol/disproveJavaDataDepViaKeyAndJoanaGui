@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class JZip {
 	 * -> SourceFolder --> UnZipIt() --> fos.write() Es exisitert ein Path von
 	 * CONFIGURATION zu fos.write False Positive: ONFIGURATION sagt nur wohin
 	 * das file gelegt wird und nicht was in dem File steht. Kann man das ohne
-	 * declassification überhaupt sagen? Kann KeY mit den ganzen Streams und
+	 * declassification ueberhaupt sagen? Kann KeY mit den ganzen Streams und
 	 * Buffern umgehen?
 	 * 
 	 * **/
@@ -49,11 +48,11 @@ public class JZip {
 	private CommandLineParser cmdParser;
 	private Options opt;
 	private boolean run;
-	private String[] args;
+	//private String[] args;
 	private String commandline = "";
 
 	public JZip(String[] args) {
-		this.args = args;
+		//this.args = args;
 		if (args != null && args.length > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (String s : args) {
@@ -88,33 +87,47 @@ public class JZip {
 		} catch (Throwable thb) {
 		}
 
-		Option loadconfig = OptionBuilder
+		OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription(
+                        "Load the configuration file <file>. All existing configuration properties will be overwritten afterwards.");
+        Option loadconfig = OptionBuilder.create("loadconfig");
+		/*Option loadconfig = OptionBuilder
 				.withArgName("file")
 				.hasArg()
 				.withDescription(
 						"Load the configuration file <file>. All existing configuration properties will be overwritten afterwards.")
-				.create("loadconfig");
+				.create("loadconfig");*/
 		try {
 			opt.addOption(loadconfig);
 		} catch (Throwable thb) {
 		}
-		Option storeconfig = OptionBuilder
+		OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription("Store the current configuration in file <file>");
+        Option storeconfig = OptionBuilder.create("storeconfig");
+		/*Option storeconfig = OptionBuilder
 				.withArgName("file")
 				.hasArg()
 				.withDescription(
 						"Store the current configuration in file <file>")
-				.create("storeconfig");
+				.create("storeconfig");*/
 		try {
 			opt.addOption(storeconfig);
 		} catch (Throwable thb) {
 		}
-		Option setconfig = OptionBuilder
+		OptionBuilder.withArgName("name=value");
+		OptionBuilder.hasOptionalArgs(2);
+		OptionBuilder.withValueSeparator('=');
+        OptionBuilder.withDescription("Assign the value <value> to configuration property <name>");
+        Option setconfig = OptionBuilder.create("setconfig");
+		/*Option setconfig = OptionBuilder
 				.withArgName("name=value")
 				.hasOptionalArgs(2)
 				.withValueSeparator('=')
 				.withDescription(
 						"Assign the value <value> to configuration property <name>")
-				.create("setconfig");
+				.create("setconfig");*/
 		try {
 			opt.addOption(setconfig);
 		} catch (Throwable thb) {
@@ -124,22 +137,34 @@ public class JZip {
 			opt.addOption(showConfig);
 		} catch (Throwable thb) {
 		}
-		Option zip = OptionBuilder
+		OptionBuilder.withArgName("file> <source");
+        OptionBuilder.hasOptionalArgs(2);
+        OptionBuilder.withDescription(
+                "Zip all files from directory <source> to archive file <file>. If <source> is not declared then this property is read from the configuration file. <source>'s default is '.'"
+                );
+        Option zip = OptionBuilder.create("zip");
+		/*Option zip = OptionBuilder
 				.withArgName("file> <source")
 				.hasOptionalArgs(2)
 				.withDescription(
 						"Zip all files from directory <source> to archive file <file>. If <source> is not declared then this property is read from the configuration file. <source>'s default is '.'")
-				.create("zip");
+				.create("zip");*/
 		try {
 			opt.addOption(zip);
 		} catch (Throwable thb) {
 		}
-		Option unzip = OptionBuilder
+		OptionBuilder.withArgName("file> <destination");
+        OptionBuilder.hasOptionalArgs(2);
+        OptionBuilder.withDescription(
+                "Unzip all files from zip <file> into destination folder <destination>. If <destination> is not declared then this propery is read from the configuration file. <destination>'s default is '.'"
+                );
+        Option unzip = OptionBuilder.create("unzip");
+		/*Option unzip = OptionBuilder
 				.withArgName("file> <destination")
 				.hasOptionalArgs(2)
 				.withDescription(
 						"Unzip all files from zip <file> into destination folder <destination>. If <destination> is not declared then this propery is read from the configuration file. <destination>'s default is '.'")
-				.create("unzip");
+				.create("unzip");*/
 		try {
 			opt.addOption(unzip);
 		} catch (Throwable thb) {

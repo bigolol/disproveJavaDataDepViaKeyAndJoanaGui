@@ -1,3 +1,5 @@
+//this is the joak script for testing MultipleClassesFalsePos
+
 pathKeY : "dep/KeY.jar",
 javaClass : "",
 pathToJar : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar",
@@ -5,5 +7,16 @@ pathToJavaFile : "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src",
 entryMethod : "multipleclassesfalsepos.MultipleClassesFalsePos",
 annotationPath : "",
 fullyAutomatic : true,
-sources : [{securityLevel : "high", description : {from : "callsToMethod", method : "multipleclassesfalsepos.ClassA.falsePos(I)I", paramPos : 1}}],
-sinks : [{securityLevel : "low", description : {from : "programPart", programPart : "(void multipleclassesfalsepos.MultipleClassesFalsePos.main(java.lang.String[]):8) v7 = v3.falsePos(#(0))->ret"}}]
+sources : [
+	{
+		securityLevel : "high",
+		description : {from : "callsToMethod", method : "multipleclassesfalsepos.ClassA.falsePos(I)I", paramPos : 1}
+	}
+],
+sinks : [
+	{
+		securityLevel : "low",
+		description : {from : "programPart", programPart : "(void multipleclassesfalsepos.MultipleClassesFalsePos.main(java.lang.String[]):8) v7 = v3.falsePos(#(0))->ret"}
+	}
+]
+
