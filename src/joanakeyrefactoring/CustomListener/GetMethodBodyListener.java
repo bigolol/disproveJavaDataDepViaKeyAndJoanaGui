@@ -23,7 +23,7 @@ public class GetMethodBodyListener extends Java8BaseListener {
 
     private List<String> extractedMethodParamNames;
     private boolean parsedRightMethod;
-    private String methodBody;
+    //private String methodBody;
     private StaticCGJavaMethod method;
     private int methodStartLine;
     private final String nullable = "/*@ nullable @*/ ";
@@ -116,7 +116,8 @@ public class GetMethodBodyListener extends Java8BaseListener {
     }
 
     public void parseMethodDeclarator(Java8Parser.MethodDeclaratorContext ctx) {
-        String text = ctx.getText();
+        //String text =
+        ctx.getText();
         String methodName = ctx.Identifier().getText();
         if (!methodName.equals(method.getId())) {
             return;

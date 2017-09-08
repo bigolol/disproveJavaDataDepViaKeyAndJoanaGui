@@ -114,7 +114,7 @@ public class MainWindowController implements Initializable {
     //---------------------other fields---------------------------
     private static FileChooser fileChooser = new FileChooser();
     private Stage mainStage;
-    private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
+    //private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
     private AsyncBackgroundLoader asyncBackgroundLoader;
 
     final private String disprovingProgressFileEnding = "dispro";

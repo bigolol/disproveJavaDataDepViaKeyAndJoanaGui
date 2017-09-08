@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -280,7 +279,8 @@ public class JavaForKeyCreator {
     }
 
     private String generateSinkDescr(SDGNode sinkNode) {
-        String bytecodeName = sinkNode.getBytecodeName();
+        //String bytecodeName =
+        sinkNode.getBytecodeName();
         if (sinkNode.getKind() == SDGNode.Kind.EXIT) {
             return "\\result";
         } else {

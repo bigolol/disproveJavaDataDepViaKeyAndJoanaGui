@@ -45,15 +45,16 @@ public class MethodVisitor extends EmptyVisitor {
     JavaClass visitedClass;
     private MethodGen mg;
     private ConstantPoolGen cp;
-    private String format;
+    //private String format;
     private OrderedHashSet<StaticCGJavaMethod> referencedMethods = new OrderedHashSet<>();
 
     public MethodVisitor(MethodGen m, JavaClass jc) {
         visitedClass = jc;
         mg = m;
         cp = mg.getConstantPool();
-        format = "M:" + visitedClass.getClassName() + ":" + mg.getName() + "(" + argumentList(mg.getArgumentTypes()) + ")"
-            + " " + "(%s)%s:%s(%s)";
+        /*format = "M:" + visitedClass.getClassName() + ":" + mg.getName()
+                + "(" + argumentList(mg.getArgumentTypes()) + ")"
+                + " " + "(%s)%s:%s(%s)";*/
     }
 
     public OrderedHashSet<StaticCGJavaMethod> getReferencedMethods() {

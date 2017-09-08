@@ -48,10 +48,10 @@ public class ClassVisitor extends EmptyVisitor {
 
     private JavaClass clazz;
     private ConstantPoolGen constants;
-    private String classReferenceFormat;
+    //private String classReferenceFormat;
     private List<StaticCGJavaClass> referencedClasses = new ArrayList<>();
-    private List<StaticCGJavaMethod> containedMethods = new ArrayList<>();
-    private List<StaticCGJavaMethod> calledMethods = new ArrayList<>();
+    //private List<StaticCGJavaMethod> containedMethods = new ArrayList<>();
+    //private List<StaticCGJavaMethod> calledMethods = new ArrayList<>();
     private StaticCGJavaClass visitedClass;
 
     private OrderedHashSet<StaticCGJavaClass> alreadyFoundClasses;
@@ -60,7 +60,7 @@ public class ClassVisitor extends EmptyVisitor {
     public ClassVisitor(JavaClass jc) {
         clazz = jc;
         constants = new ConstantPoolGen(clazz.getConstantPool());
-        classReferenceFormat = "C:" + clazz.getClassName() + " %s";
+        //classReferenceFormat = "C:" + clazz.getClassName() + " %s";
     }
 
     public void visitJavaClass(JavaClass jc) {

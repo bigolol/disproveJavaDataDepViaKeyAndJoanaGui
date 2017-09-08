@@ -5,22 +5,12 @@
  */
 package disproveviakeyandjoanagui.asynctaskhandler;
 
-import ch.qos.logback.core.util.FileUtil;
-import com.ibm.wala.ipa.cha.ClassHierarchyException;
-import com.ibm.wala.util.CancelException;
-import com.ibm.wala.util.graph.GraphIntegrity;
 import disproveviakeyandjoanagui.CurrentActionLogger;
 import disproveviakeyandjoanagui.ErrorLogger;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.stage.Stage;
 import joanakeyrefactoring.CombinedApproach;
 import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.persistence.DisprovingProject;
@@ -52,7 +42,7 @@ public class AsyncBackgroundLoader implements Runnable {
     public void loadJoakFile(File f, BiConsumer<JoanaAndKeyCheckData, Boolean> callback) {
         this.fileToLoad = f;
         this.uiThreadJoakCallback = callback;
-        loadOption = loadOption.JOAK;
+        loadOption = LoadOptions.JOAK;
         actionLogger.startProgress("now parsing the joak file, this might take a while to build the sdg ...");
         new Thread(this).start();
     }
@@ -60,7 +50,7 @@ public class AsyncBackgroundLoader implements Runnable {
     public void loadDisproFie(File f, BiConsumer<DisprovingProject, Boolean> callback) {
         this.fileToLoad = f;
         this.uiThreadDisproCallback = callback;
-        loadOption = loadOption.DISPRO;
+        loadOption = LoadOptions.DISPRO;
         actionLogger.startProgress("now parsing the dispro file, this might take a while ...");
         new Thread(this).start();
     }

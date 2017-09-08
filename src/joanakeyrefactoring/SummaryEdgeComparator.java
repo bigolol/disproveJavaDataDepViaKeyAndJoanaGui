@@ -6,7 +6,6 @@
 package joanakeyrefactoring;
 
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
-import java.util.ArrayList;
 import java.util.Comparator;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 

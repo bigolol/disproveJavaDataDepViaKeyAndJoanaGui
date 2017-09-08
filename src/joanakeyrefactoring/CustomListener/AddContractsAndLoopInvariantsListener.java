@@ -15,7 +15,6 @@ import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
 import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
-import static joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener.extractStringInBetween;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;

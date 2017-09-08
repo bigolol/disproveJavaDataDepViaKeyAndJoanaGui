@@ -8,7 +8,6 @@ package disproveviakeyandjoanagui;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.IOException;
-import java.util.Map;
 import joanakeyrefactoring.AutomationHelper;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
 import joanakeyrefactoring.ViolationsWrapper;
@@ -37,7 +36,8 @@ public class JoanaKeyInterfacer {
                         disprovingProject.getCallGraph(),
                         disprovingProject.getSdg(),
                         disprovingProject.getStateSaver());
-        Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
+        //Map<SDGEdge, StaticCGJavaMethod> summaryEdgesAndCorresJavaMethods =
+        violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
         summaryEdgeToCorresData = disprovingProject.getSummaryEdgeToCorresData();
     }
 
@@ -60,7 +60,8 @@ public class JoanaKeyInterfacer {
     public void openInKey(SDGEdge e,
             SDGNodeTuple tuple,
             StaticCGJavaMethod corresMethod) throws IOException {
-        String pathToTestJava = javaForKeyCreator.
+        //String pathToTestJava =
+                javaForKeyCreator.
                 generateJavaForFormalTupleCalledFromGui(
                         summaryEdgeToCorresData.getContractFor(tuple),
                         corresMethod,
@@ -75,7 +76,8 @@ public class JoanaKeyInterfacer {
             SDGEdge e,
             SDGNodeTuple tuple,
             StaticCGJavaMethod corresMethod) throws IOException {
-        String pathToTestJava = javaForKeyCreator.
+        //String pathToTestJava =
+                javaForKeyCreator.
                 generateJavaForFormalTupleCalledFromGui(
                         summaryEdgeToCorresData.getContractFor(tuple),
                         corresMethod,

@@ -3,7 +3,6 @@ package joanakeyrefactoring;
 import edu.kit.joana.api.IFCAnalysis;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Scanner;
 
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
@@ -25,9 +24,9 @@ public class ViolationsDisproverSemantic {
     public String pathToJar;
     public RepsRosayChopper chopper;
     public StateSaver stateSaver;
-    private String pathToJava;
-    private AutomationHelper automationHelper;
-    private boolean fullyAutomatic;
+    //private String pathToJava;
+    //private AutomationHelper automationHelper;
+    //private boolean fullyAutomatic;
     private String pathToKeyJar;
     private ViolationsWrapper violationsWrapper;
     private JavaForKeyCreator javaForKeyCreator;
@@ -36,12 +35,12 @@ public class ViolationsDisproverSemantic {
     public ViolationsDisproverSemantic(
             AutomationHelper automationHelper,
             JoanaAndKeyCheckData checkData) throws IOException {
-        this.automationHelper = automationHelper;
+        //this.automationHelper = automationHelper;
         this.pathToJar = checkData.getPathToJar();
         this.stateSaver = checkData.getStateSaver();
-        this.fullyAutomatic = checkData.isFullyAutomatic();
+        //this.fullyAutomatic = checkData.isFullyAutomatic();
         this.pathToKeyJar = checkData.getPathKeY();
-        this.pathToJava = checkData.getPathToJavaFile();
+        //this.pathToJava = checkData.getPathToJavaFile();
         javaForKeyCreator = new JavaForKeyCreator(
                 checkData.getPathToJavaFile(),
                 callGraph,
@@ -75,11 +74,13 @@ public class ViolationsDisproverSemantic {
         for (SDGNodeTuple formalNodeTuple : formalNodePairs) {
             boolean result = false, resultFunc = false;
             try {
-                StaticCGJavaMethod methodCorresToSummaryEdge = violationsWrapper.getMethodCorresToSummaryEdge(se);
-                String pathToTestJava = javaForKeyCreator.generateJavaForFormalNodeTuple(
-                        formalNodeTuple, methodCorresToSummaryEdge);
-                result = automationHelper.runKeY(pathToKeyJar, "proofObs/proofs" ,"information flow");
-                resultFunc = automationHelper.runKeY(pathToKeyJar, "proofObs/proofs", "functional");
+                StaticCGJavaMethod methodCorresToSummaryEdge =
+                        violationsWrapper.getMethodCorresToSummaryEdge(se);
+                //String pathToTestJava =
+                javaForKeyCreator.generateJavaForFormalNodeTuple(formalNodeTuple,
+                                                                 methodCorresToSummaryEdge);
+                result = AutomationHelper.runKeY(pathToKeyJar, "proofObs/proofs" ,"information flow");
+                resultFunc = AutomationHelper.runKeY(pathToKeyJar, "proofObs/proofs", "functional");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(ViolationsDisproverSemantic.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
@@ -97,7 +98,7 @@ public class ViolationsDisproverSemantic {
         return true;
     }
 
-    private void checkViaUser(SDGNode formalInNode, SDGNode formalOutNode, String methodNameKey) {
+    /*private void checkViaUser(SDGNode formalInNode, SDGNode formalOutNode, String methodNameKey) {
         if (!fullyAutomatic) {
             System.out.println("From node: " + formalInNode + " to node: " + formalOutNode);
             System.out.println("type \"y\" to verify method manually or \"n\" to go on automatically ");
@@ -111,6 +112,6 @@ public class ViolationsDisproverSemantic {
                 String keyAnswer2 = scanInput2.nextLine();
             }
         }
-    }
+    }*/
 
 }

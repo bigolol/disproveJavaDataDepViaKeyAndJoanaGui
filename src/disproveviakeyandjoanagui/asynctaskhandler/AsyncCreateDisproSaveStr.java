@@ -7,10 +7,7 @@ package disproveviakeyandjoanagui.asynctaskhandler;
 
 import disproveviakeyandjoanagui.CurrentActionLogger;
 import disproveviakeyandjoanagui.ErrorLogger;
-import java.io.FileNotFoundException;
 import java.util.function.BiConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import joanakeyrefactoring.persistence.DisprovingProject;
 

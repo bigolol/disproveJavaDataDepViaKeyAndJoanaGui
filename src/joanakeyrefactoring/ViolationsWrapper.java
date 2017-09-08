@@ -92,8 +92,10 @@ public class ViolationsWrapper {
                     .append(",")
                     .append(System.lineSeparator());
         }
-        int length = created.length();
-        int lastIndexOf = created.lastIndexOf("[");
+        //int length =
+        created.length();
+        //int lastIndexOf =
+        created.lastIndexOf("[");
         if (created.lastIndexOf("[") != created.length() - lengthOfLineSep - 1) {
             created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
         }
@@ -107,10 +109,12 @@ public class ViolationsWrapper {
             int sinkId = sdg.getEdgeTarget(e).getId();
 
             if (srcId == 14724 && sinkId == 49581) {
-                SDGEdge foundEdge = sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
+                //SDGEdge foundEdge =
+                sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
             }
 
-            SDGEdge foundEdge = sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
+            //SDGEdge foundEdge =
+            sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
 
             created.append("\"src\" : ").append(srcId);
             created.append(", \"sink\" : ").append(sinkId);
@@ -190,7 +194,8 @@ public class ViolationsWrapper {
             int srcId = summaryEdgesSortedArr.getJSONObject(i).getInt("src");
             int sinkId = summaryEdgesSortedArr.getJSONObject(i).getInt("sink");
 
-            SDGEdge edge = sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
+            //SDGEdge edge =
+            sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
             Set<SDGEdge> allEdges = sdg.getAllEdges(sdg.getNode(srcId), sdg.getNode(sinkId));
             if (allEdges.size() == 0) {
                 System.out.println("missing sue : src " + srcId + " sink " + sinkId);

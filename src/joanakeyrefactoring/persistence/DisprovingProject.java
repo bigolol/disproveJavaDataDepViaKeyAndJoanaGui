@@ -5,12 +5,10 @@
  */
 package joanakeyrefactoring.persistence;
 
-import disproveviakeyandjoanagui.ViolationsWrapperListener;
 import edu.kit.joana.api.sdg.SDGProgram;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.graph.SDG;
-import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGSerializer;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +19,6 @@ import joanakeyrefactoring.JoanaAndKeyCheckData;
 import joanakeyrefactoring.loopinvarianthandling.LoopInvPosAndMethBodExtracter;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
-import joanakeyrefactoring.ViolationChop;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
@@ -124,7 +121,8 @@ public class DisprovingProject {
         disprovingProject.sdg = SDGProgram.loadSDG(pathToSdg).getSDG();
         disprovingProject.callGraph = new JCallGraph();
         disprovingProject.callGraph.generateCG(new File(pathToJar));
-        disprovingProject.stateSaver = StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
+        disprovingProject.stateSaver =
+                StateSaver.generateFromJson(statesaveJsonObj, disprovingProject.sdg);
         disprovingProject.violationsWrapper = ViolationsWrapper.generateFromJsonObj(
                 violWrapperJsonObj, disprovingProject.sdg, disprovingProject.callGraph);
         disprovingProject.loopInvPosAndMethodBodyExtracter = new LoopInvPosAndMethBodExtracter();
@@ -139,7 +137,8 @@ public class DisprovingProject {
         return disprovingProject;
     }
 
-    public static DisprovingProject generateFromCheckdata(JoanaAndKeyCheckData checkData) throws IOException {
+    public static DisprovingProject generateFromCheckdata(JoanaAndKeyCheckData checkData)
+            throws IOException {
         DisprovingProject disprovingProject = new DisprovingProject();
         disprovingProject.pathToJar = checkData.getPathToJar();
         disprovingProject.pathToJava = checkData.getPathToJavaFile();

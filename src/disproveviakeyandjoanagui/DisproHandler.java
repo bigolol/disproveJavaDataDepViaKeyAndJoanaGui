@@ -65,7 +65,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     private ListView<String> listViewLoopsInSE;
     private ListView<String> listViewFormalInoutPairs;
 
-    private AnchorPane anchorPaneMethodCode;
+    //private AnchorPane anchorPaneMethodCode;
     private AnchorPane anchorPaneLoopInvariant;
     private AnchorPane anchorPaneKeyContract;
 
@@ -107,7 +107,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         this.listViewCalledMethodsInSE = listViewCalledMethodsInSE;
         this.listViewLoopsInSE = listViewLoopsInSE;
         this.listViewFormalInoutPairs = listViewFormalInoutPairs;
-        this.anchorPaneMethodCode = anchorPaneMethodCode;
+        //this.anchorPaneMethodCode = anchorPaneMethodCode;
         this.anchorPaneLoopInvariant = anchorPaneLoopInvariant;
         this.anchorPaneKeyContract = anchorPaneKeyContract;
         this.buttonResetLoopInvariant = buttonResetLoopInvariant;
@@ -223,10 +223,10 @@ public class DisproHandler implements ViolationsWrapperListener {
 
     private void addCodeAreaToAnchorPane(CodeArea codeArea, AnchorPane anchorPane) {
         anchorPane.getChildren().add(codeArea);
-        anchorPane.setTopAnchor(codeArea, 0.0);
-        anchorPane.setRightAnchor(codeArea, 0.0);
-        anchorPane.setBottomAnchor(codeArea, 0.0);
-        anchorPane.setLeftAnchor(codeArea, 0.0);
+        AnchorPane.setTopAnchor(codeArea, 0.0);
+        AnchorPane.setRightAnchor(codeArea, 0.0);
+        AnchorPane.setBottomAnchor(codeArea, 0.0);
+        AnchorPane.setLeftAnchor(codeArea, 0.0);
     }
 
     public DisprovingProject getDisprovingProject() {
@@ -261,9 +261,9 @@ public class DisproHandler implements ViolationsWrapperListener {
         setAllButtonsDisable(false);
     }
 
-    private void setLoopInvInCurrent(int pos, String inv) {
+    /*private void setLoopInvInCurrent(int pos, String inv) {
         joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, pos, inv);
-    }
+    }*/
 
     private void resetListView(ListView<String> listView) {
         try {

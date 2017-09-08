@@ -222,10 +222,10 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
             SDGNode in = sdg.getNode(idin);
             SDGNode out = sdg.getNode(idout);
             Set<SDGEdge> allEdges = sdg.getAllEdges(in, out);
-            SDGEdge found = null;
+            //SDGEdge found = null;
             for (SDGEdge e : allEdges) {
                 if (e.getKind() == SDGEdge.Kind.SUMMARY) {
-                    found = e;
+                    //found = e;
                     created.edgeToLoopInvariantTemplate.put(e, invariantTemplate);
                     break;
                 }

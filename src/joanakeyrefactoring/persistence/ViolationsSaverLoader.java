@@ -5,18 +5,12 @@
  */
 package joanakeyrefactoring.persistence;
 
-import edu.kit.joana.api.sdg.SDGProgram;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
 import edu.kit.joana.ifc.sdg.core.violations.ClassifiedViolation;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.core.violations.paths.ViolationPath;
 import edu.kit.joana.ifc.sdg.core.violations.paths.ViolationPathes;
 import edu.kit.joana.ifc.sdg.graph.SDG;
-import edu.kit.joana.ifc.sdg.graph.SDGNode;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;

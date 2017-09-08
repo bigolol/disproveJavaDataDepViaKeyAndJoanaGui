@@ -5,9 +5,6 @@
  */
 package joanakeyrefactoring.staticCG.javamodel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import org.antlr.v4.runtime.misc.OrderedHashSet;
 
 /**

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * @author holger
  */
 public class LoopInvariantFromUserGetter {
-    private JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
+    //private JavaCodeEditor javaCodeEditor = new JavaCodeEditor();
     
     public void getLoopInvariantFromUser() {
         Stage stage = new Stage();

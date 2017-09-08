@@ -6,7 +6,6 @@
 package disproveviakeyandjoanagui.asynctaskhandler;
 
 import disproveviakeyandjoanagui.CurrentActionLogger;
-import disproveviakeyandjoanagui.DisproHandler;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.IOException;
@@ -87,7 +86,8 @@ public class AsyncAutoRunner implements Runnable {
                 break;
             }
             try {
-                String pathToJave = javaForKeyCreator.generateJavaForFormalTupleCalledFromGui(
+                //String pathToJave =
+                javaForKeyCreator.generateJavaForFormalTupleCalledFromGui(
                         contract,
                         method,
                         edgeAndMethodToCorresData.getEdgeToLoopInvariantTemplate().get(nextSummaryEdge),

@@ -10,5 +10,10 @@ package joanakeyrefactoring;
  * @author holger
  */
 class CouldntAddAnnoException extends Exception {
+
+    /**
+     * TODO Auto-generated stub
+     */
+    private static final long serialVersionUID = -1663172386596704814L;
     
 }

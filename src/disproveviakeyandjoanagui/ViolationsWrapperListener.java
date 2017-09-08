@@ -21,5 +21,6 @@ public interface ViolationsWrapperListener {
     public void disprovedEdge(SDGEdge e);
     public void disprovedChop(ViolationChop chop);
     public void disprovedAll();
-    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg);
+    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
+                              List<SDGEdge> edgesSorted, SDG sdg);
 }
