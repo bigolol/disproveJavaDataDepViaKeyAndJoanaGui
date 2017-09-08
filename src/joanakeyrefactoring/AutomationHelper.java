@@ -223,7 +223,7 @@ public class AutomationHelper {
      * @param obligation
      * @return result of the proof
      */
-    private static String pathToJava = "/home/holger/jre1.8.0_144/bin/java";
+    private static String pathToJava = "java";
 
     public static boolean runKeY(String pathKeY, String pathProofObs, String obligation) throws IOException {
         boolean result = false;

@@ -47,7 +47,7 @@ public class LoopInvariantsTest {
 
     @Test
     public void testCalcAllRelLoopPos() throws IOException {
-        String pathToDistro = "/home/holger/Code/hiwi/DisproveViaKeyAndJoanaGUI/testdata/jzip.dispro";
+        String pathToDistro = "testdata/jzip.dispro";
         String saveStr = FileUtils.readFileToString(new File(pathToDistro), Charset.defaultCharset());
         DisprovingProject disprovingProject = DisprovingProject.generateFromSavestring(saveStr);
     }
