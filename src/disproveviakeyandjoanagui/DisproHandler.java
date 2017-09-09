@@ -135,13 +135,16 @@ public class DisproHandler implements ViolationsWrapperListener {
         labelSummaryEdge.setText("");
         labelSomeOtherData.setText("");
 
-        listViewSummaryEdges.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+        listViewSummaryEdges.getSelectionModel().selectedIndexProperty()
+        .addListener((observable, oldValue, newValue) -> {
             onSummaryEdgeSelectionChange((int) newValue);
         });
-        listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+        listViewFormalInoutPairs.getSelectionModel().selectedIndexProperty()
+        .addListener((observable, oldValue, newValue) -> {
             onFormalPairSelectionChange((int) newValue);
         });
-        listViewLoopsInSE.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+        listViewLoopsInSE.getSelectionModel().selectedIndexProperty()
+        .addListener((observable, oldValue, newValue) -> {
             onLoopInvSelectionChanged((int) newValue);
         });
     }
@@ -341,7 +344,9 @@ public class DisproHandler implements ViolationsWrapperListener {
             return;
         }
 
-        clearCodeAreaForNewCode(loopInvariantCodeArea, joanaKeyInterfacer.getLoopInvariantFor(currentSelectedEdge, newValue));
+        clearCodeAreaForNewCode(loopInvariantCodeArea,
+                                joanaKeyInterfacer.getLoopInvariantFor(currentSelectedEdge,
+                                                                       newValue));
 
         buttonResetLoopInvariant.setOnAction((ActionEvent event) -> {
             joanaKeyInterfacer.resetLoopInvariant(currentSelectedEdge, newValue);
@@ -350,7 +355,8 @@ public class DisproHandler implements ViolationsWrapperListener {
         });
 
         buttonSaveLoopInvariant.setOnAction((event) -> {
-            joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, newValue, loopInvariantCodeArea.getText());
+            joanaKeyInterfacer.setLoopInvariantFor(currentSelectedEdge, newValue,
+                                                   loopInvariantCodeArea.getText());
         });
     }
 
@@ -395,7 +401,8 @@ public class DisproHandler implements ViolationsWrapperListener {
 
         itemIndexToSummaryEdge = new HashMap<>();
 
-        Collection<? extends IViolation<SecurityNode>> uncheckedViolations = violationsWrapper.getUncheckedViolations();
+        Collection<? extends IViolation<SecurityNode>> uncheckedViolations =
+                violationsWrapper.getUncheckedViolations();
         for (IViolation<SecurityNode> v : uncheckedViolations) {
             listViewUncheckedChops.getItems().add(v.toString());
         }
@@ -463,7 +470,8 @@ public class DisproHandler implements ViolationsWrapperListener {
     }
 
     @Override
-    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg) {
+    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
+                              List<SDGEdge> edgesSorted, SDG sdg) {
         Platform.runLater(() -> {
             resetViews();
         });

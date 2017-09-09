@@ -36,13 +36,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import joanakeyrefactoring.persistence.JsonHelper;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.misc.OrderedHashSet;
 
 import org.apache.bcel.classfile.ClassParser;
-import org.json.JSONObject;
 
 /**
  * Constructs a callgraph out of a JAR archive. Can combine multiple archives
@@ -81,8 +79,8 @@ public class JCallGraph {
     }
 
     public void generateCG(File jarFile) throws IOException {
-        ClassParser cp;
         JarFile jar = new JarFile(jarFile);
+
         Enumeration<JarEntry> entries = jar.entries();
         alreadyFoundClasses = new OrderedHashSet<>();
         alreadyFoundMethods = new OrderedHashSet<>();
@@ -97,23 +95,36 @@ public class JCallGraph {
                 continue;
             }
 
-            cp = new ClassParser(jarFile.getAbsolutePath(), entry.getName());
+            ClassParser cp = new ClassParser(jarFile.getAbsolutePath(), entry.getName());
             ClassVisitor visitor = new ClassVisitor(cp.parse());
             visitor.start(alreadyFoundClasses, alreadyFoundMethods);
             if (packageName == null) {
-                packageName = visitor.getVisitedClass().getPackageString().split("\\.")[0];
+                String pkgString = visitor.getVisitedClass().getPackageString();
+                packageName = pkgString != null ? pkgString.split("\\.")[0] : "";
             }
         }
 
         for (StaticCGJavaMethod m : alreadyFoundMethods) {
             m.setCalledFunctionsRec(getAllMethodsCalledByMethodRec(m));
         }
+        jar.close();
+    }
 
+    public boolean hasMethodFor(String className, String methodName, String argList) {
+        for (StaticCGJavaMethod method : alreadyFoundMethods) {
+            if (method.getContainingClass().getId().equals(className)
+                    && method.getId().equals(methodName)
+                    && method.getParameterWithoutPackage().equals(argList)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public StaticCGJavaMethod getMethodFor(String className, String methodName, String argList) {
         for (StaticCGJavaMethod method : alreadyFoundMethods) {
-            if (method.getContainingClass().getId().equals(className) && method.getId().equals(methodName)
+            if (method.getContainingClass().getId().equals(className)
+                    && method.getId().equals(methodName)
                     && method.getParameterWithoutPackage().equals(argList)) {
                 return method;
             }

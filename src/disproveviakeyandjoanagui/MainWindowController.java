@@ -159,8 +159,8 @@ public class MainWindowController implements Initializable {
             menuBarMain.setDisable(true);
             if (joakordispro.equals(projectFileEnding)) {
                 disproHandler.setAllButtonsDisable(true);
-                asyncBackgroundLoader.loadJoakFile(file, (newCheckData, succes) -> {
-                    if (succes) {
+                asyncBackgroundLoader.loadJoakFile(file, (newCheckData, success) -> {
+                    if (success) {
                         disproHandler.handleNewDispro(newCheckData);
                     } else {
                         menuBarMain.setDisable(false);

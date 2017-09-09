@@ -10,15 +10,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.apache.commons.io.FileUtils;
@@ -89,16 +86,22 @@ public class JavaProjectCopyHandler {
                 folderPathNewNew.mkdirs();
             }
             try {
-                File classFileToCopyTo = new File(pathToNew + relPathForJavaClass + className + ".java");
-                File classFileToCopyFrom = new File(pathToSource + relPathForJavaClass + className + ".java");
+                File classFileToCopyTo =
+                        new File(pathToNew + relPathForJavaClass + className + ".java");
+                File classFileToCopyFrom =
+                        new File(pathToSource + relPathForJavaClass + className + ".java");
                 
-                String contents = new String(java.nio.file.Files.readAllBytes(classFileToCopyFrom.toPath()));
+                String contents =
+                        new String(java.nio.file.Files.readAllBytes(classFileToCopyFrom.toPath()));
                 
-                String keyCompatibleContents = copyKeyCompatibleListener.transformCode(contents, classesToCopy.get(currentClassToCopy));
+                String keyCompatibleContents =
+                        copyKeyCompatibleListener.transformCode(contents,
+                                                                classesToCopy.get(currentClassToCopy));
                 
-                String keyCompWithLoopInvariants = addLoopInvariantsIfNeeded(keyCompatibleContents, currentClassToCopy);
-                
-                FileUtils.writeStringToFile(classFileToCopyTo, keyCompWithLoopInvariants);
+                String keyCompWithLoopInvariants =
+                        addLoopInvariantsIfNeeded(keyCompatibleContents, currentClassToCopy);
+                Charset encoding = null;
+                FileUtils.writeStringToFile(classFileToCopyTo, keyCompWithLoopInvariants, encoding);
                 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -129,7 +132,7 @@ public class JavaProjectCopyHandler {
             int currLoopStart = loopLines.get(i);
             int currLoopEnd = loopLines.get(i + 1);
             String currLoopStr = code.substring(currLoopStart, currLoopEnd);
-            
+            created.add(new LoopInvariant(currLoopStr, currLoopStart, currLoopEnd));
         }
         loopInvariants.put(c, created);
     }

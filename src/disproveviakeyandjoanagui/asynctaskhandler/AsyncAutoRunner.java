@@ -64,21 +64,24 @@ public class AsyncAutoRunner implements Runnable {
             SDGEdge nextSummaryEdge = violationsWrapper.nextSummaryEdge();
             Platform.runLater(() -> {
                 actionLogger.startProgress("now generating files for " + nextSummaryEdge.toString());
-                for(int i = 0; i < summaryEdges.getItems().size(); ++i) {
-                    if(summaryEdges.getItems().get(i).startsWith(nextSummaryEdge.toString())) {
+                for (int i = 0; i < summaryEdges.getItems().size(); ++i) {
+                    if (summaryEdges.getItems().get(i).startsWith(nextSummaryEdge.toString())) {
                         summaryEdges.getSelectionModel().select(i);
                         break;
                     }
                 }
             });
-            Collection<SDGNodeTuple> allFormalPairs = violationsWrapper.getSdg().getAllFormalPairs(nextSummaryEdge.getSource(), nextSummaryEdge.getTarget());
+            Collection<SDGNodeTuple> allFormalPairs =
+                    violationsWrapper.getSdg().getAllFormalPairs(nextSummaryEdge.getSource(),
+                                                                 nextSummaryEdge.getTarget());
             SDGNodeTuple firstFormalPair = allFormalPairs.iterator().next();
             StaticCGJavaMethod method = violationsWrapper.getMethodCorresToSummaryEdge(nextSummaryEdge);
             String contract = edgeAndMethodToCorresData.getContractFor(firstFormalPair);
             if (!keepRunning.get()) {
                 break;
             }
-            HashMap<StaticCGJavaMethod, String> methodToMostGeneralContract = edgeAndMethodToCorresData.getMethodToMostGeneralContract();
+            HashMap<StaticCGJavaMethod, String> methodToMostGeneralContract =
+                    edgeAndMethodToCorresData.getMethodToMostGeneralContract();
             Platform.runLater(() -> {
                 actionLogger.startProgress("now trying to disprove " + nextSummaryEdge.toString());
             });
@@ -96,24 +99,36 @@ public class AsyncAutoRunner implements Runnable {
                 if (!keepRunning.get()) {
                     break;
                 }
-                boolean worked = AutomationHelper.runKeY("dependencies/Key/KeY.jar", "proofObs/proofs", "information flow");
+                boolean worked =
+                        AutomationHelper.runKeY("dependencies/Key/KeY.jar",
+                                                "proofObs/proofs",
+                                                "information flow");
                 if (!keepRunning.get()) {
                     break;
                 }
                 if (worked) {
-                    worked = AutomationHelper.runKeY("dependencies/Key/KeY.jar", "proofObs/proofs", "functional");
+                    worked =
+                            AutomationHelper.runKeY("dependencies/Key/KeY.jar",
+                                                    "proofObs/proofs",
+                                                    "functional");
                 }
                 if (!keepRunning.get()) {
                     break;
                 }
                 if (worked) {
                     Platform.runLater(() -> {
-                        actionLogger.startProgress("suceeded disproving " + nextSummaryEdge.toString() + ", now removing from sdg...");
+                        actionLogger.startProgress(
+                                "succeeded disproving " +
+                                nextSummaryEdge.toString() +
+                                ", now removing from sdg..."
+                                );
                     });
                     violationsWrapper.removeEdge(nextSummaryEdge);
                 } else {
                     Platform.runLater(() -> {
-                        actionLogger.startProgress("failed to disprove " + nextSummaryEdge.toString());
+                        actionLogger.startProgress(
+                                "failed to disprove " + nextSummaryEdge.toString()
+                                );
                     });
                     violationsWrapper.checkedEdge(nextSummaryEdge);
                 }

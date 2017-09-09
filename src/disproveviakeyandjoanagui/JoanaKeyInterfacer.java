@@ -76,14 +76,16 @@ public class JoanaKeyInterfacer {
             SDGEdge e,
             SDGNodeTuple tuple,
             StaticCGJavaMethod corresMethod) throws IOException {
+        if (corresMethod == null) {
+            throw new IOException("No method selected!");
+        }
         //String pathToTestJava =
-                javaForKeyCreator.
-                generateJavaForFormalTupleCalledFromGui(
-                        summaryEdgeToCorresData.getContractFor(tuple),
-                        corresMethod,
-                        summaryEdgeToCorresData.getEdgeToLoopInvariantTemplate().get(e),
-                        summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
-                        summaryEdgeToCorresData.getMethodToMostGeneralContract()
+        javaForKeyCreator.generateJavaForFormalTupleCalledFromGui(
+                summaryEdgeToCorresData.getContractFor(tuple),
+                corresMethod,
+                summaryEdgeToCorresData.getEdgeToLoopInvariantTemplate().get(e),
+                summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
+                summaryEdgeToCorresData.getMethodToMostGeneralContract()
                 );
         boolean worked = AutomationHelper.runKeY(pathToKey, pathToProofObs, "information flow");
         if (worked) {

@@ -60,10 +60,12 @@ public class CombinedApproach {
     }
 
     public static void checkAnnotatedPDGWithJoanaAndKey(
-            IFCAnalysis annotatedAnalysis, ViolationsDisproverSemantic violationChecker) throws FileNotFoundException {
+            IFCAnalysis annotatedAnalysis, ViolationsDisproverSemantic violationChecker)
+                    throws FileNotFoundException {
         Collection<? extends IViolation<SecurityNode>> violations = annotatedAnalysis.doIFC();
         try {
-            violationChecker.disproveViaKey(annotatedAnalysis, violations, annotatedAnalysis.getProgram().getSDG());
+            violationChecker.disproveViaKey(annotatedAnalysis, violations,
+                                            annotatedAnalysis.getProgram().getSDG());
         } catch (IOException ex) {
             Logger.getLogger(CombinedApproach.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,6 +95,7 @@ public class CombinedApproach {
             }
             completeString.append(line + '\n');
         }
+        br.close();
         completeString.append("}\n");
 
         JSONObject jsonObj = new JSONObject(completeString.toString());
@@ -137,7 +140,10 @@ public class CombinedApproach {
                 entryMethod, fullyAutomatic, analysis, singleAnnotationAdders, stateSaver);
     }
 
-    public static SingleAnnotationAdder createAnnotationAdder(JSONObject jsonObj, BiConsumer<SDGProgramPart, String> annoAddMethod, IFCAnalysis analysis) {
+    public static SingleAnnotationAdder
+            createAnnotationAdder(JSONObject jsonObj,
+                                  BiConsumer<SDGProgramPart, String> annoAddMethod,
+                                  IFCAnalysis analysis) {
         String securityLevelString = jsonObj.getString("securityLevel");
         String securityLevelLattice = "";
         if (securityLevelString.equals("high")) {
@@ -156,8 +162,11 @@ public class CombinedApproach {
             String method = description.getString("method");
             partSupplier
                     = () -> {
-                        Collection<SDGCall> allCallsToMethod = analysis.getProgram().getCallsToMethod(JavaMethodSignature.fromString(method));
-                        List<SDGProgramPart> collectedParts = allCallsToMethod.stream().map((SDGCall call) -> {
+                        Collection<SDGCall> allCallsToMethod =
+                                analysis.getProgram()
+                                .getCallsToMethod(JavaMethodSignature.fromString(method));
+                        List<SDGProgramPart> collectedParts =
+                                allCallsToMethod.stream().map((SDGCall call) -> {
                             return (SDGProgramPart) call.getActualParameter(paramPos);
                         }).collect(Collectors.toList());
 

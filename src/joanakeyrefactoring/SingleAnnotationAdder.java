@@ -20,7 +20,9 @@ public class SingleAnnotationAdder {
     private BiConsumer<SDGProgramPart, String> annoAddMethod;
     private String secLevel;
 
-    public SingleAnnotationAdder(Supplier<Collection<SDGProgramPart>> programPartSupplier, BiConsumer<SDGProgramPart, String> annoAddMethod, String secLevel) {
+    public SingleAnnotationAdder(Supplier<Collection<SDGProgramPart>> programPartSupplier,
+                                 BiConsumer<SDGProgramPart, String> annoAddMethod,
+                                 String secLevel) {
         this.programPartSupplier = programPartSupplier;
         this.annoAddMethod = annoAddMethod;
         this.secLevel = secLevel;

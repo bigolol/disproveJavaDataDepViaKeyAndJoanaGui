@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import joanakeyrefactoring.persistence.ViolationsSaverLoader;
 import joanakeyrefactoring.staticCG.JCallGraph;
+import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -126,7 +127,8 @@ public class ViolationsWrapper {
         created.append("],").append(System.lineSeparator());
 
         created.append("\"summary_edges_methods\": [").append(System.lineSeparator());
-        for (Map.Entry<SDGEdge, StaticCGJavaMethod> entry : summaryEdgesAndCorresJavaMethods.entrySet()) {
+        for (Map.Entry<SDGEdge, StaticCGJavaMethod> entry
+                : summaryEdgesAndCorresJavaMethods.entrySet()) {
             int edgeId = sortedEdgesToCheck.indexOf(entry.getKey());
             created.append("{");
             created.append("\"id\" :").append(edgeId);
@@ -146,7 +148,8 @@ public class ViolationsWrapper {
         created.append("],");
 
         created.append("\"summary_edges_chops\" : [").append(System.lineSeparator());
-        for (Map.Entry<SDGEdge, ArrayList<ViolationChop>> entry : summaryEdgesAndContainingChops.entrySet()) {
+        for (Map.Entry<SDGEdge, ArrayList<ViolationChop>> entry
+                : summaryEdgesAndContainingChops.entrySet()) {
             int edgeId = sortedEdgesToCheck.indexOf(entry.getKey());
             created.append("{");
             created.append("\"pos\" :").append(edgeId);
@@ -257,7 +260,8 @@ public class ViolationsWrapper {
     }
 
     private void prepareNextSummaryEdges() {
-        Collection<? extends IViolation<SecurityNode>> nextViolationsToHandle = getNextViolationsToHandle();
+        Collection<? extends IViolation<SecurityNode>> nextViolationsToHandle =
+                getNextViolationsToHandle();
 
         nextViolationsToHandle.forEach((v) -> {
             violationChops.add(createViolationChop(v, sdg));
@@ -316,7 +320,8 @@ public class ViolationsWrapper {
 
     private void findCGMethodsForSummaryEdgesIfKeyCompatible() {
         for (SDGEdge summaryEdge : edgesToCheck) {
-            Collection<SDGNodeTuple> allFormalPairs = sdg.getAllFormalPairs(summaryEdge.getSource(), summaryEdge.getTarget());
+            Collection<SDGNodeTuple> allFormalPairs =
+                    sdg.getAllFormalPairs(summaryEdge.getSource(), summaryEdge.getTarget());
             SDGNodeTuple firstPair = allFormalPairs.iterator().next();
             SDGNode methodNode = sdg.getEntry(firstPair.getFirstNode());
             String bytecodeMethod = methodNode.getBytecodeMethod();
@@ -336,8 +341,11 @@ public class ViolationsWrapper {
             String fullyQualifiedMethodName = method.getSignature().getFullyQualifiedMethodName();
             int classNameEndIndex = fullyQualifiedMethodName.lastIndexOf(".");
             String className = fullyQualifiedMethodName.substring(0, classNameEndIndex);
-            StaticCGJavaMethod callGraphMethod = callGraph.getMethodFor(className, methodName, types);
-            if (isIndepOfLibs(callGraphMethod)) {
+            boolean hasCallGraphMethod =
+                    callGraph.hasMethodFor(className, methodName, types);
+            StaticCGJavaMethod callGraphMethod =
+                    callGraph.getMethodFor(className, methodName, types);
+            if (hasCallGraphMethod && isIndepOfLibs(callGraphMethod)) {
                 summaryEdgesAndCorresJavaMethods.put(summaryEdge, callGraphMethod);
             }
         }
@@ -375,7 +383,8 @@ public class ViolationsWrapper {
     }
 
     private ViolationPath getViolationPath(IViolation<SecurityNode> v) {
-        return ((ClassifiedViolation) v).getChops().iterator().next().getViolationPathes().getPathesList().get(0);
+        return ((ClassifiedViolation) v).getChops().iterator().next()
+                .getViolationPathes().getPathesList().get(0);
     }
 
     public boolean allDisproved() {
@@ -406,21 +415,25 @@ public class ViolationsWrapper {
         listener.forEach((l) -> {
             l.disprovedEdge(e);
         });
-        summaryEdgesAndContainingChops.get(e).forEach((vc) -> {
-            vc.findSummaryEdges(sdg);
-            if (vc.isEmpty()) {
-                violationChops.remove(vc);
-                listener.forEach((l) -> {
-                    l.disprovedChop(vc);
-                });
-            }
-        });
+        if (summaryEdgesAndContainingChops.get(e) != null) {
+            summaryEdgesAndContainingChops.get(e).forEach((vc) -> {
+                vc.findSummaryEdges(sdg);
+                if (vc.isEmpty()) {
+                    violationChops.remove(vc);
+                    listener.forEach((l) -> {
+                        l.disprovedChop(vc);
+                    });
+                }
+            });
+        }
         summaryEdgesAndContainingChops.remove(e);
         summaryEdgesAndCorresJavaMethods.remove(e);
         if (sortedEdgesToCheck.isEmpty()) {
             prepareNextSummaryEdges();
         }
-        if (sortedEdgesToCheck.isEmpty() && violationChops.isEmpty() && uncheckedViolations.isEmpty()) {
+        if (sortedEdgesToCheck.isEmpty()
+                && violationChops.isEmpty()
+                && uncheckedViolations.isEmpty()) {
             listener.forEach((l) -> {
                 l.disprovedAll();
             });
@@ -436,7 +449,11 @@ public class ViolationsWrapper {
     }
 
     public SDGEdge nextSummaryEdge() {
-        return sortedEdgesToCheck.get(0);
+        if (sortedEdgesToCheck.isEmpty()) {
+            return null;
+        } else {
+            return sortedEdgesToCheck.get(0);
+        }
     }
 
     ArrayList<ViolationChop> getChopsContaining(SDGEdge e) {
@@ -446,7 +463,11 @@ public class ViolationsWrapper {
     private boolean isIndepOfLibs(StaticCGJavaMethod m) {
         String packageName = callGraph.getPackageName();
         try {
-            String classPackageName = m.getContainingClass().getPackageString();
+            StaticCGJavaClass contClass = m.getContainingClass();
+            String classPackageName = contClass.getPackageString();
+            classPackageName =
+                    contClass.getPackageString() == null ?
+                            "" : contClass.getPackageString();
             if (!classPackageName.startsWith(packageName)) {
                 return false;
             }

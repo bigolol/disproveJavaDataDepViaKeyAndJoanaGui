@@ -33,7 +33,7 @@ public class AsyncBackgroundDisproCreator implements Runnable {
         this.callback = callback;
         this.checkData = checkData;
         currentActionLogger
-        .startProgress("generating Dispro Project from jaok file, this might take a while ...");
+        .startProgress("generating dispro project from joak file, this might take a while ...");
         new Thread(this).start();
     }
 

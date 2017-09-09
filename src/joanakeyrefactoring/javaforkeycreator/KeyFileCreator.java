@@ -22,7 +22,8 @@ public class KeyFileCreator {
      * @param javaFile
      * @param method
      */
-    public static void createKeYFileIF(StaticCGJavaMethod method, String pathToSave) throws IOException {
+    public static void createKeYFileIF(StaticCGJavaMethod method,
+                                       String pathToSave) throws IOException {
         File proofObFile = new File(pathToSave + "/" + "proofObligationIF.key");
         if (!proofObFile.exists()) {
             proofObFile.createNewFile();
@@ -44,7 +45,8 @@ public class KeyFileCreator {
         generateKeyFileFrom(profileStr, javaSourceStr, proofObligationString, proofObFile);
     }
 
-    public static void createKeYFileFunctional(StaticCGJavaMethod method, String pathToSave) throws IOException {
+    public static void createKeYFileFunctional(StaticCGJavaMethod method,
+                                               String pathToSave) throws IOException {
         File proofObFile = new File(pathToSave + "/" + "proofObligationFunctional.key");
         if (!proofObFile.exists()) {
             proofObFile.createNewFile();

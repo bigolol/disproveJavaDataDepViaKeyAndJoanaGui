@@ -1,6 +1,5 @@
 package joanakeyrefactoring;
 
-import edu.kit.joana.wala.core.Main;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -81,6 +80,7 @@ public class AutomationHelper {
                 stringBuilderForFile.append(System.lineSeparator());
 
             }
+            br.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AutomationHelper.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -90,9 +90,9 @@ public class AutomationHelper {
         return stringBuilderForFile.toString();
     }
 
-    private static boolean lineIsntPackageDecl(String line) {
+    /*private static boolean lineIsntPackageDecl(String line) {
         return line.contains("package");
-    }
+    }*/
 
     /**
      * Recursively finds and lists all .java files in a given folder
@@ -119,15 +119,15 @@ public class AutomationHelper {
         }
     }
 
-    private static boolean isConstructor(String methodName) {
+    /*private static boolean isConstructor(String methodName) {
         return methodName.contains("<init>");
-    }
+    }*/
 
-    private String extractOnlyMethodBody(String completeMethod) {
+    /*private String extractOnlyMethodBody(String completeMethod) {
         completeMethod = completeMethod.trim();
         int openCurlyIndex = completeMethod.indexOf("{");
         return completeMethod.substring(openCurlyIndex);
-    }
+    }*/
 
     private void generateKeyFileFrom(
             String profileString, String javaSourceString,
@@ -163,7 +163,7 @@ public class AutomationHelper {
      * @param method
      */
     public void createKeYFileIF(String javaFile, String method) throws IOException {
-        PrintWriter writer;
+        //PrintWriter writer;
         File proofObFile = new File("proofObs/proofObIF.key");
         if (!proofObFile.exists()) {
             proofObFile.createNewFile();
