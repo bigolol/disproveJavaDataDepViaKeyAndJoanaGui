@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="448.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8.0.131" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.FXMLDocumentController">
+   <children>
+      <TextField fx:id="jarPathText" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="345.0" />
+      <Button layoutX="372.0" layoutY="14.0" mnemonicParsing="false" onAction="#onChooseJarFile" prefHeight="26.0" prefWidth="154.0" text="choose jar file" />
+      <TextField fx:id="javaPathText" layoutX="14.0" layoutY="51.0" prefHeight="26.0" prefWidth="345.0" />
+      <Button layoutX="372.0" layoutY="51.0" mnemonicParsing="false" onAction="#onChooseSrcFolder" text="choose source folder" />
+      <ComboBox fx:id="mainClassesCB" layoutX="14.0" layoutY="84.0" prefHeight="26.0" prefWidth="386.0" />
+      <Label layoutX="407.0" layoutY="89.0" text="choose main class" />
+      <AnchorPane fx:id="srcSinkAP" layoutX="14.0" layoutY="110.0" prefHeight="338.0" prefWidth="526.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+         <children>
+            <ListView fx:id="sourcesList" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="sinkList" layoutX="317.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
+            <Button layoutX="14.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAddSrc" text="add" />
+            <Button layoutX="317.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAddSink" text="add" />
+            <Button layoutX="83.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRemoveSrc" text="remove" />
+            <Button layoutX="386.0" layoutY="220.0" mnemonicParsing="false" onAction="#onRemoveSink" text="remove" />
+            <Button layoutX="14.0" layoutY="298.0" mnemonicParsing="false" onAction="#createJoak" text="create joak Json" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
