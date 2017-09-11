@@ -37,7 +37,8 @@ public class JoanaView {
         }
         this.currentJarFile = jarFile;
         controller.setJarPAth(jarFile.getAbsolutePath());
-        boolean correctJarFile = checkIfCorrectJarFile();
+        //boolean correctJarFile =
+        checkIfCorrectJarFile();
         //handle result
         tryCreateJoana();
     }
@@ -48,7 +49,9 @@ public class JoanaView {
         }
         this.currentJavaFolderFile = folderDir;
         controller.setFolderPath(folderDir.getAbsolutePath());
-        controller.letUserChooseMainClass(Helper.getAllClassesContainingMainMethod(this.currentJavaFolderFile));
+        controller.letUserChooseMainClass(
+                Helper.getAllClassesContainingMainMethod(this.currentJavaFolderFile)
+                );
         tryCreateJoana();
     }
 

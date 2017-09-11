@@ -33,7 +33,7 @@ public class JoanaInstance {
 
     private String currentJarPath;
 
-    private String currentJavaFolderPath;
+    //private String currentJavaFolderPath;
     private String currentMainMethod;
     private SDGProgram program;
     private IFCAnalysis ana;
@@ -45,7 +45,7 @@ public class JoanaInstance {
     public JoanaInstance(String currentJarPath, String currentJavaFolderPath, String currentMainMethod) throws ClassHierarchyException,
             IOException, GraphIntegrity.UnsoundGraphException, CancelException {
         this.currentJarPath = currentJarPath;
-        this.currentJavaFolderPath = currentJavaFolderPath;
+        //this.currentJavaFolderPath = currentJavaFolderPath;
         this.currentMainMethod = currentMainMethod;
         runJoanaCreateSDGAndIFCAnalyis();
     }

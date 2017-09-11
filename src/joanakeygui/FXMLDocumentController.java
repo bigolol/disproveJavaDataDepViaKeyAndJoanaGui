@@ -36,7 +36,7 @@ public class FXMLDocumentController implements Initializable {
     private SourceSinkAdderDialogHandler sourceSinkAdderDialogHandler;
     private Stage stage;
 
-    private JoanaInstance joanaInstance;
+    //private JoanaInstance joanaInstance;
 
     @FXML
     private ComboBox<String> mainClassesCB;
@@ -83,9 +83,12 @@ public class FXMLDocumentController implements Initializable {
                 + "entryMethod : \"ENTRYMETHOD\",\n"
                 + "annotationPath : \"\",\n"
                 + "fullyAutomatic : true,\n";
-        template = template.replace("JARPATH", joanaView.getCurrentJarFile().getAbsolutePath());
-        template = template.replace("JAVAPATH", joanaView.getCurrentJavaFolderFile().getAbsolutePath());
-        template = template.replace("ENTRYMETHOD", joanaView.getCurrentMainClass());
+        template = template.replace("JARPATH",
+                                    joanaView.getCurrentJarFile().getAbsolutePath());
+        template = template.replace("JAVAPATH",
+                                    joanaView.getCurrentJavaFolderFile().getAbsolutePath());
+        template = template.replace("ENTRYMETHOD",
+                                    joanaView.getCurrentMainClass());
         
         sinkSrcJson = template + sinkSrcJson;
         
@@ -136,8 +139,13 @@ public class FXMLDocumentController implements Initializable {
 
         boolean debug = true;
         if (debug) {
-            joanaView.setCurrentJarFile(new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar"));
-            joanaView.setCurrentJavaFolderFile(new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src"));
+            joanaView.setCurrentJarFile(
+                    new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/" +
+                             "dist/MultipleClassesFalsePos.jar")
+                    );
+            joanaView.setCurrentJavaFolderFile(
+                    new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src")
+                    );
         }
     }
 
@@ -152,7 +160,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     void letUserAddSinksAndSrcs(JoanaInstance joanaInstance) {
-        this.joanaInstance = joanaInstance;
+        //this.joanaInstance = joanaInstance;
         sourceSinkAdderDialogHandler.setJoanaInstance(joanaInstance);
         srcSinkAP.setDisable(false);
     }

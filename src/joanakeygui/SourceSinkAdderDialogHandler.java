@@ -22,16 +22,17 @@ import joanakeygui.joanahandler.JoanaInstance;
  */
 public class SourceSinkAdderDialogHandler {
 
-    private ListView<String> sourcesList;
-    private ListView<String> sinkList;
+    //private ListView<String> sourcesList;
+    //private ListView<String> sinkList;
     private List<SinkOrSource> sources = new ArrayList<>();
     private List<SinkOrSource> sinks = new ArrayList<>();
-    private JoanaInstance joanaInstance;
+    //private JoanaInstance joanaInstance;
     AddSourceDialogController controller;
 
-    public SourceSinkAdderDialogHandler(ListView<String> sourcesList, ListView<String> sinkList) throws IOException {
-        this.sourcesList = sourcesList;
-        this.sinkList = sinkList;
+    public SourceSinkAdderDialogHandler(ListView<String> sourcesList, ListView<String> sinkList)
+            throws IOException {
+        //this.sourcesList = sourcesList;
+        //this.sinkList = sinkList;
         FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("AddSourceDialog.fxml"));
 
         Parent root = fXMLLoader.load();
@@ -64,7 +65,7 @@ public class SourceSinkAdderDialogHandler {
     }
 
     void setJoanaInstance(JoanaInstance joanaInstance) {
-        this.joanaInstance = joanaInstance;
+        //this.joanaInstance = joanaInstance;
         controller.setJoanaInstance(joanaInstance);
     }
 
