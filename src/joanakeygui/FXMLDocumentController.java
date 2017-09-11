@@ -54,23 +54,35 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void onAddSrc() {
         SinkOrSource src = sourceSinkAdderDialogHandler.letUserAddSrc(stage);
-        sourcesList.getItems().add(src.toString());
+        if (src != null && !sourcesList.getItems().contains(src.toString())) {
+            sourcesList.getItems().add(src.toString());
+        }
     }
 
     @FXML
     public void onRemoveSrc() {
-        sourceSinkAdderDialogHandler.removeSelectedSrc();
+        final int selected = sourcesList.getSelectionModel().getSelectedIndex();
+        final int size = sourcesList.getItems().size();
+        if (0 <= selected && selected < size) {
+            sourcesList.getItems().remove(selected);
+        }
     }
 
     @FXML
     public void onAddSink() {
         SinkOrSource sink = sourceSinkAdderDialogHandler.letUserAddSink(stage);
-        sinkList.getItems().add(sink.toString());
+        if (sink != null && !sinkList.getItems().contains(sink.toString())) {
+            sinkList.getItems().add(sink.toString());
+        }
     }
 
     @FXML
     public void onRemoveSink() {
-        sourceSinkAdderDialogHandler.removeSelectedSink();
+        final int selected = sinkList.getSelectionModel().getSelectedIndex();
+        final int size = sinkList.getItems().size();
+        if (0 <= selected && selected < size) {
+            sinkList.getItems().remove(selected);
+        }
     }
 
     @FXML
@@ -165,7 +177,7 @@ public class FXMLDocumentController implements Initializable {
         srcSinkAP.setDisable(false);
     }
 
-    void setJarPAth(String absolutePath) {
+    void setJarPath(String absolutePath) {
         jarPathText.setText(absolutePath);
     }
 

@@ -20,14 +20,14 @@ public class JoanaKeyGui extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
-        
+
         Parent root = fXMLLoader.load();
         FXMLDocumentController controller = (FXMLDocumentController) fXMLLoader.getController();
         controller.setStage(stage);
-        
-        
+
+
         Scene scene = new Scene(root);
-        
+
         stage.setScene(scene);
         stage.show();
     }
@@ -38,5 +38,4 @@ public class JoanaKeyGui extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }

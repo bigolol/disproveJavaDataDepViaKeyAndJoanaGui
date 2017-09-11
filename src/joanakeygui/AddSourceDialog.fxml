@@ -6,9 +6,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="139.0" prefWidth="369.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.AddSourceDialogController">
    <children>
-      <ComboBox fx:id="selectMethodCB" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="341.0" promptText="select by which method you want to select " />
-      <ComboBox fx:id="selectionCB" layoutX="14.0" layoutY="61.0" prefHeight="26.0" prefWidth="341.0" promptText="select " />
+      <ComboBox fx:id="selectMethodCB" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="341.0" promptText="Select by which Method You Want to Select " />
+      <ComboBox fx:id="selectionCB" layoutX="14.0" layoutY="61.0" prefHeight="26.0" prefWidth="341.0" promptText="Select ..." />
       <Button layoutX="14.0" layoutY="99.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" text="Ok" onAction="#onOk"/>
-      <Button layoutX="86.0" layoutY="99.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" text="Cancel" />
+      <Button layoutX="86.0" layoutY="99.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0" text="Cancel" onAction="#onCancel"/>
    </children>
 </AnchorPane>

@@ -20,6 +20,8 @@ import edu.kit.joana.util.Stubs;
 import edu.kit.joana.wala.core.SDGBuilder.ExceptionAnalysis;
 import edu.kit.joana.wala.core.SDGBuilder.FieldPropagation;
 import edu.kit.joana.wala.core.SDGBuilder.PointsToPrecision;
+import joanakeygui.AddSourceDialogController;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -172,8 +174,8 @@ public class CombinedApproach {
 
                         return collectedParts;
                     };
-        } else if (from.equals("programPart")) {
-            String programPartString = description.getString("programPart");
+        } else if (from.equals(AddSourceDialogController.programPart)) {
+            String programPartString = description.getString(AddSourceDialogController.programPart);
             partSupplier
                     = () -> {
                         Collection<SDGProgramPart> created = new ArrayList<>();

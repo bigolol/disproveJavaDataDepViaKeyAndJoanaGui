@@ -31,10 +31,19 @@ public class AddSourceDialogController implements Initializable {
         stage.close();
     }
 
+    @FXML
+    public void onCancel() {
+        selectionCB.setValue(null);
+        stage.close();
+    }
+
     private Stage stage;
     private JoanaInstance joanaInstance;
 
-    private String[] addingMethods = {"programPart", "callsToMethod"};
+    public final static String programPart = "Program Part";
+    public final static String callsToMethod = "Calls to Method";
+
+    private String[] addingMethods = {programPart, callsToMethod};
 
     public void setJoanaInstance(JoanaInstance joanaInstance) {
         this.joanaInstance = joanaInstance;
@@ -49,13 +58,14 @@ public class AddSourceDialogController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        selectMethodCB.getItems().clear();
         selectMethodCB.getItems().addAll(addingMethods);
         selectMethodCB.valueProperty().addListener((observable) -> {
             selectionCB.getItems().clear();
             String selected = selectMethodCB.getSelectionModel().getSelectedItem();
-            if (selected.equals("programPart")) {
+            if (selected != null && selected.equals(programPart)) {
                 selectionCB.getItems().addAll(joanaInstance.getAllProgramPartsString());
-            } else if (selected.equals("callsToMethod")) {
+            } else if (selected != null && selected.equals(callsToMethod)) {
                 selectionCB.getItems().addAll(joanaInstance.getAllMethodsString());
             }
         });
@@ -65,24 +75,26 @@ public class AddSourceDialogController implements Initializable {
         stage.showAndWait();
         String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
         String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
-        if (selectMethodStr.equals("programPart")) {
+        if (selectionStr != null && selectMethodStr.equals(programPart)) {
             return Optional.of(SinkOrSource.createProgramPart(selectionStr, "low"));
-        } else if (selectMethodStr.equals("callsToMethod")) {
+        } else if (selectionStr != null && selectMethodStr.equals(callsToMethod)) {
             return Optional.of(SinkOrSource.createMethod(selectionStr, "low"));
+        } else {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     public Optional<SinkOrSource> showForSrc() {
         stage.showAndWait();
         String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
         String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
-        if (selectMethodStr.equals("programPart")) {
+        if (selectionStr != null && selectMethodStr.equals(programPart)) {
             return Optional.of(SinkOrSource.createProgramPart(selectionStr, "high"));
-        } else if (selectMethodStr.equals("callsToMethod")) {
+        } else if (selectionStr != null && selectMethodStr.equals(callsToMethod)) {
             return Optional.of(SinkOrSource.createMethod(selectionStr, "high"));
+        } else {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
 }

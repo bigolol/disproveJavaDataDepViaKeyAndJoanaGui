@@ -34,17 +34,17 @@
                      <children>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Label layoutX="94.0" layoutY="50.0" text="current Project Name" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Label layoutX="94.0" layoutY="50.0" text="Current Project Name: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                            <children>
-                              <Label layoutX="49.0" layoutY="41.0" text="current disproved summary edge:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Label layoutX="49.0" layoutY="41.0" text="Current Disproved Summary Edge: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <children>
-                              <Label layoutX="102.0" layoutY="41.0" prefHeight="37.0" prefWidth="222.0" text="some other data " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Label layoutX="102.0" layoutY="41.0" prefHeight="37.0" prefWidth="222.0" text="Some Other Data: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -64,7 +64,7 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                            <children>
-                              <Label layoutX="78.0" layoutY="6.0" text="current action" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Label layoutX="78.0" layoutY="6.0" text="Current Action: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -96,12 +96,12 @@
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                                <children>
                                                                   <ListView fx:id="listViewUncheckedEdges" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-                                                                  <Label text="summary edge" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                  <Label text="Summary edge" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                </children>
                                                             </AnchorPane>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="132.0">
                                                                <children>
-                                                                  <Label text="formal inout pairs" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                  <Label text="Formal In/Out Pairs" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                   <ListView fx:id="listViewFormalInoutPairs" layoutX="-28.0" layoutY="-24.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
                                                                </children>
                                                             </AnchorPane>
@@ -116,13 +116,13 @@
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="115.0">
                                                                <children>
                                                                   <ListView fx:id="listViewLoopsOfSE" layoutX="-56.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-                                                                  <Label layoutX="7.0" layoutY="6.0" text="loops in method" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                  <Label layoutX="7.0" layoutY="6.0" text="Loops in Method" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                </children>
                                                             </AnchorPane>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                                <children>
                                                                   <ListView fx:id="listViewCalledMethodsOfSE" layoutX="14.0" layoutY="-34.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-                                                                  <Label layoutX="28.0" layoutY="6.0" text="called methods of method" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                  <Label layoutX="28.0" layoutY="6.0" text="Called Methods in Current Method" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                </children></AnchorPane>
                                                         </items>
                                                       </SplitPane>
@@ -130,12 +130,12 @@
                                                 </AnchorPane>
                                             </items>
                                           </SplitPane>
-                                          <Label text="currently not disproved Summary edges" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <Label text="Currently Not Disproved Summary Edges" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <Label layoutX="24.0" layoutY="22.0" text="unchecked violation chops" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <Label layoutX="24.0" layoutY="22.0" text="Unchecked Violation Chops" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                           <ListView fx:id="listViewUncheckedChops" layoutX="27.0" layoutY="15.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
                                        </children>
                                     </AnchorPane>
@@ -165,12 +165,12 @@
                                                    <children>
                                                       <ButtonBar layoutX="99.0" layoutY="-6.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <buttons>
-                                                            <Button fx:id="buttonMarkAsDisproved" mnemonicParsing="false" text="mark as disproved" />
-                                                            <Button fx:id="buttonOpenSelected" mnemonicParsing="false" text="open selected in key" />
-                                                            <Button fx:id="buttonTryDisprove" mnemonicParsing="false" text="try disprove selected" />
-                                                            <Button fx:id="buttonRunAtuo" mnemonicParsing="false" text="run auto" />
-                                                          <Button fx:id="buttonSaveLoopInvariant" mnemonicParsing="false" text="save loop invariant" />
-                                                            <Button fx:id="buttonResetLoopInvariant" minWidth="80.0" mnemonicParsing="false" prefHeight="26.0" text="reset loop invariant" />
+                                                            <Button fx:id="buttonMarkAsDisproved" mnemonicParsing="false" text="Mark as Disproved" />
+                                                            <Button fx:id="buttonOpenSelected" mnemonicParsing="false" text="Open Selected in KeY" />
+                                                            <Button fx:id="buttonTryDisprove" mnemonicParsing="false" text="Try Disprove Selected" />
+                                                            <Button fx:id="buttonRunAtuo" mnemonicParsing="false" text="Run Auto" />
+                                                          <Button fx:id="buttonSaveLoopInvariant" mnemonicParsing="false" text="Save Loop Invariant" />
+                                                            <Button fx:id="buttonResetLoopInvariant" minWidth="80.0" mnemonicParsing="false" prefHeight="26.0" text="Reset Loop Invariant" />
                                                         </buttons>
                                                       </ButtonBar>
                                                    </children></AnchorPane>
@@ -189,8 +189,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="menuItemOpenJoak" mnemonicParsing="false" text="Open .joak" />
-                  <MenuItem fx:id="menuItemOpenDispro" mnemonicParsing="false" text="Open .dispro" />
+              <MenuItem fx:id="menuItemOpenJoak" mnemonicParsing="false" text="Load *.joak" />
+                  <MenuItem fx:id="menuItemOpenDispro" mnemonicParsing="false" text="Load *.dispro" />
                   <MenuItem fx:id="menuItemSaveProgress" mnemonicParsing="false" text="Save Progress" />
             </items>
           </Menu>

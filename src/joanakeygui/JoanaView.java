@@ -36,7 +36,7 @@ public class JoanaView {
             return;
         }
         this.currentJarFile = jarFile;
-        controller.setJarPAth(jarFile.getAbsolutePath());
+        controller.setJarPath(jarFile.getAbsolutePath());
         //boolean correctJarFile =
         checkIfCorrectJarFile();
         //handle result

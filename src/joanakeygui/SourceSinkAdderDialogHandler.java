@@ -46,22 +46,22 @@ public class SourceSinkAdderDialogHandler {
 
     public SinkOrSource letUserAddSink(Stage parentStage) {
         Optional<SinkOrSource> sink = controller.showForSink();
-        sinks.add(sink.get());
-        return sink.get();
+        SinkOrSource obj = sink.orElse(null);
+        controller.initialize(null, null);
+        if (obj != null && !sinks.contains(obj)) {
+            sinks.add(obj);
+            return obj;
+        } else { return null; }
     }
 
     public SinkOrSource letUserAddSrc(Stage parentStage) {
         Optional<SinkOrSource> src = controller.showForSrc();
-        sources.add(src.get());
-        return src.get();
-    }
-
-    public void removeSelectedSrc() {
-
-    }
-
-    public void removeSelectedSink() {
-
+        SinkOrSource obj = src.orElse(null);
+        controller.initialize(null, null);
+        if (obj != null && !sources.contains(obj)) {
+            sources.add(obj);
+            return obj;
+        } else { return null; }
     }
 
     void setJoanaInstance(JoanaInstance joanaInstance) {
