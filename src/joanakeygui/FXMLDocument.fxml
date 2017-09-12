@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="448.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8.0.131" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="448.0" prefWidth="541.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.FXMLDocumentController">
    <children>
       <TextField fx:id="jarPathText" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="345.0" />
       <Button layoutX="372.0" layoutY="14.0" mnemonicParsing="false" onAction="#onChooseJarFile" prefHeight="26.0" prefWidth="154.0" text="Select *.jar" />

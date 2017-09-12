@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="139.0" prefWidth="369.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.AddSourceDialogController">
+<AnchorPane id="AnchorPane" prefHeight="139.0" prefWidth="369.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="joanakeygui.AddSourceDialogController">
    <children>
       <ComboBox fx:id="selectMethodCB" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="341.0" promptText="Select by which Method You Want to Select " />
       <ComboBox fx:id="selectionCB" layoutX="14.0" layoutY="61.0" prefHeight="26.0" prefWidth="341.0" promptText="Select ..." />
