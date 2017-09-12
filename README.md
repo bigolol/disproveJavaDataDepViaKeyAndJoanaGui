@@ -46,9 +46,9 @@ tries to disprove the easiest edges first) and tries to disprove them. If it is 
 
 This software was mainly designed and implemented by the following students:
 
-* [Simon Bischof](https://pp.ipd.kit.edu/person.php?id=148)
-* Marko Kleine Büning
 * Holger Klein
+* Marko Kleine Büning
+* [Simon Bischof](https://pp.ipd.kit.edu/person.php?id=148)
 
 For more information, please contact [Mihai Herda](https://formal.iti.kit.edu/~herda/?lang=en)
 or [Michael Kirsten](https://formal.iti.kit.edu/~kirsten/?lang=en).
