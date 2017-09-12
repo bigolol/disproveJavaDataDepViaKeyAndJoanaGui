@@ -18,7 +18,7 @@ The latter (.dispro) saves the information regarding the progress of the disprov
 (using "file -> load .joak" in the main menu), it is immediately transformed into a ".dispro" file. The ".dispro" file
 also holds all information necessary to continue disproving information flows in the program. 
 
-Whenever one is not in the process of disproving a summary edge, it is possible to save the progress using "file -> save .dispro".
+Whenever one is not in the process of disproving a summary edge, it is possible to save the progress using "File -> Save Progress".
 Be advised that every time the progress is saved, a new instance of the system dependence graph (SDG) is also saved. This is
 necessary since the SDG changed with every summary edge removed from it. It is possible to delete the old instances if one is
 sure they are not needed any more.
@@ -29,17 +29,17 @@ the current chop and which actual method they correspond to. By clicking on one 
 in the topmost codearea. The other lists show which formal nodetuples correspond to the summary edge and which line positions
 (beginning at the top of the method) contain loops. By clicking on one of these line positions, one can view the 
 loop invariant currently used by the system in the bottom left codearea. 
-This loop invariant can be changed and saved by clicking the button "save loop invariant".
+This loop invariant can be changed and saved by clicking the button "Save Loop Invariant".
 It is also possible to reset the loop invariant by clicking the corresponding button.
 In the bottom right codearea it shows the currently used contract for this summary edge. This is what KeY would use when trying
 to disprove the information flow. It is currently not possible to change this in the program.
 
-To disprove a specific edge, select it and click the button "try disprove edge". The system will generate a Java project
+To disprove a specific edge, select it and click the button "Try Disprove Selected". The system will generate a Java project
 containing only the necessary classes and methods, where all called methods are annotated with their most general contract.
 If KeY manages to automatically disprove the summary edge, it will be removed.
 Otherwise, it is also possible to manually try and disprove a summary edge. To do so, select it and then click on 
-"show in KeY". This will open the project in KeY. If one is succesful in manually disproving the information flow,
-remove it by clicking on "remove summary edge".
+"Open Selected in KeY". This will open the project in KeY. If one is succesful in manually disproving the information flow,
+remove it by clicking on "Mark as Disproved".
 
-The last possible choice is the auto pilot. It traverses through all edges one by one (in an order which tries to disprove the
-easiest edges first) and tries to disprove them. If it is not successful, it moves on to the next one.
+The last possible choice is the auto pilot (option "Run Auto"). It traverses through all edges one by one (in an order which
+tries to disprove the easiest edges first) and tries to disprove them. If it is not successful, it moves on to the next one.
