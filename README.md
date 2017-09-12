@@ -7,6 +7,13 @@ sources and sinks. It is recommended that files of this type are generated using
 joanakeygui: https://github.com/bigolol/disproveJavaDataDepViaKeyAndJoanaGui/tree/master/src/joanakeygui
 (disclaimer: it is very rough around the edges).
 
+Before, you need to create a jar file from your java sources, e.g., for a main class M in the package pkg, a manifest-file "manifest.mf"
+(reading "Main-Class: pkg.M"), do the following:
+```
+jar cfm M.jar manifest.mf pkg/*
+```
+You can now load the file M.jar and the folder pkg with joanakeygui.
+
 The latter (.dispro) saves the information regarding the progress of the disproving process. Whenever a ".joak" file is loaded
 (using "file -> load .joak" in the main menu), it is immediately transformed into a ".dispro" file. The ".dispro" file
 also holds all information necessary to continue disproving information flows in the program. 
