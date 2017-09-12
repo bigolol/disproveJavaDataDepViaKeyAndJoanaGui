@@ -1,0 +1,979 @@
+SDG "PlusMinusFalsePos.main(java.lang.String[])" {
+ENTR 1 {
+O entry;
+V "PlusMinusFalsePos.main(java.lang.String[])";
+P 4;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":-1;
+Z 0;
+C "Application";
+CF 4;
+CF 2;
+CF 3;
+CE 2;
+CD 3;
+CD 5;
+CD 6;
+CD 9;
+CD 15;
+CE 3;
+CE 4;
+PS 3;
+PS 4;
+HE 2;
+HE 3;
+HE 5;
+HE 6;
+HE 9;
+HE 15;
+HE 4;
+}
+EXIT 2 {
+O exit;
+V "PlusMinusFalsePos.main(java.lang.String[])";
+T "V";
+P 4;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exit>":-2;
+Z 0;
+RF 87;
+}
+FRMO 3 {
+O form-out;
+V "_exception_";
+T "Ljava/lang/Exception";
+P 4;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 2: "exc";
+PO 36;
+}
+FRMI 4 {
+O form-in;
+V "param 1";
+T "[Ljava/lang/String";
+P 4;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 1":-2;
+Z 0;
+LD ["null"];
+CF 5;
+}
+NORM 5 {
+O declaration;
+V "v3 = new PlusMinusFalsePos";
+T "LPlusMinusFalsePos";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":0;
+Z 0;
+DD 7;
+DD 10;
+CF 7;
+}
+CALL 6 {
+O call;
+V "v3.<init>()";
+T "V";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":4;
+Z 0;
+CE 7;
+CE 8;
+PS 7;
+PS 8;
+CL 37: "virtual";
+CF 85;
+CE 85;
+HE 7;
+HE 8;
+}
+ACTI 7 {
+O act-in;
+V "this [v3]";
+T "LPlusMinusFalsePos";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<param> 0":-2;
+Z 0;
+CF 6;
+CD 6;
+PI 40;
+SU 8;
+}
+ACTO 8 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<exception>":-2;
+Z 0;
+CF 10;
+CE 85;
+HE 85;
+}
+CALL 9 {
+O call;
+V "v8 = v3.testMethod(#(1), #(2))";
+T "I";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":9;
+Z 0;
+CE 10;
+CE 11;
+CE 12;
+CE 13;
+CE 14;
+PS 10;
+PS 11;
+PS 12;
+PS 13;
+PS 14;
+CL 46: "virtual";
+CF 86;
+CE 86;
+HE 10;
+HE 11;
+HE 12;
+HE 13;
+HE 14;
+}
+ACTI 10 {
+O act-in;
+V "this [v3]";
+T "LPlusMinusFalsePos";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<param> 0":-2;
+Z 0;
+CF 11;
+CD 9;
+PI 49;
+SU 13;
+}
+ACTI 11 {
+O act-in;
+V "param 1 [#(1)]";
+T "I";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<param> 1":-2;
+Z 0;
+CF 12;
+PI 50;
+SU 13;
+}
+ACTI 12 {
+O act-in;
+V "param 2 [#(2)]";
+T "I";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<param> 2":-2;
+Z 0;
+CF 9;
+PI 51;
+SU 13;
+}
+ACTO 13 {
+O act-out;
+V "ret 0";
+T "I";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<exit>":-2;
+Z 0;
+CF 14;
+}
+ACTO 14 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "<exception>":-2;
+Z 0;
+CF 15;
+CE 86;
+HE 86;
+}
+NORM 15 {
+O compound;
+V "return";
+T "V";
+P 4;
+S "PlusMinusFalsePos.java":4,0-4,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":13;
+Z 0;
+CF 2;
+}
+ENTR 20 {
+O entry;
+V "com.ibm.wala.FakeRootClass.fakeRootMethod()";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+C "Primordial";
+CF 23;
+CF 22: "exc";
+CF 21;
+CE 21;
+CD 22;
+CD 23;
+CE 22;
+PS 22;
+HE 21;
+HE 22;
+HE 23;
+}
+EXIT 21 {
+O exit;
+V "com.ibm.wala.FakeRootClass.fakeRootMethod()";
+T "V";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<exit>":-2;
+Z 0;
+}
+FRMO 22 {
+O form-out;
+V "_exception_";
+T "Ljava/lang/Exception";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 21: "exc";
+}
+CALL 23 {
+O call;
+V "fakeWorldClinit()";
+T "V";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+U "com.ibm.wala.FakeRootClass.fakeWorldClinit()V";
+CF 24: "exc";
+CD 25;
+CE 24;
+PS 24;
+CE 82;
+CF 82;
+HE 25;
+HE 24;
+HE 82;
+}
+ACTO 24 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 22: "exc";
+DD 22;
+}
+NORM 25 {
+O declaration;
+V "v3 = new java.lang.String[]";
+T "[Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+CF 26;
+CF 22: "exc";
+CD 22;
+CD 26;
+CD 28;
+DD 28;
+DD 32;
+DD 35;
+HE 26;
+HE 28;
+}
+NORM 26 {
+O declaration;
+V "v5 = new java.lang.String";
+T "Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+CF 28;
+DD 27;
+}
+EXPR 27 {
+O modify;
+V "v3[#(0)] = v5";
+T "Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+DD 29;
+CE 29;
+CF 29;
+HE 29;
+}
+NORM 28 {
+O compound;
+V "base";
+T "[Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+DD 27;
+CE 30;
+PS 29;
+CF 30;
+CF 32;
+CF 22: "exc";
+CD 22;
+CD 29;
+CD 30;
+CD 31;
+HE 30;
+HE 31;
+}
+NORM 29 {
+O compound;
+V "field [java.lang.String]";
+T "Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+CF 28;
+}
+NORM 30 {
+O compound;
+V "index";
+T "I";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+CE 28;
+CE 27;
+DD 27;
+CF 27;
+HE 27;
+}
+CALL 31 {
+O call;
+V "v3.<init>()";
+T "V";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+U "java.lang.Object.<init>()V";
+CF 33: "exc";
+CD 34;
+CE 32;
+CE 33;
+PS 32;
+PS 33;
+CE 80;
+CE 83;
+CF 83;
+HE 34;
+HE 32;
+HE 33;
+HE 80;
+HE 83;
+}
+ACTI 32 {
+O act-in;
+V "this [v3]";
+T "Ljava/lang/Object";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<param> 0":-2;
+Z 0;
+CF 31;
+CD 31;
+DD 83;
+}
+ACTO 33 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 22: "exc";
+DD 22;
+DD 80;
+}
+CALL 34 {
+O call;
+V "main(v3)";
+T "V";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+CF 36: "exc";
+CE 35;
+CE 36;
+PS 35;
+PS 36;
+CL 1: "virtual";
+CF 87;
+CE 87;
+HE 35;
+HE 36;
+}
+ACTI 35 {
+O act-in;
+V "param 1 [v3]";
+T "[Ljava/lang/String";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<param> 1":-2;
+Z 0;
+CF 34;
+PI 4;
+}
+ACTO 36 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 22: "exc";
+CE 87;
+HE 87;
+}
+ENTR 37 {
+O entry;
+V "PlusMinusFalsePos.<init>()";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.<init>()V":-1;
+Z 0;
+C "Application";
+CF 40;
+CF 38;
+CE 38;
+CD 41;
+CE 39;
+CE 40;
+PS 39;
+PS 40;
+HE 38;
+HE 41;
+HE 39;
+HE 40;
+}
+EXIT 38 {
+O exit;
+V "PlusMinusFalsePos.<init>()";
+T "V";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exit>":-2;
+Z 0;
+RF 85;
+}
+FRMO 39 {
+O form-out;
+V "_exception_";
+T "Ljava/lang/Exception";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 38: "exc";
+PO 8;
+}
+FRMI 40 {
+O form-in;
+V "this";
+T "LPlusMinusFalsePos";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 0":-2;
+Z 0;
+LD ["null"];
+DD 42;
+CF 42;
+}
+CALL 41 {
+O call;
+V "p0 $null .<init>()";
+T "V";
+P 6;
+S "PlusMinusFalsePos.java":1,0-1,0;
+B "PlusMinusFalsePos.<init>()V":1;
+Z 0;
+U "java.lang.Object.<init>()V";
+CF 43: "exc";
+CD 44;
+CE 42;
+CE 43;
+PS 42;
+PS 43;
+CE 81;
+CE 84;
+CF 84;
+HE 44;
+HE 42;
+HE 43;
+HE 81;
+HE 84;
+}
+ACTI 42 {
+O act-in;
+V "this [p0 $null ]";
+T "Ljava/lang/Object";
+P 6;
+S "PlusMinusFalsePos.java":1,0-1,0;
+B "<param> 0":-2;
+Z 0;
+CF 41;
+CD 41;
+DD 84;
+}
+ACTO 43 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 6;
+S "PlusMinusFalsePos.java":1,0-1,0;
+B "<exception>":-2;
+Z 0;
+CF 39: "exc";
+DD 39;
+DD 81;
+}
+NORM 44 {
+O compound;
+V "return";
+T "V";
+P 6;
+S "PlusMinusFalsePos.java":1,0-1,0;
+B "PlusMinusFalsePos.<init>()V":4;
+Z 0;
+CF 38;
+}
+ENTR 46 {
+O entry;
+V "PlusMinusFalsePos.testMethod(int,int)";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.testMethod(II)I":-1;
+Z 0;
+C "Application";
+CF 49;
+CF 47;
+CF 48;
+CE 47;
+CD 48;
+CD 52;
+CD 58;
+CE 48;
+CE 49;
+CE 50;
+CE 51;
+PS 47;
+PS 48;
+PS 49;
+PS 50;
+PS 51;
+HE 47;
+HE 48;
+HE 52;
+HE 58;
+HE 49;
+HE 50;
+HE 51;
+}
+EXIT 47 {
+O exit;
+V "PlusMinusFalsePos.testMethod(int,int)";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exit>":-2;
+Z 0;
+PO 13;
+RF 86;
+}
+FRMO 48 {
+O form-out;
+V "_exception_";
+T "Ljava/lang/Exception";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 47: "exc";
+PO 14;
+}
+FRMI 49 {
+O form-in;
+V "this";
+T "LPlusMinusFalsePos";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 0":-2;
+Z 0;
+LD ["null"];
+CF 50;
+DD 53;
+}
+FRMI 50 {
+O form-in;
+V "param 1";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 1":-2;
+Z 0;
+LD ["null"];
+CF 51;
+DD 55;
+}
+FRMI 51 {
+O form-in;
+V "param 2";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 2":-2;
+Z 0;
+LD ["null"];
+DD 54;
+CF 53;
+}
+CALL 52 {
+O call;
+V "v6 = p0 $null .identity(p2 $null , p1 $null )";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "PlusMinusFalsePos.testMethod(II)I":3;
+Z 0;
+CE 53;
+CE 54;
+CE 55;
+CE 56;
+CE 57;
+PS 53;
+PS 54;
+PS 55;
+PS 56;
+PS 57;
+CL 64: "virtual";
+CF 88;
+CE 88;
+HE 53;
+HE 54;
+HE 55;
+HE 56;
+HE 57;
+}
+ACTI 53 {
+O act-in;
+V "this [p0 $null ]";
+T "LPlusMinusFalsePos";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "<param> 0":-2;
+Z 0;
+CF 54;
+CD 52;
+PI 67;
+}
+ACTI 54 {
+O act-in;
+V "param 1 [p2 $null ]";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "<param> 1":-2;
+Z 0;
+CF 55;
+PI 68;
+SU 56;
+}
+ACTI 55 {
+O act-in;
+V "param 2 [p1 $null ]";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "<param> 2":-2;
+Z 0;
+CF 52;
+PI 69;
+SU 56;
+}
+ACTO 56 {
+O act-out;
+V "ret 0";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "<exit>":-2;
+Z 0;
+CF 57;
+DD 58;
+}
+ACTO 57 {
+O act-out;
+V "ret _exception_";
+T "Ljava/lang/Exception";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "<exception>":-2;
+Z 0;
+CF 58;
+CE 88;
+HE 88;
+}
+NORM 58 {
+O compound;
+V "return v6";
+T "I";
+P 7;
+S "PlusMinusFalsePos.java":8,0-8,0;
+B "PlusMinusFalsePos.testMethod(II)I":8;
+Z 0;
+CF 47;
+DD 47;
+}
+ENTR 64 {
+O entry;
+V "PlusMinusFalsePos.identity(int,int)";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.identity(II)I":-1;
+Z 0;
+C "Application";
+CF 67;
+CF 65;
+CF 66;
+CE 65;
+CD 66;
+CD 70;
+CD 71;
+CD 72;
+CE 66;
+CE 67;
+CE 68;
+CE 69;
+PS 65;
+PS 66;
+PS 67;
+PS 68;
+PS 69;
+HE 65;
+HE 66;
+HE 70;
+HE 71;
+HE 72;
+HE 67;
+HE 68;
+HE 69;
+}
+EXIT 65 {
+O exit;
+V "PlusMinusFalsePos.identity(int,int)";
+T "I";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exit>":-2;
+Z 0;
+PO 56;
+RF 88;
+}
+FRMO 66 {
+O form-out;
+V "_exception_";
+T "Ljava/lang/Exception";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<exception>":-2;
+Z 0;
+CF 65: "exc";
+PO 57;
+}
+FRMI 67 {
+O form-in;
+V "this";
+T "LPlusMinusFalsePos";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 0":-2;
+Z 0;
+LD ["null"];
+CF 68;
+}
+FRMI 68 {
+O form-in;
+V "param 1";
+T "I";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 1":-2;
+Z 0;
+LD ["null"];
+CF 69;
+DD 70;
+}
+FRMI 69 {
+O form-in;
+V "param 2";
+T "I";
+P 8;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "<param> 2":-2;
+Z 0;
+LD ["null"];
+DD 70;
+DD 71;
+CF 70;
+}
+EXPR 70 {
+O assign;
+V "v5 = p1 $null  + p2 $null ";
+T "Ljava/lang/Object";
+P 8;
+S "PlusMinusFalsePos.java":12,0-12,0;
+B "PlusMinusFalsePos.identity(II)I":2;
+Z 0;
+DD 71;
+CF 71;
+}
+EXPR 71 {
+O assign;
+V "v6 = v5 - p2 $null ";
+T "Ljava/lang/Object";
+P 8;
+S "PlusMinusFalsePos.java":13,0-13,0;
+B "PlusMinusFalsePos.identity(II)I":6;
+Z 0;
+DD 72;
+CF 72;
+}
+NORM 72 {
+O compound;
+V "return v6";
+T "I";
+P 8;
+S "PlusMinusFalsePos.java":14,0-14,0;
+B "PlusMinusFalsePos.identity(II)I":9;
+Z 0;
+CF 65;
+DD 65;
+}
+NORM 80 {
+O compound;
+V "immutable";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+DD 25;
+CF 35;
+}
+NORM 81 {
+O compound;
+V "immutable";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.<init>()V":-1;
+Z 0;
+DD 40;
+CF 44;
+}
+NORM 82 {
+O compound;
+V "many2many";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+DD 24;
+CF 25;
+}
+NORM 83 {
+O compound;
+V "many2many";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-1;
+Z 0;
+DD 33;
+CF 80;
+}
+NORM 84 {
+O compound;
+V "many2many";
+P 6;
+S "PlusMinusFalsePos.java":0,0-0,0;
+B "PlusMinusFalsePos.<init>()V":-1;
+Z 0;
+DD 43;
+CF 81;
+}
+NORM 85 {
+O compound;
+V "CALL_RET";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":-9;
+Z 0;
+CF 8;
+}
+NORM 86 {
+O compound;
+V "CALL_RET";
+P 4;
+S "PlusMinusFalsePos.java":3,0-3,0;
+B "PlusMinusFalsePos.main([Ljava/lang/String;)V":-9;
+Z 0;
+CF 13;
+}
+NORM 87 {
+O compound;
+V "CALL_RET";
+P 5;
+S "com/ibm/wala/FakeRootClass.java":0,0-0,0;
+B "com.ibm.wala.FakeRootClass.fakeRootMethod()V":-9;
+Z 0;
+CF 21;
+}
+NORM 88 {
+O compound;
+V "CALL_RET";
+P 7;
+S "PlusMinusFalsePos.java":7,0-7,0;
+B "PlusMinusFalsePos.testMethod(II)I":-9;
+Z 0;
+CF 56;
+}
+Thread 0 {
+Entry 20;
+Exit 21;
+Fork 0;
+Join 0;
+Context null;
+Dynamic false;
+}
+}

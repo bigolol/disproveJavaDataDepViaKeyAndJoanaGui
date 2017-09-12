@@ -21,7 +21,9 @@ import org.apache.commons.io.FileUtils;
  */
 public class LoopInvPosAndMethBodExtracter {
 
-    public void findAllLoopPositionsAndMethodBodies(Collection<StaticCGJavaMethod> methods, String pathToSource) throws IOException {
+    public void findAllLoopPositionsAndMethodBodies(Collection<StaticCGJavaMethod> methods,
+                                                    String pathToSource)
+                                                            throws IOException {
         AddLoopPosAndMethodBodiesListener listener = new AddLoopPosAndMethodBodiesListener();
         HashSet<StaticCGJavaClass> neededClasses = new HashSet<>();
 
@@ -33,8 +35,11 @@ public class LoopInvPosAndMethBodExtracter {
 
         for (StaticCGJavaClass c : neededClasses) {
             try {
-                String pathToClassesJavaFile = JavaForKeyCreator.getPathToJavaClassFile(pathToSource, c);
-                String javaClassContents = FileUtils.readFileToString(new File(pathToClassesJavaFile), Charset.defaultCharset());
+                String pathToClassesJavaFile =
+                        JavaForKeyCreator.getPathToJavaClassFile(pathToSource, c);
+                String javaClassContents =
+                        FileUtils.readFileToString(new File(pathToClassesJavaFile),
+                                                   Charset.defaultCharset());
                 listener.findAllLoopsAndAddToMethods(javaClassContents, methods, c);
             } catch (Exception e) {
             }

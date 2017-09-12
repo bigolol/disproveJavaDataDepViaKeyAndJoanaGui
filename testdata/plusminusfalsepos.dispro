@@ -1,0 +1,101 @@
+{"path_to_jar" : "testdata/plusMinusFalsePositive/build/PlusMinusFalsePos.jar",
+"path_to_java_source" : "testdata/plusMinusFalsePositive/",
+"path_to_sdg" : "savedata/PlusMinusFalsePos3421557460184259452.pdg",
+"state_saver" : {"formal_ins_to_pers_cg" : [
+{ "sdg_node" : 49, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+
+}}},
+{ "sdg_node" : 50, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+
+}}},
+{ "sdg_node" : 51, "cg_node" : {"id" : 4, "cg_node_id" :9, "ir" : {
+
+}}},
+{ "sdg_node" : 68, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
+
+}}},
+{ "sdg_node" : 69, "cg_node" : {"id" : 6, "cg_node_id" :11, "ir" : {
+
+}}},
+{ "sdg_node" : 40, "cg_node" : {"id" : 3, "cg_node_id" :8, "ir" : {
+
+}}}],
+"cgNodes" : [
+{"id" : 0, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 1, "cg_node_id" :0, "ir" : {
+
+}},
+{"id" : 2, "cg_node_id" :0, "ir" : {
+
+}},
+{"id" : 3, "cg_node_id" :8, "ir" : {
+
+}},
+{"id" : 4, "cg_node_id" :9, "ir" : {
+
+}},
+{"id" : 5, "cg_node_id" :0, "ir" : {
+"1" : "this"
+}},
+{"id" : 6, "cg_node_id" :11, "ir" : {
+
+}}],
+"localPointerKeys" : [{"id" : 0, "value_number" : 1, "node" : 0
+},
+{"id" : 1, "value_number" : 1, "node" : 1
+},
+{"id" : 2, "value_number" : 1, "node" : 2
+},
+{"id" : 3, "value_number" : 1, "node" : 3
+},
+{"id" : 4, "value_number" : 1, "node" : 4
+},
+{"id" : 5, "value_number" : 1, "node" : 5
+},
+{"id" : 6, "value_number" : 1, "node" : 6
+},
+{"id" : 0, "value_number" : 1, "node" : 0
+},
+{"id" : 1, "value_number" : 1, "node" : 1
+},
+{"id" : 2, "value_number" : 1, "node" : 2
+},
+{"id" : 3, "value_number" : 1, "node" : 3
+},
+{"id" : 4, "value_number" : 1, "node" : 4
+},
+{"id" : 5, "value_number" : 1, "node" : 5
+},
+{"id" : 6, "value_number" : 1, "node" : 6
+}],
+"disjunctPointsTo" : []
+},
+"edges_methods_to_values" : {"formal_node_tuple_to_contract" : [{"in" : 69, "out" : 65, "contract" : "	/*@ requires true;	  @ determines \\result \\by this, l; */"}],"edge_to_loop_invariant_template" : [{"in" : 55, "out" : 56, "invariant" : "	/*	@ loop_invariant 	 	 @ assignable 	 	 @ determines \\result \\by this, l; 	 	 @ decreases */"}],"method_to_most_general_contract" : [{"method" : "PlusMinusFalsePos/identity/int,int", "most_general_contract" : "	/*@ requires true;	  @ determines this \\by this, l, h; */", }],"edge_to_loop_invariant" : [{"in" : 55, "out" : 56, "loop_invariants" : []}]},
+"violation_wrapper" : {
+"violations" : [],
+"chops" : [
+{
+"src" : 11,
+"sink" : 47,
+"nodes_in_chop" : [
+65,
+50,
+69,
+70,
+55,
+71,
+56,
+72,
+58,
+11,
+47]
+}],
+"summary_edges_sorted" : [
+{"src" : 55, "sink" : 56}],
+"summary_edges_methods": [
+{"id" :0, "class_name" : "PlusMinusFalsePos", "method_name" : "identity", "arg_string" : "int,int"}],"summary_edges_chops" : [
+{"pos" :0, "chops" : [
+{"src" : 11, "sink" : 47}]}]
+}}
