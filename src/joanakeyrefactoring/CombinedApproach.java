@@ -174,8 +174,8 @@ public class CombinedApproach {
 
                         return collectedParts;
                     };
-        } else if (from.equals(AddSourceDialogController.programPart)) {
-            String programPartString = description.getString(AddSourceDialogController.programPart);
+        } else if (from.equals("programPart")) {
+            String programPartString = description.getString("programPart");
             partSupplier
                     = () -> {
                         Collection<SDGProgramPart> created = new ArrayList<>();
