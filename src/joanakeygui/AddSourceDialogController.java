@@ -40,8 +40,8 @@ public class AddSourceDialogController implements Initializable {
     private Stage stage;
     private JoanaInstance joanaInstance;
 
-    public final static String programPart = "Program Part";
-    public final static String callsToMethod = "Calls to Method";
+    final static String programPart = "Program Part";
+    final static String callsToMethod = "Calls to Method";
 
     private String[] addingMethods = {programPart, callsToMethod};
 
