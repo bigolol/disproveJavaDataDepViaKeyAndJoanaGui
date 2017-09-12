@@ -20,7 +20,6 @@ import edu.kit.joana.util.Stubs;
 import edu.kit.joana.wala.core.SDGBuilder.ExceptionAnalysis;
 import edu.kit.joana.wala.core.SDGBuilder.FieldPropagation;
 import edu.kit.joana.wala.core.SDGBuilder.PointsToPrecision;
-import joanakeygui.AddSourceDialogController;
 
 import java.io.BufferedReader;
 import java.io.File;
