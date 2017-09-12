@@ -43,3 +43,12 @@ remove it by clicking on "Mark as Disproved".
 
 The last possible choice is the auto pilot (option "Run Auto"). It traverses through all edges one by one (in an order which
 tries to disprove the easiest edges first) and tries to disprove them. If it is not successful, it moves on to the next one.
+
+This software was mainly designed and implemented by the following students:
+
+* [Simon Bischof](https://pp.ipd.kit.edu/person.php?id=148)
+* Marko Kleine Büning
+* Holger Klein
+
+For more information, please contact [Mihai Herda](https://formal.iti.kit.edu/~herda/?lang=en)
+or [Michael Kirsten](https://formal.iti.kit.edu/~kirsten/?lang=en).
