@@ -23,4 +23,3 @@ sinks : [
 		description : {from : "programPart", programPart : "jzip.MyFileOutputStream.content"}
 	}
 ]
-

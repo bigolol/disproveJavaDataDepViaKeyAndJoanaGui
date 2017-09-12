@@ -19,4 +19,3 @@ sinks : [
 		description : {from : "programPart", programPart : "exit of method int PlusMinusFalsePos.testMethod(int, int)"}
 	}
 ]
-
