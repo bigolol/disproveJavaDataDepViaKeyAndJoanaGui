@@ -25,7 +25,7 @@ public class AsyncBackgroundLoader implements Runnable {
     private File fileToLoad;
     private LoadOptions loadOption;
     private CurrentActionLogger actionLogger;
-    private boolean succes;
+    private boolean success;
     private JoanaAndKeyCheckData currentCheckData;
     private BiConsumer<JoanaAndKeyCheckData, Boolean> uiThreadJoakCallback;
     private DisprovingProject disprovingProject;
@@ -60,28 +60,29 @@ public class AsyncBackgroundLoader implements Runnable {
         if (loadOption == LoadOptions.JOAK) {
             try {
                 currentCheckData = CombinedApproach.parseInputFile(fileToLoad);
-                succes = true;
+                success = true;
             } catch (Exception ex) {
-                succes = false;
-                ErrorLogger.logError("CombinedApproach threw while trying to pass the joak file " + fileToLoad.getName(),
-                        ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
+                success = false;
+                ErrorLogger.logError("CombinedApproach threw " + ex.getClass().getSimpleName() +
+                                     " while trying to pass the joak file " + fileToLoad.getName(),
+                                     ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
             }
             Platform.runLater(() -> {
                 actionLogger.endProgress();
-                uiThreadJoakCallback.accept(currentCheckData, succes);
+                uiThreadJoakCallback.accept(currentCheckData, success);
             });
         } else {
             try {
                 String fileContents = FileUtils.readFileToString(fileToLoad, Charset.defaultCharset());
                 disprovingProject = DisprovingProject.generateFromSavestring(fileContents);
-                succes = true;
+                success = true;
             } catch (Exception ex) {
-                succes = false;
+                success = false;
                 ErrorLogger.logError("error when trying to load dispro from file", ErrorLogger.ErrorTypes.ERROR_LOADING_DISPRO);
             }
             Platform.runLater(() -> {
                 actionLogger.endProgress();
-                uiThreadDisproCallback.accept(disprovingProject, succes);
+                uiThreadDisproCallback.accept(disprovingProject, success);
             });
         }
     }

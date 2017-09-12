@@ -16,7 +16,7 @@ sources : [
 sinks : [
 	{
 		securityLevel : "low",
-		description : {from : "programPart", programPart : "(void multipleclassesfalsepos.MultipleClassesFalsePos.main(java.lang.String[]):23) v13 = v9.falsePos(#(4))->ret"}
+		description : {from : "programPart", programPart : "(void multipleclassesfalsepos.MultipleClassesFalsePos.main(java.lang.String[]):8) v7 = v3.falsePos(#(0))->ret"}
 	}
 ]
 
