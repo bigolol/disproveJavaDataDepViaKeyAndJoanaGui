@@ -214,7 +214,7 @@ public class JavaForKeyCreator {
                          ".java");
 
         if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(javaClassFile.toString());
         }
 
         String contents = new String(Files.readAllBytes(javaClassFile.toPath()));

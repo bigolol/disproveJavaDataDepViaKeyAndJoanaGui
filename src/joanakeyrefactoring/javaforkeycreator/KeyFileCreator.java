@@ -8,6 +8,8 @@ package joanakeyrefactoring.javaforkeycreator;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import joanakeyrefactoring.AutomationHelper;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 
 /**
@@ -32,6 +34,7 @@ public class KeyFileCreator {
         String methodnameKey = getMethodnameKey(method);
 
         final String profileStr = "Java Profile";
+        final String settingsStr = AutomationHelper.getSettings();
         final String javaSourceStr = "./";
         final String proofObligationTemplateString
                 = "#Proof Obligation Settings\n"
@@ -42,7 +45,7 @@ public class KeyFileCreator {
                 .replaceAll("METHODNAME", methodnameKey)
                 .replaceAll("CLASSNAME", method.getContainingClass().getId());
 
-        generateKeyFileFrom(profileStr, javaSourceStr, proofObligationString, proofObFile);
+        generateKeyFileFrom(profileStr, settingsStr, javaSourceStr, proofObligationString, proofObFile);
     }
 
     public static void createKeYFileFunctional(StaticCGJavaMethod method,
@@ -53,6 +56,7 @@ public class KeyFileCreator {
         }
 
         final String profileStr = "Java Profile";
+        final String settingsStr = AutomationHelper.getSettings();
         final String javaSourceStr = "./";
 
         String methodnameKey = getMethodnameKey(method);
@@ -66,7 +70,7 @@ public class KeyFileCreator {
                 .replaceAll("METHODNAME", methodnameKey)
                 .replaceAll("CLASSNAME", method.getContainingClass().getId());
 
-        generateKeyFileFrom(profileStr, javaSourceStr, proofObligationString, proofObFile);
+        generateKeyFileFrom(profileStr, settingsStr, javaSourceStr, proofObligationString, proofObFile);
     }
 
     private static String getMethodnameKey(StaticCGJavaMethod method) {
@@ -78,15 +82,16 @@ public class KeyFileCreator {
         }
     }
 
-    private static void generateKeyFileFrom(
-            String profileString, String javaSourceString,
-            String proofObligationString, File f) throws IOException {
-
+    private static void generateKeyFileFrom(String profileString, String settingsString,
+                                            String javaSourceString, String proofObligationString,
+                                            File f) throws IOException {
         String profileTempStr = "\\profile PROFILE;\n";
         String javaSourceTempStr = "\\javaSource JAVASRC;\n";
         String proofOblTempStr = "\\proofObligation PROOFOBL;\n";
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(profileTempStr.replace("PROFILE", surroundWithApos(profileString)));
+        stringBuilder.append('\n');
+        stringBuilder.append(settingsString);
         stringBuilder.append('\n');
         stringBuilder.append(javaSourceTempStr.replace("JAVASRC", surroundWithApos(javaSourceString)));
         stringBuilder.append('\n');

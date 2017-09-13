@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
@@ -30,6 +33,9 @@ public class AutomationHelper {
     private final String pathToJavaFile;
     private ArrayList<String> classNames = new ArrayList<>();
     final static String LINE_SEP = System.getProperty("line.separator");
+    final static String DATE =
+            new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy", Locale.ENGLISH)
+            .format(Calendar.getInstance().getTime());
     private HashMap<String, String> classes = new HashMap<>();
 
     public AutomationHelper(String pathToJavaFile) {
@@ -302,12 +308,14 @@ public class AutomationHelper {
      *
      * @return settings
      */
-    public String getSettings() {
+    public static String getSettings() {
         String settings = "\\settings {"
                 + LINE_SEP
                 + " \"#Proof-Settings-Config-File"
                 + LINE_SEP
-                + "#Wed Jun 10 12:53:58 CEST 2016"
+                + "#" + DATE
+                + LINE_SEP
+                + "[StrategyProperty]OSS_OPTIONS_KEY=OSS_ON"
                 + LINE_SEP
                 + "[StrategyProperty]VBT_PHASE=VBT_SYM_EX"
                 + LINE_SEP
@@ -351,7 +359,23 @@ public class AutomationHelper {
                 + LINE_SEP
                 + "[SMTSettings]integersMaximum=2147483645"
                 + LINE_SEP
-                + "[Choice]DefaultChoices=assertions-assertions\\:on , initialisation-initialisation\\:disableStaticInitialisation , intRules-intRules\\:arithmeticSemanticsIgnoringOF , programRules-programRules\\:Java , JavaCard-JavaCard\\:on , Strings-Strings\\:on , modelFields-modelFields\\:treatAsAxiom , bigint-bigint\\:on , sequences-sequences\\:on , reach-reach\\:on , integerSimplificationRules-integerSimplificationRules\\:full , wdOperator-wdOperator\\:L , wdChecks-wdChecks\\:off , runtimeExceptions-runtimeExceptions\\:ban"
+                + "[Choice]DefaultChoices=assertions-assertions\\:on , "
+                + "initialisation-initialisation\\:disableStaticInitialisation , "
+                + "intRules-intRules\\:arithmeticSemanticsIgnoringOF , "
+                + "programRules-programRules\\:Java , "
+                + "mergeGenerateIsWeakeningGoal-mergeGenerateIsWeakeningGoal\\:off , "
+                + "JavaCard-JavaCard\\:on , "
+                + "Strings-Strings\\:on , "
+                + "modelFields-modelFields\\:treatAsAxiom , "
+                + "bigint-bigint\\:on , "
+                + "sequences-sequences\\:on , "
+                + "reach-reach\\:on , "
+                + "moreSeqRules-moreSeqRules\\:on , "
+                + "integerSimplificationRules-integerSimplificationRules\\:full , "
+                + "permissions-permissions\\:off , "
+                + "wdOperator-wdOperator\\:L , "
+                + "wdChecks-wdChecks\\:off , "
+                + "runtimeExceptions-runtimeExceptions\\:ban"
                 + LINE_SEP
                 + "[SMTSettings]useConstantsForBigOrSmallIntegers=true"
                 + LINE_SEP
@@ -368,6 +392,8 @@ public class AutomationHelper {
                 + LINE_SEP + "[Strategy]ActiveStrategy=JavaCardDLStrategy"
                 + LINE_SEP
                 + "[StrategyProperty]SPLITTING_OPTIONS_KEY=SPLITTING_DELAYED"
+                + LINE_SEP
+                + "[StrategyProperty]MPS_OPTIONS_KEY=MPS_MERGE"
                 + LINE_SEP + "	\"" + LINE_SEP + "}";
         return settings;
     }
