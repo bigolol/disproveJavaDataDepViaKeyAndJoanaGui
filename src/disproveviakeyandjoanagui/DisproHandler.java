@@ -8,6 +8,7 @@ package disproveviakeyandjoanagui;
 import disproveviakeyandjoanagui.asynctaskhandler.AsyncAutoRunner;
 import disproveviakeyandjoanagui.asynctaskhandler.AsyncBackgroundDisproCreator;
 import edu.kit.joana.ifc.sdg.core.SecurityNode;
+import edu.kit.joana.ifc.sdg.core.violations.ClassifiedViolation;
 import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
@@ -161,7 +162,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     private void onPressRunAuto() {
         if (AsyncAutoRunner.keepRunning.get()) {
             AsyncAutoRunner.stop();
-            buttonRunAuto.setText("start auto modus");
+            buttonRunAuto.setText("Start auto modus.");
             buttonMarkAsDisproved.setDisable(false);
             buttonResetLoopInvariant.setDisable(false);
             buttonSaveLoopInvariant.setDisable(false);
@@ -169,8 +170,8 @@ public class DisproHandler implements ViolationsWrapperListener {
             buttonTryDisprove.setDisable(false);
             mainMenu.setDisable(false);
         } else {
-            currentActionLogger.startProgress("running auto pilot");
-            buttonRunAuto.setText("stop auto modus");
+            currentActionLogger.startProgress("Running auto pilot.");
+            buttonRunAuto.setText("Stop auto modus.");
             buttonMarkAsDisproved.setDisable(true);
             buttonResetLoopInvariant.setDisable(true);
             buttonSaveLoopInvariant.setDisable(true);
@@ -212,15 +213,17 @@ public class DisproHandler implements ViolationsWrapperListener {
                     summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge));
             labelSummaryEdge.setText(currentSelectedEdge.toString());
             if (worked) {
-                labelSomeOtherData.setText("disproving worked");
+                labelSomeOtherData.setText("Disproving worked.");
                 violationsWrapper.removeEdge(currentSelectedEdge);
             } else {
-                labelSomeOtherData.setText("could not disprove edge");
+                labelSomeOtherData.setText("Could not disprove edge.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ErrorLogger.logError("an error occured while trying to create the jave code to disprove",
-                    ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK);
+            ErrorLogger.logError(
+                    "An error occured while trying to create the Jave code to be disproved.",
+                    ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK
+                    );
         }
     }
 
@@ -244,7 +247,8 @@ public class DisproHandler implements ViolationsWrapperListener {
                     disprovingProject = dispro;
                     handleNewDisproSet();
                 } catch (Exception e) {
-                    ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
+                    ErrorLogger.logError("Setting up new project failed.",
+                                         ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
                 }
             }
             setAllButtonsDisable(false);
@@ -258,7 +262,8 @@ public class DisproHandler implements ViolationsWrapperListener {
             this.disprovingProject = disprovingProject;
             handleNewDisproSet();
         } catch (Exception e) {
-            ErrorLogger.logError("asdasdasdasd", ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
+            ErrorLogger.logError("Setting up existing project failed.",
+                                 ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
         }
         mainMenu.setDisable(false);
         setAllButtonsDisable(false);
@@ -306,7 +311,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         resetListView(listViewFormalInoutPairs);
 
         for (int relPos : currentSelectedMethod.getRelPosOfLoops()) {
-            listViewLoopsInSE.getItems().add(String.valueOf(relPos));
+            listViewLoopsInSE.getItems().add("Line " + String.valueOf(relPos));
         }
         for (StaticCGJavaMethod m : currentSelectedMethod.getCalledFunctionsRec()) {
             listViewCalledMethodsInSE.getItems().add(m.toString());
@@ -317,7 +322,13 @@ public class DisproHandler implements ViolationsWrapperListener {
         currentIndexToNodeTuple.clear();
         int index = 0;
         for (SDGNodeTuple t : allFormalPairs) {
-            listViewFormalInoutPairs.getItems().add(t.toString());
+            final String str
+            = "(" +
+                    t.getFirstNode().getLabel() + ":" + t.getFirstNode() +
+                    ", " +
+                    t.getSecondNode().getLabel() + ":" + t.getSecondNode() +
+              ")";
+            listViewFormalInoutPairs.getItems().add(str);
             currentIndexToNodeTuple.put(index++, t);
         }
         listViewFormalInoutPairs.getSelectionModel().select(0);
@@ -404,15 +415,33 @@ public class DisproHandler implements ViolationsWrapperListener {
         Collection<? extends IViolation<SecurityNode>> uncheckedViolations =
                 violationsWrapper.getUncheckedViolations();
         for (IViolation<SecurityNode> v : uncheckedViolations) {
-            listViewUncheckedChops.getItems().add(v.toString());
+            assert v instanceof ClassifiedViolation;
+            final ClassifiedViolation c = (ClassifiedViolation)v;
+            final String src =
+                    (c.getSource().getBytecodeName().startsWith("<") ?
+                            c.getSource().getSr() + ":" + c.getSource().getBytecodeName()
+                            : c.getSource().getLabel())
+                    + " (" + c.getSource() + ")";
+            final String snk =
+                    (c.getSink().getBytecodeName().startsWith("<") ?
+                            c.getSink().getSr() + ":" + c.getSink().getBytecodeName()
+                            : c.getSink().getLabel())
+                    + " (" + c.getSink() + ")";
+            final String add =
+                    "Illegal Flow from " + src + " to " + snk
+                  + ", visible for " + c.getAttackerLevel();
+            listViewUncheckedChops.getItems().add(add);
         }
 
         summaryEdgesAndCorresJavaMethods = violationsWrapper.getSummaryEdgesAndCorresJavaMethods();
 
         int i = 0;
         for (SDGEdge e : summaryEdgesAndCorresJavaMethods.keySet()) {
-            listViewSummaryEdges.getItems().add(e.toString() + " "
-                    + summaryEdgesAndCorresJavaMethods.get(e).toString());
+            listViewSummaryEdges.getItems().add(
+                        e.toString() +
+                        " : " +
+                        summaryEdgesAndCorresJavaMethods.get(e).toString()
+                    );
             itemIndexToSummaryEdge.put(i++, e);
         }
     }
@@ -424,7 +453,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     @Override
     public void disprovedEdge(SDGEdge e) {
         Platform.runLater(() -> {
-            labelSomeOtherData.setText("disproved summary edge " + e.toString());
+            labelSomeOtherData.setText("Disproved summary edge " + e.toString() + ".");
 
             int selectedIndex = listViewSummaryEdges.getSelectionModel().getSelectedIndex();
 
@@ -457,14 +486,14 @@ public class DisproHandler implements ViolationsWrapperListener {
     @Override
     public void disprovedChop(ViolationChop chop) {
         Platform.runLater(() -> {
-            labelSomeOtherData.setText("the chop " + chop.toString() + " was completely disproved");
+            labelSomeOtherData.setText("The chop " + chop.toString() + " was fully disproved.");
         });
     }
 
     @Override
     public void disprovedAll() {
         Platform.runLater(() -> {
-            labelSomeOtherData.setText("disproved the information flow! hourayyyy! Incredible!");
+            labelSomeOtherData.setText("Disproved the information flow! Hourayyyy! Incredible!");
             AutomationHelper.playSound("Victory Sound Effect.wav");
         });
     }

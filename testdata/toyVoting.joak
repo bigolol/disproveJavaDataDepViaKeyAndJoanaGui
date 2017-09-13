@@ -1,0 +1,33 @@
+//this is the joak script for testing ToyVoting
+
+pathKeY : "dep/KeY.jar",
+javaClass : "",
+pathToJar : "testdata/toyVoting/build/toyVoting.jar",
+pathToJavaFile : "testdata/toyVoting",
+entryMethod : "toyVoting.Voter",
+annotationPath : "",
+fullyAutomatic : true,
+sources : [
+        {
+            securityLevel : "high",
+            description : {from : "programPart", programPart : "toyVoting.Voter.high_inputStream"}
+        }
+],
+sinks : [
+        {
+            securityLevel : "low",
+            description : {from : "programPart", programPart : "toyVoting.Voter.low_outputStream"}
+        },
+        {
+            securityLevel : "low",
+	    description : {from : "programPart", programPart : "toyVoting.Voter.low_outputStreamAvailable"}
+        },
+        {
+            securityLevel : "low",
+	    description : {from : "programPart", programPart : "toyVoting.Voter.low_numOfVotes"}
+        },
+        {
+            securityLevel : "low",
+	    description : {from : "programPart", programPart : "toyVoting.Voter.low_sendSuccessful"}
+        }
+]

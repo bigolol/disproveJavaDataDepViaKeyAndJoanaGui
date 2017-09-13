@@ -101,13 +101,13 @@ public class ViolationsDisproverSemantic {
     /*private void checkViaUser(SDGNode formalInNode, SDGNode formalOutNode, String methodNameKey) {
         if (!fullyAutomatic) {
             System.out.println("From node: " + formalInNode + " to node: " + formalOutNode);
-            System.out.println("type \"y\" to verify method manually or \"n\" to go on automatically ");
+            System.out.println("Type \"y\" to verify method manually or \"n\" to go on automatically ");
             Scanner scanInput = new Scanner(System.in);
             String keyAnswer = scanInput.nextLine();
             if (keyAnswer.equals("y")) {
                 // open JAVA and KeY
                 automationHelper.openKeY(pathToJar, methodNameKey);
-                System.out.println("type y if KeY could prove");
+                System.out.println("Type y if KeY could prove");
                 Scanner scanInput2 = new Scanner(System.in);
                 String keyAnswer2 = scanInput2.nextLine();
             }

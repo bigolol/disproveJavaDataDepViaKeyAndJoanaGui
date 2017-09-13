@@ -339,6 +339,10 @@ public class JavaForKeyCreator {
             incomingParamStructEdges =
                     sdg.getIncomingEdgesOfKind(currentStructSource,
                                                SDGEdge.Kind.PARAMETER_STRUCTURE);
+            if (incomingParamStructEdges == null || incomingParamStructEdges.isEmpty()) {
+                // FIXME: Maybe review whether this break corrupts anything
+                break;
+            }
             currentStructSource = incomingParamStructEdges.get(0).getSource();
             for (SDGEdge e : incomingParamStructEdges) {
                 if (!e.getSource().getBytecodeName().startsWith("<")

@@ -201,7 +201,7 @@ public class ViolationsWrapper {
             sdg.getEdge(sdg.getNode(srcId), sdg.getNode(sinkId));
             Set<SDGEdge> allEdges = sdg.getAllEdges(sdg.getNode(srcId), sdg.getNode(sinkId));
             if (allEdges.size() == 0) {
-                System.out.println("missing sue : src " + srcId + " sink " + sinkId);
+                System.out.println("Missing Summary Edge : src " + srcId + " sink " + sinkId);
             }
             for (SDGEdge e : allEdges) {
                 if (e.getKind() == SDGEdge.Kind.SUMMARY) {
