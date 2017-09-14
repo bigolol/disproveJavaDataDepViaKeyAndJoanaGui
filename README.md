@@ -1,4 +1,5 @@
-This is a project which uses both JOANA and KeY to try and analyze security risks (i.e., unwanted information flow) in Java programs.
+This is a project which uses both [JOANA](https://pp.ipd.kit.edu/projects/joana/) and [KeY](https://key-project.org/) to try and analyze
+security risks (i.e., unwanted information flow) in Java programs.
 The way it works is explained in more depth in this paper: https://formal.iti.kit.edu/biblio/?lang=en&key=BeckertBischofEA2017
 
 The tool provides a GUI which gives the user access to all internal functionality. It supports two file formats: ".joak"
