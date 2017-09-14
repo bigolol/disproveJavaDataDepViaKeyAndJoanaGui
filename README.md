@@ -1,3 +1,5 @@
+# CombinedApproach  - Automatic and Precise Noninterference Verification of Java Programs
+
 This is a project which uses both [JOANA](https://pp.ipd.kit.edu/projects/joana/) and [KeY](https://key-project.org/) to try and analyze
 security risks (i.e., unwanted information flow) in Java programs.
 The way it works is explained in more depth in this paper: https://formal.iti.kit.edu/biblio/?lang=en&key=BeckertBischofEA2017
@@ -8,14 +10,17 @@ sources and sinks. It is recommended that files of this type are generated using
 joanakeygui: https://github.com/bigolol/disproveJavaDataDepViaKeyAndJoanaGui/tree/master/src/joanakeygui
 (disclaimer: it is very rough around the edges).
 
-Before, you need to create a jar file from your java sources, e.g., for a main class M in the package pkg, a manifest-file "manifest.mf"
-(reading "Main-Class: pkg.M"), do the following:
+
+## Getting Started
+
+Before starting, you need to create a jar file from your java sources, e.g., for a main class M in the package pkg, a manifest-file
+"manifest.mf" (reading "Main-Class: pkg.M"), do the following:
 ```
 jar cfm M.jar manifest.mf pkg/*
 ```
 You can now load the file M.jar and the folder pkg with joanakeygui.
 
-The latter (.dispro) saves the information regarding the progress of the disproving process. Whenever a ".joak" file is loaded
+The ".dispro" file saves the information regarding the progress of the disproving process. Whenever a ".joak" file is loaded
 (using "file -> load .joak" in the main menu), it is immediately transformed into a ".dispro" file. The ".dispro" file
 also holds all information necessary to continue disproving information flows in the program. 
 
@@ -44,6 +49,17 @@ remove it by clicking on "Mark as Disproved".
 
 The last possible choice is the auto pilot (option "Run Auto"). It traverses through all edges one by one (in an order which
 tries to disprove the easiest edges first) and tries to disprove them. If it is not successful, it moves on to the next one.
+
+
+## Examples
+
+You can find a small number of examples in the folder [testdata](/testdata). You can load the corresponding "*.joak" files
+directly from the **disproveviakeyandjoanagui** tool. Currently these range from the very simple examples **plusminusfalsepos**
+and **multipleClassesArrFalsePos** to the more complex ones **toyVoting** and **jzip**. Both **plusminusfalsepos** and **toyVoting**
+have been presented in the [HotSpot paper](https://formal.iti.kit.edu/biblio/?lang=en&key=BeckertBischofEA2017) mentioned above.
+
+
+## Contributors
 
 This software was mainly designed and implemented by the following students:
 
