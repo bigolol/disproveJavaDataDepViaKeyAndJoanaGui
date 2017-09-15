@@ -53,7 +53,7 @@ tries to disprove the easiest edges first) and tries to disprove them. If it is 
 
 ## Examples
 
-You can find a small number of examples in the folder [testdata](/testdata). You can load the corresponding "*.joak" files
+You can find a small number of examples in the folder [``testdata``](/testdata). You can load the corresponding "*.joak" files
 directly from the **disproveviakeyandjoanagui** tool. Currently these range from the very simple examples **plusminusfalsepos**
 and **multipleClassesArrFalsePos** to the more complex ones **toyVoting** and **jzip**. Both **plusminusfalsepos** and **toyVoting**
 have been presented in the [HotSpot paper](https://formal.iti.kit.edu/biblio/?lang=en&key=BeckertBischofEA2017) mentioned above.
