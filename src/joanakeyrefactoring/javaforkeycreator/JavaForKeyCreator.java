@@ -414,9 +414,11 @@ public class JavaForKeyCreator {
                 inputNameForKey = getCompleteNameOfOtherThanParam(currentFormalInNode,
                                                                   methodCorresToSE);
             }
-            if (!inputNameForKey.endsWith("<[]>")) {
-                created += inputNameForKey + ", ";
+            if (inputNameForKey.endsWith("<[]>")) {
+                inputNameForKey =
+                        "\\dl_array2seq(" + inputNameForKey.replace(".<[]>", "") + ")";
             }
+            created += inputNameForKey + ", ";
         }
         if (created.isEmpty()) {
             return "\\nothing";
