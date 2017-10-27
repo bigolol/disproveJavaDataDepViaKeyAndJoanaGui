@@ -19,7 +19,9 @@ public class ClassB {
     ClassB() {}
     
     int[] putDataInArr(int high) {
-        arr[4] = high;
+        if (arr != null && 4 < arr.length) {
+            arr[4] = high;
+        }
         return arr;
     }
     

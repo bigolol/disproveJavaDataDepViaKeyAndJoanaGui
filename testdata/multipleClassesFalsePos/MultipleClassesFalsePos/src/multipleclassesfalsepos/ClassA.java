@@ -23,6 +23,11 @@ public class ClassA {
         c.arr = new int[3];
         c.arr[0] = 2;
         b.arr[1] = c.arr[0];
-        return b.putDataInArr(high)[0];
+        int[] res = b.putDataInArr(high);
+        int r = 0;
+        if (res != null && 0 < res.length) {
+	    r = res[0];
+        }
+        return r;
     }
 }
