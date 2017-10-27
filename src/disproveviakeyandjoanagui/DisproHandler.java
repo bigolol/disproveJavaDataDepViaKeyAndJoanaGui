@@ -297,7 +297,19 @@ public class DisproHandler implements ViolationsWrapperListener {
         }
         currentSelectedEdge = itemIndexToSummaryEdge.get(newValue);
 
-        currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge);
+        currentSelectedMethod = summaryEdgesAndCorresJavaMethods != null ?
+                summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge) : null;
+        if (currentSelectedMethod == null && 0 < summaryEdgesAndCorresJavaMethods.size()) {
+            currentSelectedEdge =
+                    currentSelectedEdge == null ?
+                            summaryEdgesAndCorresJavaMethods.keySet().iterator().next()
+                            : currentSelectedEdge;
+            currentSelectedMethod = summaryEdgesAndCorresJavaMethods.get(currentSelectedEdge);
+        }
+        if (currentSelectedMethod == null) {
+            System.err.println("No method available, but proof not finished.");
+            return;
+        }
 
         //handle the code areas
         String methodBody = currentSelectedMethod.getMethodBody();
