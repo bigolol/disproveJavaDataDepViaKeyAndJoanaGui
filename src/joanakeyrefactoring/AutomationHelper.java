@@ -364,6 +364,7 @@ public class AutomationHelper {
                 + "intRules-intRules\\:arithmeticSemanticsIgnoringOF , "
                 + "programRules-programRules\\:Java , "
                 + "mergeGenerateIsWeakeningGoal-mergeGenerateIsWeakeningGoal\\:off , "
+                + "joinGenerateIsWeakeningGoal-joinGenerateIsWeakeningGoal\\:off , "
                 + "JavaCard-JavaCard\\:on , "
                 + "Strings-Strings\\:on , "
                 + "modelFields-modelFields\\:treatAsAxiom , "
