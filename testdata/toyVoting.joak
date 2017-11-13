@@ -20,14 +20,14 @@ sinks : [
         },
         {
             securityLevel : "low",
-	    description : {from : "programPart", programPart : "toyVoting.Voter.low_outputStreamAvailable"}
+            description : {from : "programPart", programPart : "toyVoting.Voter.low_outputStreamAvailable"}
         },
         {
             securityLevel : "low",
-	    description : {from : "programPart", programPart : "toyVoting.Voter.low_numOfVotes"}
+            description : {from : "programPart", programPart : "toyVoting.Voter.low_numOfVotes"}
         },
         {
             securityLevel : "low",
-	    description : {from : "programPart", programPart : "toyVoting.Voter.low_sendSuccessful"}
+            description : {from : "programPart", programPart : "toyVoting.Voter.low_sendSuccessful"}
         }
 ]

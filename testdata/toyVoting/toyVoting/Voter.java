@@ -27,7 +27,8 @@ public class Voter {
     private boolean high_voteValid;
 
     public static void main(String[] args) {
-        new Voter().secure_voting();
+	Voter v = new Voter();
+        v.secure_voting();
     }
 
     /*@ normal_behavior
