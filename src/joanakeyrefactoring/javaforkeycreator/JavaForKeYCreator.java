@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import joanakeyrefactoring.CustomListener.AddContractsAndLoopInvariantsListener;
-import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
+
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.ViolationsDisproverSemantic;
+import joanakeyrefactoring.customlistener.AddContractsAndLoopInvariantsListener;
+import joanakeyrefactoring.customlistener.GetMethodBodyListener;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;

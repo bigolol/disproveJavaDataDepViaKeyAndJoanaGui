@@ -8,13 +8,15 @@ package joanakeyrefactoring.loopinvarianthandling;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
+
 import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
+import joanakeyrefactoring.customlistener.GetMethodBodyListener;
 import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeYCompatibleListener;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
