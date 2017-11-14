@@ -58,6 +58,11 @@ directly from the **disproveviakeyandjoanagui** tool. Currently these range from
 and **multipleClassesArrFalsePos** to the more complex ones **toyVoting** and **jzip**. Both **plusminusfalsepos** and **toyVoting**
 have been presented in the [HotSpot paper](https://formal.iti.kit.edu/biblio/?lang=en&key=BeckertBischofEA2017) mentioned above.
 
+## Future Development
+
+As of now, this repository will not be updated anymore and future development continues in the internal repository
+[py8074/keyjoana](https://git.scc.kit.edu/py8074/keyjoana). If you are interested in the current version, please
+contact us and we provide executables. Requests for sensible cooperations are also welcome.
 
 ## Contributors
 
