@@ -6,8 +6,7 @@ The way it works is explained in more depth in this paper: https://formal.iti.ki
 
 The tool provides a GUI which gives the user access to all internal functionality. It supports two file formats: ".joak"
 (JOana And Key) and ".dispro" (DISproving PROgress). The former describes where to find the Java project and how to annotate
-sources and sinks. It is recommended that files of this type are generated using the
-joanakeygui: https://github.com/bigolol/disproveJavaDataDepViaKeyAndJoanaGui/tree/master/src/joanakeygui
+sources and sinks. It is recommended that files of this type are generated using the [``joanakeygui``](/src/joanakeygui)
 (disclaimer: it is very rough around the edges).
 
 
