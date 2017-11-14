@@ -14,10 +14,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
+
+import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
+import joanakeyrefactoring.customlistener.GetMethodBodyListener;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -29,8 +31,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  *
  * @author holger
  */
-public class CopyKeyCompatibleListener extends Java8BaseListener implements JavaToKeyPipelineStage {
+public class CopyKeYCompatibleListener extends Java8BaseListener implements JavaToKeYPipelineStage {
 
+    private final static String PUBLIC = "public";
+    private final static String SPEC_PUBLIC = "/*@spec_public@*/";
     private StringBuilder currentlyGenerated;
     private List<String> keyCompatibleJavaFeature = new ArrayList<>();
     private List<String> classCodeAsLines = new ArrayList<>();
@@ -39,8 +43,8 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
     private String packageOfClass;
     Set<StaticCGJavaMethod> neededMethods;
 
-    public CopyKeyCompatibleListener(String mainPackageName) throws FileNotFoundException, IOException {
-        InputStream is = new FileInputStream("otherdata/JAVALANG.txt");
+    public CopyKeYCompatibleListener(String mainPackageName) throws FileNotFoundException, IOException {
+        InputStream is = new FileInputStream(ViolationsWrapper.KeY_COMPATIBLE_JAVA_FEATURES);
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
         this.mainPackageName = mainPackageName;
@@ -207,13 +211,13 @@ public class CopyKeyCompatibleListener extends Java8BaseListener implements Java
         if (isTypeKeyCompatible(type)) {
             List<Java8Parser.FieldModifierContext> fieldModifier = ctx.fieldModifier();
             for (Java8Parser.FieldModifierContext currentMod : fieldModifier) {
-                if (currentMod.getText().equals("public")) {
+                if (currentMod.getText().equals(PUBLIC)) {
                     currentlyGenerated.append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
                     return;
                 }
             }
             currentlyGenerated
-                    .append("/*@spec_public@*/")
+                    .append(SPEC_PUBLIC)
                     .append(extractStringInBetween(ctx, classCodeAsLines)).append(";\n");
         }
     }

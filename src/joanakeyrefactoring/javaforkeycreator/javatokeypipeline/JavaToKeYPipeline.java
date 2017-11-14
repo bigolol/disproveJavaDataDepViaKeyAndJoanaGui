@@ -14,16 +14,16 @@ import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
  *
  * @author holger
  */
-public class JavaToKeyPipeline {
+public class JavaToKeYPipeline {
     
-    private List<JavaToKeyPipelineStage> stages = new ArrayList<>();
+    private List<JavaToKeYPipelineStage> stages = new ArrayList<>();
     
-    public void addStage(JavaToKeyPipelineStage stage) {
+    public void addStage(JavaToKeYPipelineStage stage) {
         stages.add(stage);
     }
     
     public String transformCode(String code, Set<StaticCGJavaMethod> neededMethods) {
-        for(JavaToKeyPipelineStage s : stages) {
+        for(JavaToKeYPipelineStage s : stages) {
             code = s.transformCode(code, neededMethods);
         }
         return code;

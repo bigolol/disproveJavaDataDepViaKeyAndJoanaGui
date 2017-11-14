@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.json.JSONArray;
@@ -30,16 +30,29 @@ import org.json.JSONObject;
  */
 public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListener {
 
+    private final static String FORMAL_NODE_TUPLE_TO_CONTRACT = "formal_node_tuple_to_contract";
+    private final static String EDGE_TO_LOOP_INVARIANT_TEMPLATE = "edge_to_loop_invariant_template";
+    private final static String EDGE_TO_LOOP_INVARIANT = "edge_to_loop_invariant";
+    private final static String METHOD_TO_MOST_GENERAL_CONTRACT = "method_to_most_general_contract";
+    private final static String MOST_GENERAL_CONTRACT = "most_general_contract";
+    private final static String LOOP_INVARIANTS = "loop_invariants";
+    private final static String NULL = "null";
+    private final static String IN = "in";
+    private final static String OUT = "out";
+    private final static String CONTRACT = "contract";
+    private final static String INVARIANT = "invariant";
+    private final static String METHOD = "method";
+
     private HashMap<SDGNodeTuple, String> formalTupleToContract = new HashMap<>();
     private HashMap<SDGEdge, ArrayList<String>> edgeToLoopInvariant = new HashMap<>();
     private HashMap<SDGEdge, String> edgeToLoopInvariantTemplate = new HashMap<>();
     private HashMap<StaticCGJavaMethod, String> methodToMostGeneralContract = new HashMap<>();
-    private JavaForKeyCreator javaForKeyCreator;
+    private JavaForKeYCreator javaForKeyCreator;
 
     public SummaryEdgeAndMethodToCorresData(
             Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
             SDG sdg,
-            JavaForKeyCreator javaForKeyCreator) throws IOException {
+            JavaForKeYCreator javaForKeyCreator) throws IOException {
         this.javaForKeyCreator = javaForKeyCreator;
         for (SDGEdge e : edgesToMethods.keySet()) {
             Collection<SDGNodeTuple> allFormalPairs = sdg.getAllFormalPairs(e.getSource(), e.getTarget());
@@ -112,53 +125,53 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
 
     public String generateSaveString(ViolationsWrapper violationsWrapper) {
         StringBuilder builder = new StringBuilder("{");
-        builder.append("\"formal_node_tuple_to_contract\" : [");
+        builder.append("\"" + FORMAL_NODE_TUPLE_TO_CONTRACT + "\" : [");
         formalTupleToContract.forEach((t, c) -> {
             builder.append("{");
-            builder.append("\"in\" : " + t.getFirstNode().getId() + ", ");
-            builder.append("\"out\" : " + t.getSecondNode().getId() + ", ");
-            builder.append("\"contract\" : \"" + escapeContract(c) + "\"");
+            builder.append("\"" + IN + "\" : " + t.getFirstNode().getId() + ", ");
+            builder.append("\"" + OUT + "\" : " + t.getSecondNode().getId() + ", ");
+            builder.append("\"" + CONTRACT + "\" : \"" + escapeContract(c) + "\"");
             builder.append("},\n");
         });
         if (builder.lastIndexOf(",") == builder.length() - 2) {
             builder.replace(builder.length() - 2, builder.length(), "");
         }
         builder.append("],");
-        builder.append("\"edge_to_loop_invariant_template\" : [");
+        builder.append("\"" + EDGE_TO_LOOP_INVARIANT_TEMPLATE + "\" : [");
         edgeToLoopInvariantTemplate.forEach((e, s) -> {
             builder.append("{");
-            builder.append("\"in\" : " + e.getSource().getId() + ", ");
-            builder.append("\"out\" : " + e.getTarget().getId() + ", ");
-            builder.append("\"invariant\" : \"" + escapeContract(s) + "\"");
+            builder.append("\"" + IN + "\" : " + e.getSource().getId() + ", ");
+            builder.append("\"" + OUT + "\" : " + e.getTarget().getId() + ", ");
+            builder.append("\"" + INVARIANT + "\" : \"" + escapeContract(s) + "\"");
             builder.append("},\n");
         });
         if (builder.lastIndexOf(",") == builder.length() - 2) {
             builder.replace(builder.length() - 2, builder.length(), "");
         }
         builder.append("],");
-        builder.append("\"method_to_most_general_contract\" : [");
+        builder.append("\"" + METHOD_TO_MOST_GENERAL_CONTRACT + "\" : [");
         methodToMostGeneralContract.forEach((m, c) -> {
             builder.append("{");
-            builder.append("\"method\" : \""
+            builder.append("\"" + METHOD + "\" : \""
                     + m.getContainingClass().getId()
                     + "/" + m.getId()
                     + "/" + m.getParameterWithoutPackage() + "\", ");
-            builder.append("\"most_general_contract\" : \"" + escapeContract(c) + "\", ");
+            builder.append("\"" + MOST_GENERAL_CONTRACT + "\" : \"" + escapeContract(c) + "\", ");
             builder.append("},\n");
         });
         if (builder.lastIndexOf(",") == builder.length() - 2) {
             builder.replace(builder.length() - 2, builder.length(), "");
         }
         builder.append("],");
-        builder.append("\"edge_to_loop_invariant\" : [");
+        builder.append("\"" + EDGE_TO_LOOP_INVARIANT + "\" : [");
         edgeToLoopInvariant.forEach((e, i) -> {
             builder.append("{");
-            builder.append("\"in\" : " + e.getSource().getId() + ", ");
-            builder.append("\"out\" : " + e.getTarget().getId() + ", ");
-            builder.append("\"loop_invariants\" : [");
+            builder.append("\"" + IN + "\" : " + e.getSource().getId() + ", ");
+            builder.append("\"" + OUT + "\" : " + e.getTarget().getId() + ", ");
+            builder.append("\"" + LOOP_INVARIANTS + "\" : [");
             i.forEach((s) -> {
                 if (s == null) {
-                    builder.append("\"null\"");
+                    builder.append("\""+ NULL + "\"");
                 } else {
                     builder.append("\"" + escapeContract(s) + "\",");
                 }
@@ -200,25 +213,25 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
     public static SummaryEdgeAndMethodToCorresData
             generateFromjson(JSONObject jsonObject, JCallGraph callGraph, SDG sdg) {
         SummaryEdgeAndMethodToCorresData created = new SummaryEdgeAndMethodToCorresData();
-        JSONArray currentJsonArray = jsonObject.getJSONArray("formal_node_tuple_to_contract");
+        JSONArray currentJsonArray = jsonObject.getJSONArray(FORMAL_NODE_TUPLE_TO_CONTRACT);
         for (int i = 0; i < currentJsonArray.length(); ++i) {
             JSONObject currentJsonObj = currentJsonArray.getJSONObject(i);
-            int idin = currentJsonObj.getInt("in");
-            int idout = currentJsonObj.getInt("out");
+            int idin = currentJsonObj.getInt(IN);
+            int idout = currentJsonObj.getInt(OUT);
             String contract
-                    = addLinebreaksBackIntoContract(currentJsonObj.getString("contract"));
+                    = addLinebreaksBackIntoContract(currentJsonObj.getString(CONTRACT));
             SDGNode in = sdg.getNode(idin);
             SDGNode out = sdg.getNode(idout);
             SDGNodeTuple sdgNodeTuple = new SDGNodeTuple(in, out);
             created.formalTupleToContract.put(sdgNodeTuple, contract);
         }
-        currentJsonArray = jsonObject.getJSONArray("edge_to_loop_invariant_template");
+        currentJsonArray = jsonObject.getJSONArray(EDGE_TO_LOOP_INVARIANT_TEMPLATE);
         for (int i = 0; i < currentJsonArray.length(); ++i) {
             JSONObject currentJsonObj = currentJsonArray.getJSONObject(i);
-            int idin = currentJsonObj.getInt("in");
-            int idout = currentJsonObj.getInt("out");
+            int idin = currentJsonObj.getInt(IN);
+            int idout = currentJsonObj.getInt(OUT);
             String invariantTemplate = addLinebreaksBackIntoContract(
-                    currentJsonObj.getString("invariant"));
+                    currentJsonObj.getString(INVARIANT));
             SDGNode in = sdg.getNode(idin);
             SDGNode out = sdg.getNode(idout);
             Set<SDGEdge> allEdges = sdg.getAllEdges(in, out);
@@ -232,10 +245,10 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
             }
         }
 
-        currentJsonArray = jsonObject.getJSONArray("method_to_most_general_contract");
+        currentJsonArray = jsonObject.getJSONArray(METHOD_TO_MOST_GENERAL_CONTRACT);
         for (int i = 0; i < currentJsonArray.length(); ++i) {
             JSONObject currentJsonObj = currentJsonArray.getJSONObject(i);
-            String methodDescr = currentJsonObj.getString("method");
+            String methodDescr = currentJsonObj.getString(METHOD);
             String[] split = methodDescr.split("/");
             String classId = split[0];
             String methodid = split[1];
@@ -245,21 +258,21 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
             } else {
                 argtypes = "";
             }
-            String mostGeneralContract = currentJsonObj.getString("most_general_contract");
+            String mostGeneralContract = currentJsonObj.getString(MOST_GENERAL_CONTRACT);
             StaticCGJavaMethod method = callGraph.getMethodFor(classId, methodid, argtypes);
             created.methodToMostGeneralContract.put(method, mostGeneralContract);
         }
 
-        currentJsonArray = jsonObject.getJSONArray("edge_to_loop_invariant");
+        currentJsonArray = jsonObject.getJSONArray(EDGE_TO_LOOP_INVARIANT);
         for (int i = 0; i < currentJsonArray.length(); ++i) {
             JSONObject currentJsonObj = currentJsonArray.getJSONObject(i);
-            int inid = currentJsonObj.getInt("in");
-            int outid = currentJsonObj.getInt("out");
-            JSONArray loopInvArrs = currentJsonObj.getJSONArray("loop_invariants");
+            int inid = currentJsonObj.getInt(IN);
+            int outid = currentJsonObj.getInt(OUT);
+            JSONArray loopInvArrs = currentJsonObj.getJSONArray(LOOP_INVARIANTS);
             ArrayList<String> loopInvariants = new ArrayList<>();
             for (int j = 0; j < loopInvArrs.length(); ++j) {
                 String string = loopInvArrs.getString(j);
-                if (string.equals("null")) {
+                if (string.equals(NULL)) {
                     loopInvariants.add(null);
                 } else {
                     loopInvariants.add(string);
@@ -288,7 +301,8 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
     }
 
     @Override
-    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods, List<SDGEdge> edgesSorted, SDG sdg) {
+    public void addedNewEdges(Map<SDGEdge, StaticCGJavaMethod> edgesToMethods,
+                              List<SDGEdge> edgesSorted, SDG sdg) {
         for (SDGEdge e : edgesToMethods.keySet()) {
             Collection<SDGNodeTuple> allFormalPairs = sdg.getAllFormalPairs(e.getSource(), e.getTarget());
             for (SDGNodeTuple t : allFormalPairs) {
@@ -301,7 +315,7 @@ public class SummaryEdgeAndMethodToCorresData implements ViolationsWrapperListen
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     ErrorLogger.logError(
-                            "error when trying to get the contract for " + t.toString(),
+                            "Error when trying to get the contract for " + t.toString(),
                             ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
                 }
             }

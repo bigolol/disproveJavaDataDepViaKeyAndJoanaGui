@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 import java.util.function.BiConsumer;
 import javafx.application.Platform;
 import joanakeyrefactoring.CombinedApproach;
-import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.JoanaAndKeYCheckData;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import org.apache.commons.io.FileUtils;
 
@@ -26,8 +26,8 @@ public class AsyncBackgroundLoader implements Runnable {
     private LoadOptions loadOption;
     private CurrentActionLogger actionLogger;
     private boolean success;
-    private JoanaAndKeyCheckData currentCheckData;
-    private BiConsumer<JoanaAndKeyCheckData, Boolean> uiThreadJoakCallback;
+    private JoanaAndKeYCheckData currentCheckData;
+    private BiConsumer<JoanaAndKeYCheckData, Boolean> uiThreadJoakCallback;
     private DisprovingProject disprovingProject;
     private BiConsumer<DisprovingProject, Boolean> uiThreadDisproCallback;
 
@@ -39,11 +39,12 @@ public class AsyncBackgroundLoader implements Runnable {
         this.actionLogger = actionLogger;
     }
 
-    public void loadJoakFile(File f, BiConsumer<JoanaAndKeyCheckData, Boolean> callback) {
+    public void loadJoakFile(File f, BiConsumer<JoanaAndKeYCheckData, Boolean> callback) {
         this.fileToLoad = f;
         this.uiThreadJoakCallback = callback;
         loadOption = LoadOptions.JOAK;
-        actionLogger.startProgress("now parsing the joak file, this might take a while to build the sdg ...");
+        actionLogger.startProgress(
+                "Now parsing the JOAK file, this might take a while to build the SDG ...");
         new Thread(this).start();
     }
 
@@ -51,7 +52,7 @@ public class AsyncBackgroundLoader implements Runnable {
         this.fileToLoad = f;
         this.uiThreadDisproCallback = callback;
         loadOption = LoadOptions.DISPRO;
-        actionLogger.startProgress("now parsing the dispro file, this might take a while ...");
+        actionLogger.startProgress("Now parsing the DISPRO file, this might take a while ...");
         new Thread(this).start();
     }
 
@@ -64,7 +65,7 @@ public class AsyncBackgroundLoader implements Runnable {
             } catch (Exception ex) {
                 success = false;
                 ErrorLogger.logError("CombinedApproach threw " + ex.getClass().getSimpleName() +
-                                     " while trying to pass the joak file " + fileToLoad.getName(),
+                                     " while trying to pass the JOAK file " + fileToLoad.getName() + ".",
                                      ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
             }
             Platform.runLater(() -> {
@@ -78,7 +79,8 @@ public class AsyncBackgroundLoader implements Runnable {
                 success = true;
             } catch (Exception ex) {
                 success = false;
-                ErrorLogger.logError("error when trying to load dispro from file", ErrorLogger.ErrorTypes.ERROR_LOADING_DISPRO);
+                ErrorLogger.logError("Error while trying to load DISPRO from file.",
+                                     ErrorLogger.ErrorTypes.ERROR_LOADING_DISPRO);
             }
             Platform.runLater(() -> {
                 actionLogger.endProgress();

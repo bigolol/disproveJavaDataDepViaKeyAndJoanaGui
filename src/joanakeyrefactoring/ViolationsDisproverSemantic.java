@@ -15,11 +15,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 
 public class ViolationsDisproverSemantic {
+
+    public final static String PO_PATH = "proofObs/proofs";
+
+    public static enum PO_TYPE { INFORMATION_FLOW, FUNCTIONAL; }
 
     public String pathToJar;
     public RepsRosayChopper chopper;
@@ -29,19 +34,19 @@ public class ViolationsDisproverSemantic {
     //private boolean fullyAutomatic;
     private String pathToKeyJar;
     private ViolationsWrapper violationsWrapper;
-    private JavaForKeyCreator javaForKeyCreator;
+    private JavaForKeYCreator javaForKeyCreator;
     private JCallGraph callGraph = new JCallGraph();
 
     public ViolationsDisproverSemantic(
             AutomationHelper automationHelper,
-            JoanaAndKeyCheckData checkData) throws IOException {
+            JoanaAndKeYCheckData checkData) throws IOException {
         //this.automationHelper = automationHelper;
         this.pathToJar = checkData.getPathToJar();
         this.stateSaver = checkData.getStateSaver();
         //this.fullyAutomatic = checkData.isFullyAutomatic();
         this.pathToKeyJar = checkData.getPathKeY();
         //this.pathToJava = checkData.getPathToJavaFile();
-        javaForKeyCreator = new JavaForKeyCreator(
+        javaForKeyCreator = new JavaForKeYCreator(
                 checkData.getPathToJavaFile(),
                 callGraph,
                 checkData.getAnalysis().getProgram().getSDG(),
@@ -79,8 +84,12 @@ public class ViolationsDisproverSemantic {
                 //String pathToTestJava =
                 javaForKeyCreator.generateJavaForFormalNodeTuple(formalNodeTuple,
                                                                  methodCorresToSummaryEdge);
-                result = AutomationHelper.runKeY(pathToKeyJar, "proofObs/proofs" ,"information flow");
-                resultFunc = AutomationHelper.runKeY(pathToKeyJar, "proofObs/proofs", "functional");
+                result = AutomationHelper.runKeY(pathToKeyJar,
+                                                 PO_PATH,
+                                                 PO_TYPE.INFORMATION_FLOW);
+                resultFunc = AutomationHelper.runKeY(pathToKeyJar,
+                                                     PO_PATH,
+                                                     PO_TYPE.FUNCTIONAL);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(ViolationsDisproverSemantic.class.getName()).log(Level.SEVERE, null, ex);
                 return false;

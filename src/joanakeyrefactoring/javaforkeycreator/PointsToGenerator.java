@@ -32,15 +32,18 @@ public class PointsToGenerator {
      * @return non-aliasing information as a string that can be used as
      * precondition
      */
-    public static String generatePreconditionFromPointsToSet(SDG sdg, SDGNode methodNode, StateSaver stateSaver) {
+    public static String generatePreconditionFromPointsToSet(SDG sdg, SDGNode methodNode,
+                                                             StateSaver stateSaver) {
         //get the call graph node corresponding to the SDG method node
         PersistentCGNode persistentCGNode = stateSaver.getCGNodeForFormalIn(methodNode);
         // get IR for parameter names
         PersistentIR persistentIR = persistentCGNode.getIR();
-        List<PersistentLocalPointerKey> persistentLocalPointerKeys = stateSaver.getPersistentLocalPointerKeys(persistentCGNode);
+        List<PersistentLocalPointerKey> persistentLocalPointerKeys =
+                stateSaver.getPersistentLocalPointerKeys(persistentCGNode);
 
         // calculate individual non-alias clauses
-        Set<String> pointsToResult = calculateNonAliases(persistentLocalPointerKeys, stateSaver, persistentIR);
+        Set<String> pointsToResult =
+                calculateNonAliases(persistentLocalPointerKeys, stateSaver, persistentIR);
         StringBuilder stringBuilder = new StringBuilder();
         String delim = "";
         //chain clauses together by conjunction
@@ -66,7 +69,8 @@ public class PointsToGenerator {
         // enumerate all two element subsets of pointer keys and check if those two have disjunct points-to sets
         for (PersistentLocalPointerKey persistentLocalPointerKey : localPointerKeys) {
             String o1 = ir.getLocalName(persistentLocalPointerKey.getValueNumber());
-            List<PersistentLocalPointerKey> disjunctLPKs = stateSaver.getDisjunctLPKs(persistentLocalPointerKey);
+            List<PersistentLocalPointerKey> disjunctLPKs =
+                    stateSaver.getDisjunctLPKs(persistentLocalPointerKey);
             if (disjunctLPKs == null) {
                 continue;
             }

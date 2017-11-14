@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author holger
  */
-public class JoanaAndKeyCheckData {
+public class JoanaAndKeYCheckData {
 
     private final String pathKeY;
     private final String pathToJar;
@@ -26,7 +26,11 @@ public class JoanaAndKeyCheckData {
     private final List<SingleAnnotationAdder> singleAnnotationAdders;
     private final StateSaver stateSaver;
 
-    public JoanaAndKeyCheckData(String pathKeY, String pathToJar, String pathToJavaFile, String entryMethodString, String annotationPath, JavaMethodSignature entryMethod, boolean fullyAutomatic, IFCAnalysis analysis, List<SingleAnnotationAdder> singleAnnotationAdders, StateSaver stateSaver) {
+    public JoanaAndKeYCheckData(String pathKeY, String pathToJar, String pathToJavaFile,
+                                String entryMethodString, String annotationPath,
+                                JavaMethodSignature entryMethod, boolean fullyAutomatic,
+                                IFCAnalysis analysis, List<SingleAnnotationAdder> singleAnnotationAdders,
+                                StateSaver stateSaver) {
         this.pathKeY = pathKeY;
         this.pathToJar = pathToJar;
         this.pathToJavaFile = pathToJavaFile;

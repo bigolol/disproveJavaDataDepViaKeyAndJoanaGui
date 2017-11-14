@@ -11,8 +11,8 @@ import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNode;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
-
 import edu.kit.joana.wala.core.CGConsumer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +30,14 @@ import org.json.JSONObject;
  * points-to and call graph) for later use
  */
 public class StateSaver implements CGConsumer {
+
+    private static final String KEY = "key";
+    private static final String VALUES = "values";
+    private static final String SDG_NODE = "sdg_node";
+    private static final String CG_NODE = "cg_node";
+    private static final String FORMAL_INS_TO_PERS_CG = "formal_ins_to_pers_cg";
+    private static final String LOCAL_POINTER_KEYS = "localPointerKeys";
+    private static final String DISJUNCT_POINTS_TO = "disjunctPointsTo";
 
     private CallGraph callGraph;
     private PointerAnalysis<? extends InstanceKey> pointerAnalyis;
@@ -50,35 +58,41 @@ public class StateSaver implements CGConsumer {
     public static StateSaver generateFromJson(JSONObject jsonObj, SDG sdg) throws IOException {
         StateSaver stateSaver = new StateSaver();
 
-        JSONArray formalNodeToCGNodeArr = jsonObj.getJSONArray("formal_ins_to_pers_cg");
+        JSONArray formalNodeToCGNodeArr = jsonObj.getJSONArray(FORMAL_INS_TO_PERS_CG);
         for (int i = 0; i < formalNodeToCGNodeArr.length(); ++i) {
             JSONObject currentPair = formalNodeToCGNodeArr.getJSONObject(i);
-            int sdgIndex = currentPair.getInt("sdg_node");
-            JSONObject persistentCGNode = currentPair.getJSONObject("cg_node");
+            int sdgIndex = currentPair.getInt(SDG_NODE);
+            JSONObject persistentCGNode = currentPair.getJSONObject(CG_NODE);
             SDGNode node = sdg.getNode(sdgIndex);
-            stateSaver.formalInsToPersistentCGNodes.put(node, PersistentCGNode.generateFromJsonObj(persistentCGNode));
+            stateSaver.formalInsToPersistentCGNodes.put(node,
+                                                        PersistentCGNode
+                                                        .generateFromJsonObj(persistentCGNode));
         }
 
-        JSONArray cgNodeArr = jsonObj.getJSONArray("cgNodes");
+        JSONArray cgNodeArr = jsonObj.getJSONArray(CG_NODE + "s");
         for (int i = 0; i < cgNodeArr.length(); ++i) {
             JSONObject currentCGNodeSaveObj = cgNodeArr.getJSONObject(i);
-            PersistentCGNode currentPersistentCGNode = PersistentCGNode.generateFromJsonObj(currentCGNodeSaveObj);
+            PersistentCGNode currentPersistentCGNode =
+                    PersistentCGNode.generateFromJsonObj(currentCGNodeSaveObj);
             stateSaver.persistentCGNodes.add(currentPersistentCGNode);
-            stateSaver.cgNodeIdToPersistentCGNodes.put(currentPersistentCGNode.getCgNodeId(), currentPersistentCGNode);
+            stateSaver.cgNodeIdToPersistentCGNodes.put(currentPersistentCGNode.getCgNodeId(),
+                                                       currentPersistentCGNode);
         }
 
-        JSONArray pointerKeyArr = jsonObj.getJSONArray("localPointerKeys");
+        JSONArray pointerKeyArr = jsonObj.getJSONArray(LOCAL_POINTER_KEYS);
         for (int i = 0; i < pointerKeyArr.length(); ++i) {
             JSONObject currentPointerKeyJsonObj = pointerKeyArr.getJSONObject(i);
-            PersistentLocalPointerKey currentLocalPointerKey = PersistentLocalPointerKey.generateFromJsonObj(currentPointerKeyJsonObj, stateSaver.persistentCGNodes);
+            PersistentLocalPointerKey currentLocalPointerKey =
+                    PersistentLocalPointerKey.generateFromJsonObj(currentPointerKeyJsonObj,
+                                                                  stateSaver.persistentCGNodes);
             stateSaver.persistentLocalPointerKeys.add(currentLocalPointerKey);
         }
 
-        JSONArray disjunctPointstoArr = jsonObj.getJSONArray("disjunctPointsTo");
+        JSONArray disjunctPointstoArr = jsonObj.getJSONArray(DISJUNCT_POINTS_TO);
         for (int i = 0; i < disjunctPointstoArr.length(); ++i) {
             JSONObject currentDisjObj = disjunctPointstoArr.getJSONObject(i);
-            int key = currentDisjObj.getInt("key");
-            JSONArray values = currentDisjObj.getJSONArray("values");
+            int key = currentDisjObj.getInt(KEY);
+            JSONArray values = currentDisjObj.getJSONArray(VALUES);
             List<PersistentLocalPointerKey> disPointers = new ArrayList<>();
             for (int j = 0; j < values.length(); ++j) {
                 int currDisIndex = values.getInt(j);
@@ -95,73 +109,76 @@ public class StateSaver implements CGConsumer {
         StringBuilder created = new StringBuilder();
         created.append("{");
 
-        created.append("\"formal_ins_to_pers_cg\" : [\n");
+        created.append("\"" + FORMAL_INS_TO_PERS_CG + "\" : [\n");
 
         for (SDGNode n : formalInsToPersistentCGNodes.keySet()) {
             PersistentCGNode get = formalInsToPersistentCGNodes.get(n);
             try {
 
-                created.append("{ \"sdg_node\" : " + n.getId() + ", \"cg_node\" : {"
-                        + get.generateSaveString() + "}},\n");
+                created.append("{ \"" + SDG_NODE + "\" : " + n.getId() + ", \"" +
+                               CG_NODE + "\" : {" + get.generateSaveString() + "}},\n");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         if (created.lastIndexOf("[") != created.length() - 1) {
-            created.replace(created.length() - 2, created.length(), "");
+            created.delete(created.length() - 2, created.length());
         }
         created.append("],\n");
 
-        created.append("\"cgNodes\" : [").append('\n');
+        created.append("\"" + CG_NODE + "s" + "\" : [").append("\n");
         for (PersistentCGNode persistentCGNode : persistentCGNodes) {
             created.append("{");
             created.append(persistentCGNode.generateSaveString());
             created.append("},\n");
         }
         if (created.lastIndexOf("[") != created.length() - 1) {
-            created.replace(created.length() - 2, created.length(), "");
+            created.delete(created.length() - 2, created.length());
         }
         created.append("],\n");
 
-        created.append("\"localPointerKeys\" : [");
+        created.append("\"" + LOCAL_POINTER_KEYS + "\" : [");
         for (PersistentLocalPointerKey persistentLocalPointerKey : persistentLocalPointerKeys) {
             created.append("{");
-            created.append(persistentLocalPointerKey.generateSaveString()).append('\n');
+            created.append(persistentLocalPointerKey.generateSaveString()).append("\n");
             created.append("},\n");
         }
         if (created.lastIndexOf("[") != created.length() - 1) {
-            created.replace(created.length() - 2, created.length(), "");
+            created.delete(created.length() - 2, created.length());
         }
         created.append("],\n");
 
-        created.append("\"disjunctPointsTo\" : [");
+        created.append("\"" + DISJUNCT_POINTS_TO + "\" : [");
 
         disjunctPointsToSets.forEach((k, l) -> {
             created.append("{");
-            created.append("\"key\" : " + k.getId()).append(", \"values\" : [ ");
+            created.append("\"" + KEY + "\" : " +
+                           k.getId()).append(", \"" + VALUES + "\" : [ ");
             l.forEach((t) -> {
                 created.append(t.getId()).append(", ");
             });
             if (created.lastIndexOf("[") != created.length() - 1) {
-                created.replace(created.length() - 2, created.length(), "");
+                created.delete(created.length() - 2, created.length());
             }
             created.append("]\n");
             created.append("},\n");
         });
         if (created.lastIndexOf("[") != created.length() - 1) {
-            created.replace(created.length() - 2, created.length(), "");
+            created.delete(created.length() - 2, created.length());
         }
         created.append("]\n");
         created.append("}");
         return created.toString();
     }
 
-    public boolean pointsToSetsAreDisjunct(PersistentLocalPointerKey n1, PersistentLocalPointerKey n2) {
+    public boolean pointsToSetsAreDisjunct(PersistentLocalPointerKey n1,
+                                           PersistentLocalPointerKey n2) {
         return true;
     }
 
-    public List<PersistentLocalPointerKey> getDisjunctLPKs(PersistentLocalPointerKey persistentLocalPointerKey) {
+    public List<PersistentLocalPointerKey>
+            getDisjunctLPKs(PersistentLocalPointerKey persistentLocalPointerKey) {
         return disjunctPointsToSets.get(persistentLocalPointerKey);
     }
 
@@ -195,7 +212,8 @@ public class StateSaver implements CGConsumer {
             if (e.getKind() == SDGEdge.Kind.SUMMARY) {
                 SDGNode actualInNode = e.getSource();
                 SDGNode actualOutNode = e.getTarget();
-                Collection<SDGNodeTuple> formalNodePairs = sdg.getAllFormalPairs(actualInNode, actualOutNode);
+                Collection<SDGNodeTuple> formalNodePairs =
+                        sdg.getAllFormalPairs(actualInNode, actualOutNode);
                 for (SDGNodeTuple formalNodeTuple : formalNodePairs) {
                     SDGNode formalInNode = formalNodeTuple.getFirstNode();
                     SDGNode methodNode = sdg.getEntry(formalInNode);
@@ -224,24 +242,28 @@ public class StateSaver implements CGConsumer {
             Integer currentCGNodeId = persistentCGNode.getCgNodeId();
             cgNodeIdToPersistentCGNodes.put(currentCGNodeId, persistentCGNode);
 
-            PersistentLocalPointerKey persistentLocalPointerKey = new PersistentLocalPointerKey(currentLocalPointerKey, persistentCGNode, i);
+            PersistentLocalPointerKey persistentLocalPointerKey =
+                    new PersistentLocalPointerKey(currentLocalPointerKey, persistentCGNode, i);
             persistentLocalPointerKeys.add(persistentLocalPointerKey);
         }
     }
 
     private void calculateDisjunctPointsToKeys(ArrayList<LocalPointerKey> localPointerKeys) {
         for (int i = 0; i < localPointerKeys.size(); ++i) {
-            OrdinalSet<? extends InstanceKey> currentPointsToset = pointerAnalyis.getPointsToSet(localPointerKeys.get(i));
+            OrdinalSet<? extends InstanceKey> currentPointsToset =
+                    pointerAnalyis.getPointsToSet(localPointerKeys.get(i));
             for (int j = 0; j < localPointerKeys.size(); ++j) {
                 if (i == j) {
                     continue;
                 } else if (!localPointerKeys.get(i).getNode().equals(localPointerKeys.get(j).getNode())) {
                     continue;
                 }
-                OrdinalSet<? extends InstanceKey> otherPointsToSet = pointerAnalyis.getPointsToSet(localPointerKeys.get(j));
+                OrdinalSet<? extends InstanceKey> otherPointsToSet =
+                        pointerAnalyis.getPointsToSet(localPointerKeys.get(j));
                 if (disjunct(currentPointsToset, otherPointsToSet)) {
                     if (disjunctPointsToSets.containsKey(persistentLocalPointerKeys.get(i))) {
-                        disjunctPointsToSets.get(persistentLocalPointerKeys.get(i)).add(persistentLocalPointerKeys.get(j));
+                        disjunctPointsToSets.get(persistentLocalPointerKeys.get(i))
+                                            .add(persistentLocalPointerKeys.get(j));
                     } else {
                         List<PersistentLocalPointerKey> list = new ArrayList<>();
                         list.add(persistentLocalPointerKeys.get(j));

@@ -22,6 +22,16 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
  */
 public class JavaCodeEditor {
 
+    private static final String JAVA_KEYWORDS_RESOURCE = "java-keywords.css";
+
+    private static final String KEYWORD = "KEYWORD";
+    private static final String PAREN = "PAREN";
+    private static final String BRACE = "BRACE";
+    private static final String BRACKET = "BRACKET";
+    private static final String SEMICOLON = "SEMICOLON";
+    private static final String STRING = "STRING";
+    private static final String COMMENT = "COMMENT";
+
     private static final String[] KEYWORDS = new String[]{
         "abstract", "assert", "boolean", "break", "byte",
         "case", "catch", "char", "class", "const",
@@ -45,13 +55,13 @@ public class JavaCodeEditor {
 
     //-------------methods----------------------------------    
     private static final Pattern PATTERN = Pattern.compile(
-            "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-            + "|(?<PAREN>" + PAREN_PATTERN + ")"
-            + "|(?<BRACE>" + BRACE_PATTERN + ")"
-            + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-            + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-            + "|(?<STRING>" + STRING_PATTERN + ")"
-            + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+            "(?<" + KEYWORD + ">" + KEYWORD_PATTERN + ")"
+            + "|(?<" + PAREN + ">" + PAREN_PATTERN + ")"
+            + "|(?<" + BRACE + ">" + BRACE_PATTERN + ")"
+            + "|(?<" + BRACKET + ">" + BRACKET_PATTERN + ")"
+            + "|(?<" + SEMICOLON + ">" + SEMICOLON_PATTERN + ")"
+            + "|(?<" + STRING + ">" + STRING_PATTERN + ")"
+            + "|(?<" + COMMENT + ">" + COMMENT_PATTERN + ")"
     );
 
     public CodeArea getCodeArea() {
@@ -63,7 +73,8 @@ public class JavaCodeEditor {
                 .subscribe(change -> {
                     codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText()));
                 });
-        codeArea.getStylesheets().add(JavaKeywordsAsync.class.getResource("java-keywords.css").toExternalForm());
+        codeArea.getStylesheets().add(JavaKeywordsAsync.class
+                .getResource(JAVA_KEYWORDS_RESOURCE).toExternalForm());
         return codeArea;
     }    
 
@@ -74,13 +85,13 @@ public class JavaCodeEditor {
                 = new StyleSpansBuilder<>();
         while (matcher.find()) {
             String styleClass
-                    = matcher.group("KEYWORD") != null ? "keyword"
-                    : matcher.group("PAREN") != null ? "paren"
-                    : matcher.group("BRACE") != null ? "brace"
-                    : matcher.group("BRACKET") != null ? "bracket"
-                    : matcher.group("SEMICOLON") != null ? "semicolon"
-                    : matcher.group("STRING") != null ? "string"
-                    : matcher.group("COMMENT") != null ? "comment"
+                    = matcher.group(KEYWORD) != null ? KEYWORD.toLowerCase()
+                    : matcher.group(PAREN) != null ? PAREN.toLowerCase()
+                    : matcher.group(BRACE) != null ? BRACE.toLowerCase()
+                    : matcher.group(BRACKET) != null ? BRACKET.toLowerCase()
+                    : matcher.group(SEMICOLON) != null ? SEMICOLON.toLowerCase()
+                    : matcher.group(STRING) != null ? STRING.toLowerCase()
+                    : matcher.group(COMMENT) != null ? COMMENT.toLowerCase()
                     : null;
             /* never happens */ assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);

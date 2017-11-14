@@ -21,6 +21,9 @@ import joanakeygui.joanahandler.JoanaInstance;
  */
 public class AddSourceDialogController implements Initializable {
 
+    private final static String HIGH_SECURITY = "high";
+    private final static String LOW_SECURITY = "low";
+
     @FXML
     private ComboBox<String> selectMethodCB;
     @FXML
@@ -40,10 +43,10 @@ public class AddSourceDialogController implements Initializable {
     private Stage stage;
     private JoanaInstance joanaInstance;
 
-    final static String programPart = "Program Part";
-    final static String callsToMethod = "Calls to Method";
+    final static String PROGRAM_PART = "Program Part";
+    final static String CALLS_TO_METHOD = "Calls to Method";
 
-    private String[] addingMethods = {programPart, callsToMethod};
+    private String[] addingMethods = {PROGRAM_PART, CALLS_TO_METHOD};
 
     public void setJoanaInstance(JoanaInstance joanaInstance) {
         this.joanaInstance = joanaInstance;
@@ -63,9 +66,9 @@ public class AddSourceDialogController implements Initializable {
         selectMethodCB.valueProperty().addListener((observable) -> {
             selectionCB.getItems().clear();
             String selected = selectMethodCB.getSelectionModel().getSelectedItem();
-            if (selected != null && selected.equals(programPart)) {
+            if (selected != null && selected.equals(PROGRAM_PART)) {
                 selectionCB.getItems().addAll(joanaInstance.getAllProgramPartsString());
-            } else if (selected != null && selected.equals(callsToMethod)) {
+            } else if (selected != null && selected.equals(CALLS_TO_METHOD)) {
                 selectionCB.getItems().addAll(joanaInstance.getAllMethodsString());
             }
         });
@@ -75,10 +78,10 @@ public class AddSourceDialogController implements Initializable {
         stage.showAndWait();
         String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
         String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
-        if (selectionStr != null && selectMethodStr.equals(programPart)) {
-            return Optional.of(SinkOrSource.createProgramPart(selectionStr, "low"));
-        } else if (selectionStr != null && selectMethodStr.equals(callsToMethod)) {
-            return Optional.of(SinkOrSource.createMethod(selectionStr, "low"));
+        if (selectionStr != null && selectMethodStr.equals(PROGRAM_PART)) {
+            return Optional.of(SinkOrSource.createProgramPart(selectionStr, LOW_SECURITY));
+        } else if (selectionStr != null && selectMethodStr.equals(CALLS_TO_METHOD)) {
+            return Optional.of(SinkOrSource.createMethod(selectionStr, LOW_SECURITY));
         } else {
             return Optional.empty();
         }
@@ -88,10 +91,10 @@ public class AddSourceDialogController implements Initializable {
         stage.showAndWait();
         String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
         String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
-        if (selectionStr != null && selectMethodStr.equals(programPart)) {
-            return Optional.of(SinkOrSource.createProgramPart(selectionStr, "high"));
-        } else if (selectionStr != null && selectMethodStr.equals(callsToMethod)) {
-            return Optional.of(SinkOrSource.createMethod(selectionStr, "high"));
+        if (selectionStr != null && selectMethodStr.equals(PROGRAM_PART)) {
+            return Optional.of(SinkOrSource.createProgramPart(selectionStr, HIGH_SECURITY));
+        } else if (selectionStr != null && selectMethodStr.equals(CALLS_TO_METHOD)) {
+            return Optional.of(SinkOrSource.createMethod(selectionStr, HIGH_SECURITY));
         } else {
             return Optional.empty();
         }

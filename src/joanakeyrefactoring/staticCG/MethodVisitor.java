@@ -101,7 +101,9 @@ public class MethodVisitor extends EmptyVisitor {
         String ref = i.getReferenceType(cp).toString();
         String methodName = i.getMethodName(cp);
         String args = argumentList(i.getArgumentTypes(cp));
-        referencedMethods.add(new StaticCGJavaMethod(new StaticCGJavaClass(ref), methodName, args, false, i.getReturnType(cp).toString()));
+        referencedMethods.add(new StaticCGJavaMethod(new StaticCGJavaClass(ref),
+                                                     methodName, args, false,
+                                                     i.getReturnType(cp).toString()));
     }
 
     @Override

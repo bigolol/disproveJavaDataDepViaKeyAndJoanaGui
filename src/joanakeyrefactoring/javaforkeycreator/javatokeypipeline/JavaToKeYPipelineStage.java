@@ -12,6 +12,6 @@ import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
  *
  * @author holger
  */
-public interface JavaToKeyPipelineStage {
+public interface JavaToKeYPipelineStage {
     String transformCode(String code, Set<StaticCGJavaMethod> neededMethods);
 }

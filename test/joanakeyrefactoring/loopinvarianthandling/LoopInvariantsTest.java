@@ -21,7 +21,9 @@ import org.junit.Test;
  * @author holger
  */
 public class LoopInvariantsTest {
-    
+
+    private final static String JZIP_PATH = "testdata/jzip.dispro";
+
     public LoopInvariantsTest() {
     }
     
@@ -43,8 +45,7 @@ public class LoopInvariantsTest {
 
     @Test
     public void testCalcAllRelLoopPos() throws IOException {
-        String pathToDistro = "testdata/jzip.dispro";
-        String saveStr = FileUtils.readFileToString(new File(pathToDistro), Charset.defaultCharset());
+        String saveStr = FileUtils.readFileToString(new File(JZIP_PATH), Charset.defaultCharset());
         //DisprovingProject disprovingProject =
         DisprovingProject.generateFromSavestring(saveStr);
     }

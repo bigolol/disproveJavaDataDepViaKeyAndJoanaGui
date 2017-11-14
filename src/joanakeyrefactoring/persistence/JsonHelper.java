@@ -11,15 +11,18 @@ package joanakeyrefactoring.persistence;
  */
 public class JsonHelper {
 
-    public static void addJsonStringToStringBuilder(StringBuilder stringBuilder, String key, String value) {
+    public static void addJsonStringToStringBuilder(StringBuilder stringBuilder,
+                                                    String key, String value) {
         stringBuilder.append("\"" + key + "\" : " + "\"" + value + "\"");
     }
 
-    public static void addKeyValueToJsonStringbuilder(StringBuilder stringBuilder, String key, String value) {
+    public static void addKeyValueToJsonStringbuilder(StringBuilder stringBuilder,
+                                                      String key, String value) {
         stringBuilder.append("\"" + key + "\" : " + value);
     }
 
-    public static void addJsonObjValueToStringBuiler(StringBuilder stringBuilder, String key, String value) {
+    public static void addJsonObjValueToStringBuiler(StringBuilder stringBuilder,
+                                                     String key, String value) {
         stringBuilder.append("\"" + key + "\" : {\n");
         stringBuilder.append(value);
         stringBuilder.append("}\n");
