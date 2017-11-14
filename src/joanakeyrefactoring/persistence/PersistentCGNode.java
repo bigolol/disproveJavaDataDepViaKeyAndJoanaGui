@@ -20,8 +20,10 @@ public class PersistentCGNode {
     private int cgNodeId;
     
     public static PersistentCGNode generateFromJsonObj(JSONObject jsonObj) {
-        PersistentCGNode node = new PersistentCGNode(jsonObj.getInt("id"), jsonObj.getInt("cg_node_id"));
-        node.persistentIR = PersistentIR.generateFromJsonObj(jsonObj.getJSONObject("ir"), node.getUniqueId());
+        PersistentCGNode node =
+                new PersistentCGNode(jsonObj.getInt("id"), jsonObj.getInt("cg_node_id"));
+        node.persistentIR =
+                PersistentIR.generateFromJsonObj(jsonObj.getJSONObject("ir"), node.getUniqueId());
         return node;
     }
 

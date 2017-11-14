@@ -12,7 +12,7 @@ import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
 import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
-import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
+import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeYCompatibleListener;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -44,10 +44,13 @@ public class AddLoopPosAndMethodBodiesListener extends Java8BaseListener {
         walker.walk(this, parser.compilationUnit());
     }
 
-    private StaticCGJavaMethod getStaticCGMethodAndInsertBody(String id, String args, ParserRuleContext ctx) {
+    private StaticCGJavaMethod getStaticCGMethodAndInsertBody(String id, String args,
+                                                              ParserRuleContext ctx) {
         for (StaticCGJavaMethod m : currentmethods) {
             if (m.getId().equals(id) && m.getParameterWithoutPackage().equals(args)) {
-                m.setMethodBody(CopyKeyCompatibleListener.extractStringInBetween(ctx, currentClassFileContents));
+                m.setMethodBody(
+                        CopyKeYCompatibleListener.extractStringInBetween(ctx,
+                                                                         currentClassFileContents));
                 return m;
             }
         }
@@ -56,13 +59,17 @@ public class AddLoopPosAndMethodBodiesListener extends Java8BaseListener {
 
     private StaticCGJavaMethod getMethodCorresToMethodDecl(Java8Parser.MethodDeclarationContext ctx) {
         String id = ctx.methodHeader().methodDeclarator().Identifier().getText();
-        String args = GetMethodBodyListener.getArgTypeString(ctx.methodHeader().methodDeclarator().formalParameterList());
+        String args =
+                GetMethodBodyListener.getArgTypeString(
+                        ctx.methodHeader().methodDeclarator().formalParameterList());
         return getStaticCGMethodAndInsertBody(id, args, ctx);
     }
 
     private StaticCGJavaMethod getMethodCorresToCtor(Java8Parser.ConstructorDeclarationContext ctx) {
         String id = "<init>";
-        String args = GetMethodBodyListener.getArgTypeString(ctx.constructorDeclarator().formalParameterList());
+        String args =
+                GetMethodBodyListener.getArgTypeString(
+                        ctx.constructorDeclarator().formalParameterList());
         return getStaticCGMethodAndInsertBody(id, args, ctx);
     }
 

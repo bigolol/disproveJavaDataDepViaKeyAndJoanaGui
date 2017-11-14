@@ -11,6 +11,7 @@ import edu.kit.joana.ifc.sdg.core.violations.IViolation;
 import edu.kit.joana.ifc.sdg.core.violations.paths.ViolationPath;
 import edu.kit.joana.ifc.sdg.core.violations.paths.ViolationPathes;
 import edu.kit.joana.ifc.sdg.graph.SDG;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -90,7 +91,9 @@ public class ViolationsSaverLoader {
                 pathes.add(new ViolationPath(list));
             }
             
-            ClassifiedViolation createdViolation = ClassifiedViolation.createViolation(sinkNode, sourceNode, pathes, currentAttackerLvl);
+            ClassifiedViolation createdViolation =
+                    ClassifiedViolation.createViolation(sinkNode, sourceNode, pathes,
+                                                        currentAttackerLvl);
             created.add(createdViolation);
         }
         

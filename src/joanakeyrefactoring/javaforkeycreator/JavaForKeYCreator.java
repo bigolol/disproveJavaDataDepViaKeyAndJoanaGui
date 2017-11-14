@@ -5,7 +5,7 @@
  */
 package joanakeyrefactoring.javaforkeycreator;
 
-import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
+import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeYCompatibleListener;
 import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNode;
@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 import joanakeyrefactoring.CustomListener.AddContractsAndLoopInvariantsListener;
 import joanakeyrefactoring.CustomListener.GetMethodBodyListener;
 import joanakeyrefactoring.StateSaver;
+import joanakeyrefactoring.ViolationsDisproverSemantic;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
@@ -32,19 +33,30 @@ import org.apache.commons.io.FileUtils;
  *
  * @author holger
  */
-public class JavaForKeyCreator {
+public class JavaForKeYCreator {
 
+    private final static String DOT_JAVA = ".java";
+    private final static String RESULT = "\\result";
+    private final static String NOTHING = "\\nothing";
+    private final static String REQUIRES = "requires";
+    private final static String DETERMINES = "determines";
+    private final static String BY = "\\by";
+    private final static String THIS = "this";
+    private final static String PARAM = "<param>";
+    private final static String EXCEPTION = "<exception>";
+    private final static String FORMAL_IN ="FORMAL_IN";
+    private final static String JOANA_ARRAY = "<[]>";
+    private final static String ARRAY_TO_SEQ = "\\dl_array2seq";
     private String pathToJavaSource;
-    private String pathToTestJava = "proofObs/proofs";
     private JCallGraph callGraph;
     private SDG sdg;
     private StateSaver stateSaver;
     private JavaProjectCopyHandler javaProjectCopyHandler;
-    private CopyKeyCompatibleListener keyCompatibleListener;
+    private CopyKeYCompatibleListener keyCompatibleListener;
 
     private GetMethodBodyListener methodBodyListener = new GetMethodBodyListener();
 
-    public JavaForKeyCreator(String pathToJavaSource, JCallGraph callGraph,
+    public JavaForKeYCreator(String pathToJavaSource, JCallGraph callGraph,
                              SDG sdg, StateSaver stateSaver) {
         this.pathToJavaSource = pathToJavaSource;
         this.callGraph = callGraph;
@@ -54,7 +66,7 @@ public class JavaForKeyCreator {
 
     public static String getPathToJavaClassFile(String pathToSource, StaticCGJavaClass javaClass) {
         return pathToSource + JavaProjectCopyHandler.getRelPathForJavaClass(javaClass)
-                + javaClass.getOnlyClassName() + ".java";
+                + javaClass.getOnlyClassName() + DOT_JAVA;
     }
 
     public String generateJavaForFormalTupleCalledFromGui(
@@ -63,15 +75,17 @@ public class JavaForKeyCreator {
             String loopInvariantTemplate,
             List<String> loopInvariants,
             Map<StaticCGJavaMethod, String> methodsToMostGeneralContract) throws IOException {
-        FileUtils.deleteDirectory(new File(pathToTestJava));
+        FileUtils.deleteDirectory(new File(ViolationsDisproverSemantic.PO_PATH));
 
-        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+        this.keyCompatibleListener = new CopyKeYCompatibleListener(callGraph.getPackageName());
         AddContractsAndLoopInvariantsListener addContractsAndLoopInvariantsListener =
                 new AddContractsAndLoopInvariantsListener();
         Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> allNecessaryClasses =
                 callGraph.getAllNecessaryClasses(method);
         javaProjectCopyHandler =
-                new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
+                new JavaProjectCopyHandler(pathToJavaSource,
+                                           ViolationsDisproverSemantic.PO_PATH,
+                                           keyCompatibleListener);
 
         for (StaticCGJavaClass c : allNecessaryClasses.keySet()) {
             Set<StaticCGJavaMethod> set = allNecessaryClasses.get(c);
@@ -81,7 +95,7 @@ public class JavaForKeyCreator {
                     new File(pathToJavaSource +
                              relPathForJavaClass +
                              c.getOnlyClassName() +
-                             ".java");
+                             DOT_JAVA);
             if (!javaClassFile.exists()) {
                 //it is a library class since it doesnt exist in the project
                 //but since the violationswrapper sorts out all methods which arent key compatible
@@ -98,16 +112,16 @@ public class JavaForKeyCreator {
             javaProjectCopyHandler.copyClassContentsIntoTestDir(codeContainingContractsAndInvariants, c);
         }
 
-        KeyFileCreator.createKeYFileIF(method, pathToTestJava);
-        KeyFileCreator.createKeYFileFunctional(method, pathToTestJava);
+        KeYFileCreator.createKeYFileIF(method, ViolationsDisproverSemantic.PO_PATH);
+        KeYFileCreator.createKeYFileFunctional(method, ViolationsDisproverSemantic.PO_PATH);
 
-        return pathToTestJava;
+        return ViolationsDisproverSemantic.PO_PATH;
     }
 
     public String generateJavaForFormalNodeTuple(
             SDGNodeTuple formalNodeTuple,
             StaticCGJavaMethod methodCorresToSE) throws IOException {
-        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+        this.keyCompatibleListener = new CopyKeYCompatibleListener(callGraph.getPackageName());
 
         SDGNode formalInNode = formalNodeTuple.getFirstNode();
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
@@ -117,7 +131,7 @@ public class JavaForKeyCreator {
                 new File(pathToJavaSource +
                          relPathForJavaClass +
                          containingClass.getOnlyClassName() +
-                         ".java");
+                         DOT_JAVA);
 
         if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
             throw new FileNotFoundException();
@@ -133,7 +147,9 @@ public class JavaForKeyCreator {
         methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
 
         javaProjectCopyHandler =
-                new JavaProjectCopyHandler(pathToJavaSource, pathToTestJava, keyCompatibleListener);
+                new JavaProjectCopyHandler(pathToJavaSource,
+                                           ViolationsDisproverSemantic.PO_PATH,
+                                           keyCompatibleListener);
         javaProjectCopyHandler.copyClasses(allNecessaryClasses);
 
         String descriptionForKey
@@ -145,17 +161,17 @@ public class JavaForKeyCreator {
 
         javaProjectCopyHandler.addClassToTest(classFileForKey, containingClass);
 
-        KeyFileCreator.createKeYFileIF(methodCorresToSE, pathToTestJava);
-        KeyFileCreator.createKeYFileFunctional(methodCorresToSE, pathToTestJava);
+        KeYFileCreator.createKeYFileIF(methodCorresToSE, ViolationsDisproverSemantic.PO_PATH);
+        KeYFileCreator.createKeYFileFunctional(methodCorresToSE, ViolationsDisproverSemantic.PO_PATH);
 
-        return pathToTestJava;
+        return ViolationsDisproverSemantic.PO_PATH;
     }
 
     private String getMethodContract(
             SDGNode formalInNode,
             SDGNode formalOutNode,
             StaticCGJavaMethod methodCorresToSE) throws IOException {
-        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+        this.keyCompatibleListener = new CopyKeYCompatibleListener(callGraph.getPackageName());
 
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
         String relPathForJavaClass
@@ -164,7 +180,7 @@ public class JavaForKeyCreator {
                 new File(pathToJavaSource +
                          relPathForJavaClass +
                          containingClass.getOnlyClassName() +
-                         ".java");
+                         DOT_JAVA);
 
         if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
             throw new FileNotFoundException();
@@ -187,9 +203,9 @@ public class JavaForKeyCreator {
                 sdg, formalInNode, stateSaver);
 
         String descriptionForKey
-                = "\t/*@ requires "
+                = "\t/*@ " + REQUIRES + " "
                 + pointsToDecsr
-                + ";\n\t  @ determines " + sinkDescr + " \\by "
+                + ";\n\t  @ " + DETERMINES + " " + sinkDescr + " " + BY + " "
                 + inputDescrExceptFormalIn + "; */";
         return descriptionForKey;
     }
@@ -201,7 +217,7 @@ public class JavaForKeyCreator {
             Map<SDGEdge, String> edgeToInvariantTempltate,
             SDGEdge e,
             Map<StaticCGJavaMethod, String> methodToGeneralContract) throws IOException {
-        this.keyCompatibleListener = new CopyKeyCompatibleListener(callGraph.getPackageName());
+        this.keyCompatibleListener = new CopyKeYCompatibleListener(callGraph.getPackageName());
 
         StaticCGJavaClass containingClass = methodCorresToSE.getContainingClass();
         String relPathForJavaClass
@@ -211,9 +227,9 @@ public class JavaForKeyCreator {
                 new File(pathToJavaSource +
                          relPathForJavaClass +
                          containingClass.getOnlyClassName() +
-                         ".java");
+                         DOT_JAVA);
 
-        if (!javaClassFile.exists()) { //it is a library class since it doesnt exist in the project
+        if (!javaClassFile.exists()) { //it is a library class since it doesn't exist in the project
             throw new FileNotFoundException(javaClassFile.toString());
         }
 
@@ -227,7 +243,7 @@ public class JavaForKeyCreator {
         methodBodyListener.parseFile(keyCompatibleContents, methodCorresToSE);
 
         //
-        //most general contract, if it hasnt already been computed
+        //most general contract, if it hasn't already been computed
         //
         String generalContract = methodToGeneralContract.get(methodCorresToSE);
         if (generalContract == null) {
@@ -249,9 +265,9 @@ public class JavaForKeyCreator {
                         sinkDescr, inputDescrExceptFormalIn));
 
         String descriptionForKey
-                = "\t/*@ requires "
+                = "\t/*@ " + REQUIRES + " "
                 + pointsToDecsr
-                + ";\n\t  @ determines " + sinkDescr + " \\by "
+                + ";\n\t  @ " + DETERMINES + " " + sinkDescr + " " + BY + " "
                 + inputDescrExceptFormalIn + "; */";
         return descriptionForKey;
     }
@@ -277,9 +293,9 @@ public class JavaForKeyCreator {
         }
         String pointsToDecsr = PointsToGenerator.generatePreconditionFromPointsToSet(
                 sdg, formalIn, stateSaver);
-        return "\t/*@ requires "
+        return "\t/*@ " + REQUIRES + " "
                 + pointsToDecsr
-                + ";\n\t  @ determines " + allOutput + " \\by "
+                + ";\n\t  @ " + DETERMINES + " " + allOutput + " " + BY + " "
                 + allInput + "; */";
     }
 
@@ -310,9 +326,9 @@ public class JavaForKeyCreator {
         //String bytecodeName =
         sinkNode.getBytecodeName();
         if (sinkNode.getKind() == SDGNode.Kind.EXIT) {
-            return "\\result";
+            return RESULT;
         } else {
-            return "this";
+            return THIS;
         }
     }
 
@@ -327,13 +343,13 @@ public class JavaForKeyCreator {
         SDGNode currentStructSource = incomingParamStructEdges.get(0).getSource();
         for (SDGEdge e : incomingParamStructEdges) {
             if (!e.getSource().getBytecodeName().startsWith("<")
-                    || e.getSource().getBytecodeName().startsWith("<param>")) {
+                    || e.getSource().getBytecodeName().startsWith(PARAM)) {
                 currentStructSource = e.getSource();
                 break;
             }
         }
         String sourceBC = currentStructSource.getBytecodeName();
-        while (!sourceBC.startsWith("<param>") && !sourceBC.startsWith("<exception>")) {
+        while (!sourceBC.startsWith(PARAM) && !sourceBC.startsWith(EXCEPTION)) {
             String[] sourceBCSplit = sourceBC.split("\\.");
             inputNameForKey = sourceBCSplit[sourceBCSplit.length - 1] + "." + inputNameForKey;
             incomingParamStructEdges =
@@ -346,29 +362,29 @@ public class JavaForKeyCreator {
             currentStructSource = incomingParamStructEdges.get(0).getSource();
             for (SDGEdge e : incomingParamStructEdges) {
                 if (!e.getSource().getBytecodeName().startsWith("<")
-                        || e.getSource().getBytecodeName().startsWith("<param>")) {
+                        || e.getSource().getBytecodeName().startsWith(PARAM)) {
                     currentStructSource = e.getSource();
                     break;
                 }
             }
             sourceBC = currentStructSource.getBytecodeName();
         }
-        if (sourceBC.startsWith("<param>")) {
+        if (sourceBC.startsWith(PARAM)) {
             String nameForParam = getNameForParam(sourceBC, methodCorresToSE);
             return nameForParam + "." + inputNameForKey;
         } else {
-            return "<exception>" + inputNameForKey;
+            return EXCEPTION + inputNameForKey;
         }
 
     }
 
     private String getNameForParam(String byteCodeName, StaticCGJavaMethod methodCorresToSE) {
         int p_number =
-                Integer.parseInt(byteCodeName.substring("<param>".length()
+                Integer.parseInt(byteCodeName.substring(PARAM.length()
                                  + 1)); //+ 1 for the trailing space
         if (!methodCorresToSE.isStatic()) {
             if (p_number == 0) {
-                return "this";
+                return THIS;
             } else {
                 if (p_number <= methodBodyListener.getExtractedMethodParamNames().size()) {
                     return methodBodyListener.getExtractedMethodParamNames().get(p_number - 1);
@@ -395,16 +411,15 @@ public class JavaForKeyCreator {
         SDGNode methodNodeInSDG = sdg.getEntry(formalInNode);
         Set<SDGNode> formalInNodesOfProcedure = sdg.getFormalInsOfProcedure(methodNodeInSDG);
         String created = "";
-        final String param = "<param>";
         for (SDGNode currentFormalInNode : formalInNodesOfProcedure) {
             String nameOfKind = currentFormalInNode.getKind().name();
             if (!(predicate.test(currentFormalInNode))
-                    || (!nameOfKind.startsWith(param) && !nameOfKind.equals("FORMAL_IN"))) {
+                    || (!nameOfKind.startsWith(PARAM) && !nameOfKind.equals(FORMAL_IN))) {
                 continue;
             }
             String bytecodeName = currentFormalInNode.getBytecodeName();
             String inputNameForKey = "";
-            if (bytecodeName.startsWith(param)) {
+            if (bytecodeName.startsWith(PARAM)) {
                 try {
                     inputNameForKey = getNameForParam(bytecodeName, methodCorresToSE);
                 } catch (Exception e) {
@@ -414,14 +429,14 @@ public class JavaForKeyCreator {
                 inputNameForKey = getCompleteNameOfOtherThanParam(currentFormalInNode,
                                                                   methodCorresToSE);
             }
-            if (inputNameForKey.endsWith("<[]>")) {
+            if (inputNameForKey.endsWith(JOANA_ARRAY)) {
                 inputNameForKey =
-                        "\\dl_array2seq(" + inputNameForKey.replace(".<[]>", "") + ")";
+                        ARRAY_TO_SEQ + "(" + inputNameForKey.replace(JOANA_ARRAY, "") + ")";
             }
             created += inputNameForKey + ", ";
         }
         if (created.isEmpty()) {
-            return "\\nothing";
+            return NOTHING;
         } else {
             return created.substring(0, created.length() - 2);
         }

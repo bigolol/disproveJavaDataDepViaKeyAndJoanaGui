@@ -9,7 +9,7 @@ import disproveviakeyandjoanagui.CurrentActionLogger;
 import disproveviakeyandjoanagui.ErrorLogger;
 import java.util.function.BiConsumer;
 import javafx.application.Platform;
-import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.JoanaAndKeYCheckData;
 import joanakeyrefactoring.persistence.DisprovingProject;
 
 /**
@@ -18,7 +18,7 @@ import joanakeyrefactoring.persistence.DisprovingProject;
  */
 public class AsyncBackgroundDisproCreator implements Runnable {
 
-    private JoanaAndKeyCheckData checkData;
+    private JoanaAndKeYCheckData checkData;
     private BiConsumer<DisprovingProject, Boolean> callback;
     private CurrentActionLogger currentActionLogger;
     DisprovingProject disprovingProject;
@@ -28,12 +28,12 @@ public class AsyncBackgroundDisproCreator implements Runnable {
         this.currentActionLogger = currentActionLogger;
     }
 
-    public void generateFromCheckData(JoanaAndKeyCheckData checkData,
+    public void generateFromCheckData(JoanaAndKeYCheckData checkData,
                                       BiConsumer<DisprovingProject, Boolean> callback) {
         this.callback = callback;
         this.checkData = checkData;
         currentActionLogger
-        .startProgress("generating dispro project from joak file, this might take a while ...");
+        .startProgress("Generating DISPRO project from JOAK file, this might take a while ...");
         new Thread(this).start();
     }
 
@@ -44,7 +44,7 @@ public class AsyncBackgroundDisproCreator implements Runnable {
             loadingWorked = true;
         } catch (Exception ex) {
             ex.printStackTrace();
-            ErrorLogger.logError("could not create dispro proj from joak file for some reason",
+            ErrorLogger.logError("Could not create DISPRO project from JOAK file for some reason.",
                                  ErrorLogger.ErrorTypes.ERROR_PARSING_JOAK);
         }
         Platform.runLater(() -> {

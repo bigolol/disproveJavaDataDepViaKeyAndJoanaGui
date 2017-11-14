@@ -117,8 +117,8 @@ public class MainWindowController implements Initializable {
     //private LoopInvariantFromUserGetter loopInvariantGetter = new LoopInvariantFromUserGetter();
     private AsyncBackgroundLoader asyncBackgroundLoader;
 
-    final private String disprovingProgressFileEnding = "dispro";
-    final private String projectFileEnding = "joak";
+    final private static String DISPROVING_PROGRESS_FILE_ENDING = "dispro";
+    final private static String PROJECT_FILE_ENDING = "joak";
 
     private DisproHandler disproHandler;
     private AsyncCreateDisproSaveStr disproSaveStrCreator;
@@ -126,7 +126,8 @@ public class MainWindowController implements Initializable {
     private CurrentActionLogger actionLogger;
 
     //---------------------static methods boiiiiii-----------------------
-    public static File letUserChooseFile(String title, String extensionExp, String extension, File baseDirectory, Window ownerWindow) {
+    public static File letUserChooseFile(String title, String extensionExp, String extension,
+                                         File baseDirectory, Window ownerWindow) {
         fileChooser.setTitle(title);
         if (baseDirectory != null) {
             fileChooser.setInitialDirectory(baseDirectory);
@@ -140,24 +141,27 @@ public class MainWindowController implements Initializable {
 
     //-------------------non-static methods-------------------------------
     private void tryLetUserChooseFileAndHandleResponse(String joakordispro) {
-        if (!joakordispro.equals(disprovingProgressFileEnding) && !joakordispro.equals(projectFileEnding)) {
-            ErrorLogger.logError("the file extension is not known to this program. Pls step yo game up",
-                    ErrorLogger.ErrorTypes.UNKNOWN_FILE_EXTENSION);
+        if (!joakordispro.equals(DISPROVING_PROGRESS_FILE_ENDING)
+                && !joakordispro.equals(PROJECT_FILE_ENDING)) {
+            ErrorLogger.logError("This file extension is not known to the program. " +
+                                 "Please step yo game up.",
+                                 ErrorLogger.ErrorTypes.UNKNOWN_FILE_EXTENSION);
             return;
         }
-        String title = "please navigate to and select " + joakordispro + " file";
-        String extensionExp = "A .joak file containing info about which java project to load";
+        String title = "Please navigate to and select " + joakordispro + " file.";
+        String extensionExp = "A *.joak file containing information about which Java project to load.";
         String extension = "*." + joakordispro;
         File file = letUserChooseFile(title, extensionExp, extension, null, mainStage);
         if (file == null) {
-            ErrorLogger.logError("no" + joakordispro
-                    + "file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy",
+            ErrorLogger.logError("No" + joakordispro + ". "
+                    + "File was chosen by user or the file was chosen incorrectly "
+                    + "or another error (such as IO) occurred, homeboy.",
                     ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
         } else {
-            //TODO: make only certain controll elements inactive, or handle user clicking in some other way
+            //TODO: make only certain control elements inactive, or handle user clicking in some other way
             //might be more trouble than its worth though...idk
             menuBarMain.setDisable(true);
-            if (joakordispro.equals(projectFileEnding)) {
+            if (joakordispro.equals(PROJECT_FILE_ENDING)) {
                 disproHandler.setAllButtonsDisable(true);
                 asyncBackgroundLoader.loadJoakFile(file, (newCheckData, success) -> {
                     if (success) {
@@ -166,7 +170,7 @@ public class MainWindowController implements Initializable {
                         menuBarMain.setDisable(false);
                     }
                 });
-            } else if (joakordispro.equals(disprovingProgressFileEnding)) {
+            } else if (joakordispro.equals(DISPROVING_PROGRESS_FILE_ENDING)) {
                 disproHandler.setAllButtonsDisable(true);
                 asyncBackgroundLoader.loadDisproFie(file, (dispro, succes) -> {
                     if (succes) {
@@ -183,13 +187,14 @@ public class MainWindowController implements Initializable {
         DisprovingProject disprovingProject = disproHandler.getDisprovingProject();
         disproSaveStrCreator.createSaveStr(disprovingProject, (String string, Boolean sucess) -> {
             if (sucess) {
-                fileChooser.setTitle("please navigate to where to save this disproving project");
+                fileChooser.setTitle("Please navigate to where you want to save this disproving project.");
                 fileChooser.setSelectedExtensionFilter(
-                        new FileChooser.ExtensionFilter("Disprovingproject save file", ".dispro"));
+                        new FileChooser.ExtensionFilter("Disproving project storage file", ".dispro"));
                 File saveFile = fileChooser.showSaveDialog(mainStage);
                 if (saveFile == null) {
-                    ErrorLogger.logError(" no file was chosen by user or the file was chosen incorrectly or another error (such as IO) occured, homeboy",
-                            ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
+                    ErrorLogger.logError("No file was chosen by user or the file was chosen incorrectly or " +
+                                         "another error (such as IO) occured, homeboy.",
+                                         ErrorLogger.ErrorTypes.ERROR_USER_CHOOSING_FILE);
                 } else {
                     if (!saveFile.getName().endsWith(".dispro")) {
                         saveFile = new File(saveFile.getAbsolutePath() + ".dispro");
@@ -200,7 +205,7 @@ public class MainWindowController implements Initializable {
                         fileWriter.write(string);
                         fileWriter.close();
                     } catch (IOException ex) {
-                        ErrorLogger.logError("error while trying to write file to disk",
+                        ErrorLogger.logError("Error while trying to write file to disk.",
                                 ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK);
                     }
                 }
@@ -240,10 +245,10 @@ public class MainWindowController implements Initializable {
         disproSaveStrCreator = new AsyncCreateDisproSaveStr(actionLogger);
 
         menuItemOpenJoak.setOnAction((event) -> {
-            tryLetUserChooseFileAndHandleResponse(projectFileEnding);
+            tryLetUserChooseFileAndHandleResponse(PROJECT_FILE_ENDING);
         });
         menuItemOpenDispro.setOnAction((event) -> {
-            tryLetUserChooseFileAndHandleResponse(disprovingProgressFileEnding);
+            tryLetUserChooseFileAndHandleResponse(DISPROVING_PROGRESS_FILE_ENDING);
         });
         menuItemSaveProgress.setOnAction((event) -> {
             saveDispro();

@@ -21,22 +21,32 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import joanakeyrefactoring.ViolationsDisproverSemantic.PO_TYPE;
+
 /**
  * This class handles all automation processes of the Combined Approach.
  * Summarize files, export methods and classes, run KeY, open files ...
  *
- * @author Marko Kleine B�ning
+ * @author Marko Kleine Büning
  *
  */
 public class AutomationHelper {
 
+    private static final String DATE_FORMAT = "EEE MMM d HH:mm:ss z yyyy";
+    private static final String PO_FILE_FUNC = "proofObs/proofObFunc.key";
+    private static final String PO_FILE_IF = "proofObs/proofObIF.key";
+
+    private final static String LINE_SEP = System.getProperty("line.separator");
+    private final static String DATE = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH)
+                                            .format(Calendar.getInstance().getTime());
+
     private final String pathToJavaFile;
     private ArrayList<String> classNames = new ArrayList<>();
-    final static String LINE_SEP = System.getProperty("line.separator");
-    final static String DATE =
-            new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy", Locale.ENGLISH)
-            .format(Calendar.getInstance().getTime());
     private HashMap<String, String> classes = new HashMap<>();
+
+    public final static String PO_NAME_FUNCTIONAL = "/proofObligationFunctional.key";
+    public final static String PO_NAME_IF = "/proofObligationIF.key";
+    public static final String DEPENDENCIES_FOLDER = "dependencies/";
 
     public AutomationHelper(String pathToJavaFile) {
         this.pathToJavaFile = pathToJavaFile;
@@ -170,7 +180,7 @@ public class AutomationHelper {
      */
     public void createKeYFileIF(String javaFile, String method) throws IOException {
         //PrintWriter writer;
-        File proofObFile = new File("proofObs/proofObIF.key");
+        File proofObFile = new File(PO_FILE_IF);
         if (!proofObFile.exists()) {
             proofObFile.createNewFile();
         }
@@ -182,9 +192,10 @@ public class AutomationHelper {
                 + "name=proofs.sourceFile[proofs.sourceFile\\\\:\\\\:METHODNAME].Non-interference contract.0\n"
                 + "contract=proofs.sourceFile[proofs.sourceFile\\\\:\\\\:METHODNAME].Non-interference contract.0\n"
                 + "class=de.uka.ilkd.key.informationflow.po.InfFlowContractPO\n";
-        final String proofObligationString = proofObligationTemplateString.replaceAll("METHODNAME", method);
+        final String proofObligationString =
+                proofObligationTemplateString.replaceAll("METHODNAME", method);
 
-        generateKeyFileFrom(profileStr, javaSourceStr, proofObligationString, "proofObs/proofObIF.key");
+        generateKeyFileFrom(profileStr, javaSourceStr, proofObligationString, PO_FILE_IF);
     }
 
     /**
@@ -193,13 +204,14 @@ public class AutomationHelper {
      * @param javaFile
      * @param method
      */
-    public void createKeYFileFunctional(String javaFile, String method) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        File proofObFile = new File("proofObs/proofObFunc.key");
+    public void createKeYFileFunctional(String javaFile, String method)
+            throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        File proofObFile = new File(PO_FILE_FUNC);
         if (!proofObFile.exists()) {
             proofObFile.createNewFile();
         }
         PrintWriter writer;
-        writer = new PrintWriter("proofObs/proofObFunc.key", "UTF-8");
+        writer = new PrintWriter(PO_FILE_FUNC, "UTF-8");
         String firstRow = "\\profile \"Java Profile\";";
         writer.println(firstRow);
         // Java Source
@@ -231,13 +243,14 @@ public class AutomationHelper {
      */
     private static String pathToJava = "java";
 
-    public static boolean runKeY(String pathKeY, String pathProofObs, String obligation) throws IOException {
+    public static boolean runKeY(String pathKeY, String pathProofObs, PO_TYPE obligation)
+            throws IOException {
         boolean result = false;
-        String cmd = "";
-        if (obligation.equals("functional")) {
-            cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " --auto " + pathProofObs + "/proofObligationFunctional.key";
+        String cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " --auto " + pathProofObs;
+        if (obligation == PO_TYPE.FUNCTIONAL) {
+            cmd += PO_NAME_FUNCTIONAL;
         } else {
-            cmd = pathToJava + " -Xmx512m -jar " + pathKeY + " --auto " + pathProofObs + "/proofObligationIF.key";
+            cmd += PO_NAME_IF;
         }
         Runtime r = Runtime.getRuntime();
         Process pr;
@@ -290,7 +303,7 @@ public class AutomationHelper {
                 try {
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            new File("dependencies/" + url)
+                            new File(DEPENDENCIES_FOLDER + url)
                     );
                     clip.open(inputStream);
                     clip.start();

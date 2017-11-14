@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package disproveviakeyandjoanagui;
+package joanakeygui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,26 +13,25 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author holger
+ * @author holgerklein
  */
-public class DisproveViaKeyAndJoanaGUI extends Application {
+public class JoanaKeYGui extends Application {
+
+    private static final String FXML_RESOURCE = "FXMLDocument.fxml";
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainWindowFXMLDoc.fxml"));
-        Parent root = fxmlLoader.load();
-        MainWindowController controller = (MainWindowController) fxmlLoader.getController();
+        FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource(FXML_RESOURCE));
 
-        //setup controller here
-        controller.setMainStage(stage);
+        Parent root = fXMLLoader.load();
+        FXMLDocumentController controller = (FXMLDocumentController) fXMLLoader.getController();
+        controller.setStage(stage);
+
 
         Scene scene = new Scene(root);
+
         stage.setScene(scene);
         stage.show();
-
-        //I do this so the menus opens at the correct place. For some reason it doesnt sometimes
-        //if the main stage isnt moved by a bit
-        stage.setX(stage.getX() + 1);
     }
 
     /**
@@ -41,5 +40,4 @@ public class DisproveViaKeyAndJoanaGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

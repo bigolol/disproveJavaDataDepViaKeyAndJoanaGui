@@ -22,6 +22,12 @@ import joanakeygui.joanahandler.JoanaInstance;
  */
 public class SourceSinkAdderDialogHandler {
 
+    private static final String FXML_ADD_SRC_RESOURCE = "AddSourceDialog.fxml";
+    private static final String SOURCES = "SOURCES";
+    private static final String SINKS = "SINKS";
+    private static final String SRCS = "sources";
+    private static final String SNKS = "sinks";
+
     //private ListView<String> sourcesList;
     //private ListView<String> sinkList;
     private List<SinkOrSource> sources = new ArrayList<>();
@@ -33,7 +39,7 @@ public class SourceSinkAdderDialogHandler {
             throws IOException {
         //this.sourcesList = sourcesList;
         //this.sinkList = sinkList;
-        FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("AddSourceDialog.fxml"));
+        FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource(FXML_ADD_SRC_RESOURCE));
 
         Parent root = fXMLLoader.load();
         controller = (AddSourceDialogController) fXMLLoader.getController();
@@ -70,7 +76,7 @@ public class SourceSinkAdderDialogHandler {
     }
 
     public String createSinkSourceJson() {
-        String sourcesStringTemplate = "sources : [SOURCES]";
+        String sourcesStringTemplate = SRCS + " : [" + SOURCES + "]";
         String sourcesJsonString = "{";
         for (SinkOrSource src : sources) {
             sourcesJsonString += src.generateJson();
@@ -81,9 +87,9 @@ public class SourceSinkAdderDialogHandler {
         } else {
             sourcesJsonString = sourcesJsonString.substring(0, sourcesJsonString.length() - 3);
         }
-        sourcesJsonString = sourcesStringTemplate.replace("SOURCES", sourcesJsonString);
+        sourcesJsonString = sourcesStringTemplate.replace(SOURCES, sourcesJsonString);
 
-        String sinkStringTemplate = "sinks : [SINKS]";
+        String sinkStringTemplate = SNKS + " : [" + SINKS + "]";
         String sinksJsonString = "{";
         for (SinkOrSource sink : sinks) {
             sinksJsonString += sink.generateJson();
@@ -94,7 +100,7 @@ public class SourceSinkAdderDialogHandler {
         } else {
             sinksJsonString = sinksJsonString.substring(0, sinksJsonString.length() - 3);
         }
-        sinksJsonString = sinkStringTemplate.replace("SINKS", sinksJsonString);
+        sinksJsonString = sinkStringTemplate.replace(SINKS, sinksJsonString);
         return sourcesJsonString + ",\n" + sinksJsonString;
     }
 

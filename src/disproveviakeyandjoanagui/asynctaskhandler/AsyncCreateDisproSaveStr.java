@@ -26,10 +26,11 @@ public class AsyncCreateDisproSaveStr implements Runnable {
         this.actionLogger = actionLogger;
     }
         
-    public void createSaveStr(DisprovingProject disprovingProject, BiConsumer<String, Boolean> uiThreadCallback) {
+    public void createSaveStr(DisprovingProject disprovingProject,
+                              BiConsumer<String, Boolean> uiThreadCallback) {
         this.disprovingProject = disprovingProject;
         this.uiThreadCallback = uiThreadCallback;
-        actionLogger.startProgress("now creating save file from project, pls wait k thx");
+        actionLogger.startProgress("Now creating storage file from project, please wait.");
         new Thread(this).start();
     }
 
@@ -41,7 +42,7 @@ public class AsyncCreateDisproSaveStr implements Runnable {
             succes = true;
         } catch (Exception ex) {
             succes = false;
-            ErrorLogger.logError("error when trying to create save str for disprovingProject",
+            ErrorLogger.logError("Error while trying to create storage String for disprovingProject.",
                     ErrorLogger.ErrorTypes.ERROR_CREATING_SAVE_STR_FOR_DISPRO);
         }
         Platform.runLater(() -> {

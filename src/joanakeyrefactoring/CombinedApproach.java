@@ -49,7 +49,7 @@ public class CombinedApproach {
 //        }
 //    }
 
-    public static void runTestFromCheckData(JoanaAndKeyCheckData checkData)
+    public static void runTestFromCheckData(JoanaAndKeYCheckData checkData)
             throws ClassHierarchyException, IOException, UnsoundGraphException,
             CancelException, CouldntAddAnnoException, CancelException {
         checkData.addAnnotations();
@@ -85,7 +85,7 @@ public class CombinedApproach {
         });
     }
 
-    public static JoanaAndKeyCheckData parseInputFile(File filetoload)
+    public static JoanaAndKeYCheckData parseInputFile(File filetoload)
             throws IOException, ClassHierarchyException, UnsoundGraphException, CancelException {
         BufferedReader br = new BufferedReader(new FileReader(filetoload));
         StringBuilder completeString = new StringBuilder();
@@ -136,7 +136,7 @@ public class CombinedApproach {
             );
         });
 
-        return new JoanaAndKeyCheckData(
+        return new JoanaAndKeYCheckData(
                 pathKeY, pathToJar, pathToJavaFile, entryMethodString, annotationPath,
                 entryMethod, fullyAutomatic, analysis, singleAnnotationAdders, stateSaver);
     }

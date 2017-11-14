@@ -32,6 +32,13 @@ import joanakeygui.joanahandler.JoanaInstance;
  */
 public class FXMLDocumentController implements Initializable {
 
+    private static final String DEBUG_FOLDER =
+            "testdata/multipleClassesFalsePos/MultipleClassesFalsePos/";
+    private static final String DEBUG_JAR = "dist/MultipleClassesFalsePos.jar";
+    private static final String KeY_JAR = "KeY.jar";
+    private static final String DOT_JOAK = ".joak";
+    private static final String DOT_JAR = "*.jar";
+
     private JoanaView joanaView = new JoanaView(this);
     private SourceSinkAdderDialogHandler sourceSinkAdderDialogHandler;
     private Stage stage;
@@ -88,7 +95,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void createJoak() throws FileNotFoundException, IOException {
         String sinkSrcJson = sourceSinkAdderDialogHandler.createSinkSourceJson();
-        String template = "pathKeY : \"dep/KeY.jar\",\n"
+        String template = "pathKeY : \"dep/" + KeY_JAR + "\",\n"
                 + "javaClass : \"\",\n"
                 + "pathToJar : \"JARPATH\",\n"
                 + "pathToJavaFile : \"JAVAPATH\",\n"
@@ -105,12 +112,12 @@ public class FXMLDocumentController implements Initializable {
         sinkSrcJson = template + sinkSrcJson;
         
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select save location");
+        fileChooser.setTitle("Select storage location.");
 
         File chosenFile = fileChooser.showSaveDialog(stage);
         String filepath = chosenFile.getAbsolutePath();
-        if (!chosenFile.getAbsolutePath().endsWith(".joak")) {
-            filepath += ".joak";
+        if (!chosenFile.getAbsolutePath().endsWith(DOT_JOAK)) {
+            filepath += DOT_JOAK;
         }
         BufferedWriter out = new BufferedWriter(new FileWriter(filepath));
         out.write(sinkSrcJson);
@@ -120,9 +127,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void onChooseJarFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Jar file");
+        fileChooser.setTitle("Open Jar file.");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Jar", "*.jar")
+                new FileChooser.ExtensionFilter("Jar", DOT_JAR)
         );
         File chosenJarFile = fileChooser.showOpenDialog(stage);
         joanaView.setCurrentJarFile(chosenJarFile);
@@ -131,7 +138,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void onChooseSrcFolder() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Navigate to source directory");
+        directoryChooser.setTitle("Navigate to source directory.");
         File chosenSrcDir = directoryChooser.showDialog(stage);
         joanaView.setCurrentJavaFolderFile(chosenSrcDir);
     }
@@ -151,13 +158,8 @@ public class FXMLDocumentController implements Initializable {
 
         boolean debug = true;
         if (debug) {
-            joanaView.setCurrentJarFile(
-                    new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/" +
-                             "dist/MultipleClassesFalsePos.jar")
-                    );
-            joanaView.setCurrentJavaFolderFile(
-                    new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src")
-                    );
+            joanaView.setCurrentJarFile(new File(DEBUG_FOLDER + DEBUG_JAR));
+            joanaView.setCurrentJavaFolderFile(new File(DEBUG_FOLDER + "src"));
         }
     }
 

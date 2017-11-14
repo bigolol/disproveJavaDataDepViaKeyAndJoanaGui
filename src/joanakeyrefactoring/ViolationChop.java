@@ -10,6 +10,7 @@ import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNode;
 import edu.kit.joana.ifc.sdg.graph.chopper.Chopper;
 import edu.kit.joana.ifc.sdg.graph.chopper.RepsRosayChopper;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,6 +24,10 @@ import org.json.JSONObject;
  * @author holgerklein
  */
 public class ViolationChop {
+
+    public static final String SOURCE = "src";
+    public static final String SINK = "sink";
+    private static final String NODES_IN_CHOP = "nodes_in_chop";
 
     private SDGNode violationSource;
     private SDGNode violationSink;
@@ -45,15 +50,17 @@ public class ViolationChop {
         created.append("{").append(System.lineSeparator());
         int lengthOfLineSep = System.lineSeparator().length();
 
-        created.append("\"src\" : ").append(violationSource.getId()).append(",").append(System.lineSeparator());
-        created.append("\"sink\" : ").append(violationSink.getId()).append(",").append(System.lineSeparator());
+        created.append("\"" + SOURCE + "\" : ")
+            .append(violationSource.getId()).append(",").append(System.lineSeparator());
+        created.append("\"" + SINK + "\" : ")
+            .append(violationSink.getId()).append(",").append(System.lineSeparator());
 
-        created.append("\"nodes_in_chop\" : [").append(System.lineSeparator());
+        created.append("\"" + NODES_IN_CHOP + "\" : [").append(System.lineSeparator());
         for (SDGNode n : nodesInChop) {
             created.append(n.getId()).append(",").append(System.lineSeparator());
         }
         if (created.lastIndexOf("[") != created.length() - 1) {
-            created.replace(created.length() - lengthOfLineSep - 1, created.length(), "");
+            created.delete(created.length() - lengthOfLineSep - 1, created.length());
         }
         created.append("]").append(System.lineSeparator());
         created.append("}");
@@ -62,13 +69,13 @@ public class ViolationChop {
 
     public static ViolationChop generateFromJsonObj(JSONObject jSONObject, SDG sdg) {
 
-        int srcId = jSONObject.getInt("src");
-        int sinkId = jSONObject.getInt("sink");
+        int srcId = jSONObject.getInt(SOURCE);
+        int sinkId = jSONObject.getInt(SINK);
         ViolationChop created = new ViolationChop();
         created.violationSource = sdg.getNode(srcId);
         created.violationSink = sdg.getNode(sinkId);
         created.nodesInChop = new HashSet<>();
-        JSONArray nodesInChopArr = jSONObject.getJSONArray("nodes_in_chop");
+        JSONArray nodesInChopArr = jSONObject.getJSONArray(NODES_IN_CHOP);
         for (int i = 0; i < nodesInChopArr.length(); ++i) {
             created.nodesInChop.add(sdg.getNode(nodesInChopArr.getInt(i)));
         }

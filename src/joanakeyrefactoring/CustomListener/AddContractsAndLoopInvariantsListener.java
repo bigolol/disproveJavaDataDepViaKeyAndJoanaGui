@@ -14,7 +14,7 @@ import java.util.Set;
 import joanakeyrefactoring.antlr.java8.Java8BaseListener;
 import joanakeyrefactoring.antlr.java8.Java8Lexer;
 import joanakeyrefactoring.antlr.java8.Java8Parser;
-import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
+import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeYCompatibleListener;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -25,6 +25,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
  * @author holger
  */
 public class AddContractsAndLoopInvariantsListener extends Java8BaseListener {
+
+    private static final String INIT = "<init>";
 
     private StaticCGJavaMethod methodToDisprove;
     private String contract;
@@ -55,7 +57,7 @@ public class AddContractsAndLoopInvariantsListener extends Java8BaseListener {
         linePosToContentToCopy = new HashMap<>();
         linePosOfContentToCopy = new ArrayList<>();
 
-        this.classCodeInLines = CopyKeyCompatibleListener.seperateCodeIntoLines(classCode);
+        this.classCodeInLines = CopyKeYCompatibleListener.seperateCodeIntoLines(classCode);
 
         Java8Lexer lexer = new Java8Lexer(new ANTLRInputStream(classCode));
         Java8Parser parser = new Java8Parser(new CommonTokenStream(lexer));
@@ -84,7 +86,8 @@ public class AddContractsAndLoopInvariantsListener extends Java8BaseListener {
                 ++linePos;
                 --currentDist;
             }
-            generatedCode.append(linePosToContentToCopy.get(linePosOfContentToCopy.get(posInLinePosList))).append('\n');
+            generatedCode.append(linePosToContentToCopy
+                    .get(linePosOfContentToCopy.get(posInLinePosList))).append('\n');
             generatedCode.append(classCodeInLines.get(linePos)).append('\n');
             ++linePos;
             posInLinePosList++;
@@ -120,17 +123,24 @@ public class AddContractsAndLoopInvariantsListener extends Java8BaseListener {
 
     @Override
     public void enterConstructorDeclaration(Java8Parser.ConstructorDeclarationContext ctx) {
-        String id = "<init>";
-        String args = GetMethodBodyListener.getArgTypeString(ctx.constructorDeclarator().formalParameterList());
-        StaticCGJavaMethod method = CopyKeyCompatibleListener.findMethodInSet(methodsInThisClass, id, args);
+        String args =
+                GetMethodBodyListener.getArgTypeString(
+                        ctx.constructorDeclarator().formalParameterList()
+                        );
+        StaticCGJavaMethod method =
+                CopyKeYCompatibleListener.findMethodInSet(methodsInThisClass, INIT, args);
         addStringForMethodOrCtor(method, ctx.getStart().getLine());
     }
 
     @Override
     public void enterMethodDeclaration(Java8Parser.MethodDeclarationContext ctx) {
         String id = ctx.methodHeader().methodDeclarator().Identifier().getText();
-        String args = GetMethodBodyListener.getArgTypeString(ctx.methodHeader().methodDeclarator().formalParameterList());
-        StaticCGJavaMethod method = CopyKeyCompatibleListener.findMethodInSet(methodsInThisClass, id, args);
+        String args =
+                GetMethodBodyListener.getArgTypeString(
+                        ctx.methodHeader().methodDeclarator().formalParameterList()
+                        );
+        StaticCGJavaMethod method =
+                CopyKeYCompatibleListener.findMethodInSet(methodsInThisClass, id, args);
         addStringForMethodOrCtor(method, ctx.getStart().getLine());
     }
 

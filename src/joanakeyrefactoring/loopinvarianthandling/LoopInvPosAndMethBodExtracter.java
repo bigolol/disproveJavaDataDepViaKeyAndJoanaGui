@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaClass;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.apache.commons.io.FileUtils;
@@ -36,7 +36,7 @@ public class LoopInvPosAndMethBodExtracter {
         for (StaticCGJavaClass c : neededClasses) {
             try {
                 String pathToClassesJavaFile =
-                        JavaForKeyCreator.getPathToJavaClassFile(pathToSource, c);
+                        JavaForKeYCreator.getPathToJavaClassFile(pathToSource, c);
                 String javaClassContents =
                         FileUtils.readFileToString(new File(pathToClassesJavaFile),
                                                    Charset.defaultCharset());

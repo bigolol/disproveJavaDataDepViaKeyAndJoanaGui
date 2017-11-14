@@ -5,7 +5,7 @@
  */
 package joanakeyrefactoring.javaforkeycreator;
 
-import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeyCompatibleListener;
+import joanakeyrefactoring.javaforkeycreator.javatokeypipeline.CopyKeYCompatibleListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,14 +25,17 @@ import org.apache.commons.io.FileUtils;
  * @author holger
  */
 public class JavaProjectCopyHandler {
-    
+
+    private final static String DOT_JAVA = ".java";
     private String pathToSource;
     private String pathToNew;
     private File newFile;
-    private CopyKeyCompatibleListener copyKeyCompatibleListener;
+    private CopyKeYCompatibleListener copyKeyCompatibleListener;
     private Map<StaticCGJavaClass, ArrayList<LoopInvariant>> loopInvariants = new HashMap<>();
     
-    public JavaProjectCopyHandler(String pathToSource, String pathToNew, CopyKeyCompatibleListener copyKeyCompatibleListener) throws IOException {
+    public JavaProjectCopyHandler(String pathToSource, String pathToNew,
+                                  CopyKeYCompatibleListener copyKeyCompatibleListener)
+                   throws IOException {
         this.pathToSource = pathToSource;
         this.pathToNew = pathToNew;
         this.copyKeyCompatibleListener = copyKeyCompatibleListener;
@@ -56,19 +59,22 @@ public class JavaProjectCopyHandler {
         return packageToRelPathString;
     }
     
-    public void copyClassContentsIntoTestDir(String contents, StaticCGJavaClass javaClass) throws FileNotFoundException, IOException {
+    public void copyClassContentsIntoTestDir(String contents,
+                                             StaticCGJavaClass javaClass)
+                                     throws FileNotFoundException, IOException {
         String relPathForJavaClass = getRelPathForJavaClass(javaClass);
         String className = javaClass.getOnlyClassName();
         File relPathFile = new File(pathToNew + "/" + relPathForJavaClass);
         relPathFile.mkdirs();
-        File javaFile = new File(pathToNew + relPathForJavaClass + "/" + className + ".java");
+        File javaFile = new File(pathToNew + relPathForJavaClass + "/" + className + DOT_JAVA);
         javaFile.createNewFile();
         PrintWriter out = new PrintWriter(javaFile);
         out.print(contents);
         out.close();
     }
     
-    public void addClassToTest(List<String> classContent, StaticCGJavaClass javaClass) throws FileNotFoundException, IOException {
+    public void addClassToTest(List<String> classContent, StaticCGJavaClass javaClass)
+            throws FileNotFoundException, IOException {
         StringBuilder builder = new StringBuilder();
         classContent.forEach((s) -> {
             builder.append(s).append('\n');
@@ -76,7 +82,8 @@ public class JavaProjectCopyHandler {
         copyClassContentsIntoTestDir(builder.toString(), javaClass);
     }
     
-    public void copyClasses(Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> classesToCopy) throws IOException {
+    public void copyClasses(Map<StaticCGJavaClass, Set<StaticCGJavaMethod>> classesToCopy)
+            throws IOException {
         for (StaticCGJavaClass currentClassToCopy : classesToCopy.keySet()) {
             String relPathForJavaClass = getRelPathForJavaClass(currentClassToCopy);
             String className = currentClassToCopy.getOnlyClassName();
@@ -87,9 +94,9 @@ public class JavaProjectCopyHandler {
             }
             try {
                 File classFileToCopyTo =
-                        new File(pathToNew + relPathForJavaClass + className + ".java");
+                        new File(pathToNew + relPathForJavaClass + className + DOT_JAVA);
                 File classFileToCopyFrom =
-                        new File(pathToSource + relPathForJavaClass + className + ".java");
+                        new File(pathToSource + relPathForJavaClass + className + DOT_JAVA);
                 
                 String contents =
                         new String(java.nio.file.Files.readAllBytes(classFileToCopyFrom.toPath()));

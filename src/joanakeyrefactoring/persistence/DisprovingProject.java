@@ -15,12 +15,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.JoanaAndKeYCheckData;
 import joanakeyrefactoring.loopinvarianthandling.LoopInvPosAndMethBodExtracter;
 import joanakeyrefactoring.StateSaver;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
 import joanakeyrefactoring.ViolationsWrapper;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.JCallGraph;
 import org.json.JSONObject;
 
@@ -29,6 +29,9 @@ import org.json.JSONObject;
  * @author hklein
  */
 public class DisprovingProject {
+
+    private static final String DOT_JAR = ".jar";
+    private static final String DOT_PDG = ".pdg";
 
     private String pathToSDG;
     private String pathToJar;
@@ -72,11 +75,11 @@ public class DisprovingProject {
     }
 
     public String getProjName() {
-        return pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - ".jar".length());
+        return pathToJar.substring(pathToJar.lastIndexOf("/") + 1, pathToJar.length() - DOT_JAR.length());
     }
 
     public void saveSDG() throws FileNotFoundException, IOException {
-        File f = File.createTempFile(getProjName(), ".pdg", new File("savedata"));
+        File f = File.createTempFile(getProjName(), DOT_PDG, new File("savedata"));
         if (f.exists()) {
             f.delete();
         }
@@ -137,7 +140,7 @@ public class DisprovingProject {
         return disprovingProject;
     }
 
-    public static DisprovingProject generateFromCheckdata(JoanaAndKeyCheckData checkData)
+    public static DisprovingProject generateFromCheckdata(JoanaAndKeYCheckData checkData)
             throws IOException {
         DisprovingProject disprovingProject = new DisprovingProject();
         disprovingProject.pathToJar = checkData.getPathToJar();
@@ -163,7 +166,7 @@ public class DisprovingProject {
         disprovingProject.summaryEdgeToCorresData = new SummaryEdgeAndMethodToCorresData(
                 disprovingProject.violationsWrapper.getSummaryEdgesAndCorresJavaMethods(),
                 disprovingProject.sdg,
-                new JavaForKeyCreator(checkData.getPathToJavaFile(),
+                new JavaForKeYCreator(checkData.getPathToJavaFile(),
                         disprovingProject.callGraph,
                         disprovingProject.sdg,
                         disprovingProject.stateSaver));

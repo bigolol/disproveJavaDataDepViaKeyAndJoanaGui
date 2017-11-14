@@ -26,7 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
 import joanakeyrefactoring.AutomationHelper;
-import joanakeyrefactoring.JoanaAndKeyCheckData;
+import joanakeyrefactoring.JoanaAndKeYCheckData;
 import joanakeyrefactoring.ViolationChop;
 import joanakeyrefactoring.ViolationsWrapper;
 import joanakeyrefactoring.persistence.DisprovingProject;
@@ -39,10 +39,12 @@ import org.fxmisc.richtext.CodeArea;
  */
 public class DisproHandler implements ViolationsWrapperListener {
 
+    private static final String SOUND = "Victory Sound Effect.wav";
+
     private AsyncBackgroundDisproCreator backgroundDisproCreator;
     private DisprovingProject disprovingProject;
     private ViolationsWrapper violationsWrapper;
-    private JoanaKeyInterfacer joanaKeyInterfacer;
+    private JoanaKeYInterfacer joanaKeyInterfacer;
 
     private CodeArea methodCodeArea;
     private CodeArea loopInvariantCodeArea;
@@ -162,7 +164,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     private void onPressRunAuto() {
         if (AsyncAutoRunner.keepRunning.get()) {
             AsyncAutoRunner.stop();
-            buttonRunAuto.setText("Start auto modus.");
+            buttonRunAuto.setText("Start auto mode.");
             buttonMarkAsDisproved.setDisable(false);
             buttonResetLoopInvariant.setDisable(false);
             buttonSaveLoopInvariant.setDisable(false);
@@ -171,7 +173,7 @@ public class DisproHandler implements ViolationsWrapperListener {
             mainMenu.setDisable(false);
         } else {
             currentActionLogger.startProgress("Running auto pilot.");
-            buttonRunAuto.setText("Stop auto modus.");
+            buttonRunAuto.setText("Stop auto mode.");
             buttonMarkAsDisproved.setDisable(true);
             buttonResetLoopInvariant.setDisable(true);
             buttonSaveLoopInvariant.setDisable(true);
@@ -221,7 +223,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         } catch (Exception e) {
             e.printStackTrace();
             ErrorLogger.logError(
-                    "An error occured while trying to create the Jave code to be disproved.",
+                    "An error occured while trying to create the Jave file to be disproved.",
                     ErrorLogger.ErrorTypes.ERROR_WRITING_FILE_TO_DISK
                     );
         }
@@ -239,7 +241,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         return disprovingProject;
     }
 
-    public void handleNewDispro(JoanaAndKeyCheckData checkData) {
+    public void handleNewDispro(JoanaAndKeYCheckData checkData) {
         setAllButtonsDisable(true);
         backgroundDisproCreator.generateFromCheckData(checkData, (dispro, worked) -> {
             if (worked) {
@@ -391,7 +393,7 @@ public class DisproHandler implements ViolationsWrapperListener {
         violationsWrapper = disprovingProject.getViolationsWrapper();
         violationsWrapper.addListener(this);
 
-        joanaKeyInterfacer = new JoanaKeyInterfacer(disprovingProject);
+        joanaKeyInterfacer = new JoanaKeYInterfacer(disprovingProject);
         resetViews();
         //
         //setup disproving buttons
@@ -440,7 +442,7 @@ public class DisproHandler implements ViolationsWrapperListener {
                             : c.getSink().getLabel())
                     + " (" + c.getSink() + ")";
             final String add =
-                    "Illegal Flow from " + src + " to " + snk
+                    "Illegal flow from " + src + " to " + snk
                   + ", visible for " + c.getAttackerLevel();
             listViewUncheckedChops.getItems().add(add);
         }
@@ -506,7 +508,7 @@ public class DisproHandler implements ViolationsWrapperListener {
     public void disprovedAll() {
         Platform.runLater(() -> {
             labelSomeOtherData.setText("Disproved the information flow! Hourayyyy! Incredible!");
-            AutomationHelper.playSound("Victory Sound Effect.wav");
+            AutomationHelper.playSound(SOUND);
         });
     }
 

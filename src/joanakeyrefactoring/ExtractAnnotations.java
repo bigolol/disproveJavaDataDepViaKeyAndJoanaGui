@@ -27,7 +27,8 @@ public class ExtractAnnotations {
         while (nextLine != null) {
             StringTokenizer tok = new StringTokenizer(nextLine, ",");
             AnnotationType annType = AnnotationType.valueOf(tok.nextToken());
-            String level = annType == AnnotationType.SOURCE ? BuiltinLattices.STD_SECLEVEL_HIGH : BuiltinLattices.STD_SECLEVEL_LOW;
+            String level = annType == AnnotationType.SOURCE ?
+                    BuiltinLattices.STD_SECLEVEL_HIGH : BuiltinLattices.STD_SECLEVEL_LOW;
             String methodSig = tok.nextToken();
             int bcIndex = Integer.parseInt(tok.nextToken());
             String param = tok.nextToken();

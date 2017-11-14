@@ -6,6 +6,7 @@
 package disproveviakeyandjoanagui.asynctaskhandler;
 
 import disproveviakeyandjoanagui.CurrentActionLogger;
+import disproveviakeyandjoanagui.JoanaKeYInterfacer;
 import edu.kit.joana.ifc.sdg.graph.SDGEdge;
 import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.IOException;
@@ -18,8 +19,10 @@ import javafx.application.Platform;
 import javafx.scene.control.ListView;
 import joanakeyrefactoring.AutomationHelper;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
+import joanakeyrefactoring.ViolationsDisproverSemantic;
+import joanakeyrefactoring.ViolationsDisproverSemantic.PO_TYPE;
 import joanakeyrefactoring.ViolationsWrapper;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 
 /**
@@ -30,14 +33,14 @@ public class AsyncAutoRunner implements Runnable {
 
     public static AtomicBoolean keepRunning = new AtomicBoolean();
     private static ViolationsWrapper violationsWrapper;
-    private static JavaForKeyCreator javaForKeyCreator;
+    private static JavaForKeYCreator javaForKeyCreator;
     private static SummaryEdgeAndMethodToCorresData edgeAndMethodToCorresData;
     private static CurrentActionLogger actionLogger;
     private static ListView<String> summaryEdges;
 
     public static void startAutoDisproving(
             ViolationsWrapper violationsWrapper,
-            JavaForKeyCreator javaForKeyCreator,
+            JavaForKeYCreator javaForKeyCreator,
             SummaryEdgeAndMethodToCorresData edgeAndMethodToCorresData,
             CurrentActionLogger actionLogger,
             ListView<String> summaryEdges) {
@@ -54,7 +57,7 @@ public class AsyncAutoRunner implements Runnable {
     public static void stop() {
         keepRunning.set(false);
         Platform.runLater(() -> {
-            actionLogger.startProgress("please wait while the last disproving progress finishes");
+            actionLogger.startProgress("Please wait while the last disproving process finishes.");
         });
     }
 
@@ -63,7 +66,8 @@ public class AsyncAutoRunner implements Runnable {
         while (keepRunning.get()) {
             SDGEdge nextSummaryEdge = violationsWrapper.nextSummaryEdge();
             Platform.runLater(() -> {
-                actionLogger.startProgress("now generating files for " + nextSummaryEdge.toString());
+                actionLogger.startProgress("Now generating files for " +
+                                           nextSummaryEdge.toString() + ".");
                 for (int i = 0; i < summaryEdges.getItems().size(); ++i) {
                     if (summaryEdges.getItems().get(i).startsWith(nextSummaryEdge.toString())) {
                         summaryEdges.getSelectionModel().select(i);
@@ -83,7 +87,8 @@ public class AsyncAutoRunner implements Runnable {
             HashMap<StaticCGJavaMethod, String> methodToMostGeneralContract =
                     edgeAndMethodToCorresData.getMethodToMostGeneralContract();
             Platform.runLater(() -> {
-                actionLogger.startProgress("now trying to disprove " + nextSummaryEdge.toString());
+                actionLogger.startProgress("Now trying to disprove " +
+                                           nextSummaryEdge.toString() + ".");
             });
             if (!keepRunning.get()) {
                 break;
@@ -100,17 +105,17 @@ public class AsyncAutoRunner implements Runnable {
                     break;
                 }
                 boolean worked =
-                        AutomationHelper.runKeY("dependencies/Key/KeY.jar",
-                                                "proofObs/proofs",
-                                                "information flow");
+                        AutomationHelper.runKeY(JoanaKeYInterfacer.PATH_TO_KeY,
+                                                ViolationsDisproverSemantic.PO_PATH,
+                                                PO_TYPE.INFORMATION_FLOW);
                 if (!keepRunning.get()) {
                     break;
                 }
                 if (worked) {
                     worked =
-                            AutomationHelper.runKeY("dependencies/Key/KeY.jar",
-                                                    "proofObs/proofs",
-                                                    "functional");
+                            AutomationHelper.runKeY(JoanaKeYInterfacer.PATH_TO_KeY,
+                                                    ViolationsDisproverSemantic.PO_PATH,
+                                                    PO_TYPE.FUNCTIONAL);
                 }
                 if (!keepRunning.get()) {
                     break;
@@ -118,17 +123,17 @@ public class AsyncAutoRunner implements Runnable {
                 if (worked) {
                     Platform.runLater(() -> {
                         actionLogger.startProgress(
-                                "succeeded disproving " +
+                                "Succeeded disproving " +
                                 nextSummaryEdge.toString() +
-                                ", now removing from sdg..."
+                                ", now removing from SDG ..."
                                 );
                     });
                     violationsWrapper.removeEdge(nextSummaryEdge);
                 } else {
                     Platform.runLater(() -> {
                         actionLogger.startProgress(
-                                "failed to disprove " + nextSummaryEdge.toString()
-                                );
+                                "Failed to disprove " +
+                                nextSummaryEdge.toString() + ".");
                     });
                     violationsWrapper.checkedEdge(nextSummaryEdge);
                 }

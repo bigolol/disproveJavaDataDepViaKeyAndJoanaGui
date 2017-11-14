@@ -80,7 +80,9 @@ public class StaticCGJavaMethod {
         String created = "";
         for (int i = 0; i < seperatedByComma.length; ++i) {
             int lastIndexOfDot = seperatedByComma[i].lastIndexOf(".");
-            created += seperatedByComma[i].substring(lastIndexOfDot + 1, seperatedByComma[i].length()) + ",";
+            created += seperatedByComma[i].substring(lastIndexOfDot + 1,
+                                                     seperatedByComma[i].length())
+                        + ",";
         }
         if (!created.isEmpty()) {
             created = created.substring(0, created.length() - 1);
@@ -132,7 +134,8 @@ public class StaticCGJavaMethod {
 
     @Override
     public String toString() {
-        return containingClass.getId() + "." + getId() + "(" + getParameterWithoutPackage() + ") -> " + returnType;
+        return containingClass.getId() + "." + getId()
+                + "(" + getParameterWithoutPackage() + ") -> " + returnType;
     }
 
     public void addRelativeLoopLinePos(int pos) {

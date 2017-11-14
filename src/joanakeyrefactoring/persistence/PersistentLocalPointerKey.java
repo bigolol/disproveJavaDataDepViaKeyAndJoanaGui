@@ -16,15 +16,20 @@ import org.json.JSONObject;
  */
 public class PersistentLocalPointerKey {
 
+    private final static String NODE ="node";
+    private final static String VALUE_NUMBER ="value_number";
+    private final static String ID ="id";
+
     private int valueNumber;
     private PersistentCGNode persistentCGNode;
     private int id;
 
-    public static PersistentLocalPointerKey generateFromJsonObj(JSONObject jsonObj, List<PersistentCGNode> cgNodes) {
-        int nodeIndex = jsonObj.getInt("node");
+    public static PersistentLocalPointerKey generateFromJsonObj(JSONObject jsonObj,
+                                                                List<PersistentCGNode> cgNodes) {
+        int nodeIndex = jsonObj.getInt(NODE);
         PersistentCGNode cgNode = cgNodes.get(nodeIndex);
-        int valueNumber = jsonObj.getInt("value_number");
-        int id = jsonObj.getInt("id");
+        int valueNumber = jsonObj.getInt(VALUE_NUMBER);
+        int id = jsonObj.getInt(ID);
         PersistentLocalPointerKey persistentLocalPointerKey = new PersistentLocalPointerKey();
         persistentLocalPointerKey.valueNumber = valueNumber;
         persistentLocalPointerKey.id = id;
@@ -35,7 +40,8 @@ public class PersistentLocalPointerKey {
     private PersistentLocalPointerKey() {
     }
 
-    public PersistentLocalPointerKey(LocalPointerKey localPointerKey, PersistentCGNode persistentCGNode, int uniqueId) {
+    public PersistentLocalPointerKey(LocalPointerKey localPointerKey, PersistentCGNode persistentCGNode,
+                                     int uniqueId) {
         valueNumber = localPointerKey.getValueNumber();
         this.persistentCGNode = persistentCGNode;
         this.id = uniqueId;
@@ -54,9 +60,9 @@ public class PersistentLocalPointerKey {
     }
 
     public String generateSaveString() {
-        return "\"id\" : " + id
-                + ", \"value_number\" : " + String.valueOf(valueNumber)
-                + ", \"node\" : " + persistentCGNode.getUniqueId();
+        return "\"" + ID + "\" : " + id
+                + ", \"" + VALUE_NUMBER + "\" : " + String.valueOf(valueNumber)
+                + ", \"" + NODE + "\" : " + persistentCGNode.getUniqueId();
     }
 
     @Override

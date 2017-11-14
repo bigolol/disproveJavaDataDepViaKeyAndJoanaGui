@@ -10,8 +10,10 @@ import edu.kit.joana.ifc.sdg.graph.SDGNodeTuple;
 import java.io.IOException;
 import joanakeyrefactoring.AutomationHelper;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
+import joanakeyrefactoring.ViolationsDisproverSemantic;
+import joanakeyrefactoring.ViolationsDisproverSemantic.PO_TYPE;
 import joanakeyrefactoring.ViolationsWrapper;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.persistence.DisprovingProject;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 
@@ -19,19 +21,19 @@ import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
  *
  * @author holger
  */
-public class JoanaKeyInterfacer {
+public class JoanaKeYInterfacer {
 
     private ViolationsWrapper violationsWrapper;
-    private JavaForKeyCreator javaForKeyCreator;
+    private JavaForKeYCreator javaForKeyCreator;
     private SummaryEdgeAndMethodToCorresData summaryEdgeToCorresData;
-    private String pathToKey = "dependencies/Key/KeY.jar";
-    private String pathToProofObs = "proofObs/proofs";
+    public final static String PATH_TO_KeY =
+            AutomationHelper.DEPENDENCIES_FOLDER + "Key/KeY.jar";
 
-    public JoanaKeyInterfacer(
+    public JoanaKeYInterfacer(
             DisprovingProject disprovingProject) throws IOException {
         this.violationsWrapper = disprovingProject.getViolationsWrapper();
         this.javaForKeyCreator
-                = new JavaForKeyCreator(
+                = new JavaForKeYCreator(
                         disprovingProject.getPathToJava(),
                         disprovingProject.getCallGraph(),
                         disprovingProject.getSdg(),
@@ -69,7 +71,7 @@ public class JoanaKeyInterfacer {
                         summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
                         summaryEdgeToCorresData.getMethodToMostGeneralContract()
                 );
-        AutomationHelper.openKeY(pathToKey, pathToProofObs);
+        AutomationHelper.openKeY(PATH_TO_KeY, ViolationsDisproverSemantic.PO_PATH);
     }
 
     public boolean tryDisproveEdge(
@@ -87,9 +89,13 @@ public class JoanaKeyInterfacer {
                 summaryEdgeToCorresData.getEdgeToLoopInvariant().get(e),
                 summaryEdgeToCorresData.getMethodToMostGeneralContract()
                 );
-        boolean worked = AutomationHelper.runKeY(pathToKey, pathToProofObs, "information flow");
+        boolean worked = AutomationHelper.runKeY(PATH_TO_KeY,
+                                                 ViolationsDisproverSemantic.PO_PATH,
+                                                 PO_TYPE.INFORMATION_FLOW);
         if (worked) {
-            worked = AutomationHelper.runKeY(pathToKey, pathToProofObs, "functional");
+            worked = AutomationHelper.runKeY(PATH_TO_KeY,
+                                             ViolationsDisproverSemantic.PO_PATH,
+                                             PO_TYPE.FUNCTIONAL);
         }
         if (worked) {
             violationsWrapper.removeEdge(e);
@@ -101,7 +107,7 @@ public class JoanaKeyInterfacer {
         violationsWrapper.removeEdge(currentSelectedEdge);
     }
 
-    public JavaForKeyCreator getJavaForKeyCreator() {
+    public JavaForKeYCreator getJavaForKeyCreator() {
         return javaForKeyCreator;
     }
 

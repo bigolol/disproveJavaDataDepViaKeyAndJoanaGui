@@ -19,6 +19,11 @@ import java.util.logging.Logger;
  */
 public class Helper {
 
+    private static final String DOT = ".";
+    private static final String PACKAGE = "package";
+    private static final String MAIN = "main";
+    private static final String DOT_JAVA = ".java";
+
     public static List<String> getAllClassesContainingMainMethod(File parentFolder) {
         List<File> javaFiles = new ArrayList<>();
         getAllJaveFilesRec(parentFolder, javaFiles);
@@ -29,13 +34,12 @@ public class Helper {
                 String currentPackage = "";
                 for (String line : lines) {
                     line = line.trim();
-                    if (line.startsWith("package")) {
-                        currentPackage = line.substring("package".length(), line.length() - 1).trim();
-                    } else {
-                        if (line.contains("main")) {
-                            created.add(currentPackage + "."
-                                    + f.getName().substring(0, f.getName().length() - ".java".length()));
-                        }
+                    if (line.startsWith(PACKAGE)) {
+                        currentPackage = line.substring(PACKAGE.length(), line.length() - 1).trim();
+                    } else if (line.contains(MAIN)) {
+                        String pkg = currentPackage + (currentPackage.equals("") ? "" : DOT);
+                        String fName = f.getName();
+                        created.add(pkg + fName.substring(0, fName.length() - DOT_JAVA.length()));
                     }
                 }
             } catch (IOException ex) {
@@ -51,7 +55,7 @@ public class Helper {
             if (f.isDirectory()) {
                 getAllJaveFilesRec(f, javaFiles);
             } else {
-                if (f.getName().endsWith(".java")) {
+                if (f.getName().endsWith(DOT_JAVA)) {
                     javaFiles.add(f);
                 }
             }

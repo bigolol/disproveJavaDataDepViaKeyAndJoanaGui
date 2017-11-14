@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import joanakeyrefactoring.SummaryEdgeAndMethodToCorresData;
-import joanakeyrefactoring.javaforkeycreator.JavaForKeyCreator;
+import joanakeyrefactoring.javaforkeycreator.JavaForKeYCreator;
 import joanakeyrefactoring.staticCG.javamodel.StaticCGJavaMethod;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -80,7 +80,7 @@ public class DisprovingProjectTest {
                 FileUtils.readFileToString(
                         new File("testdata/jzip.dispro"),
                         Charset.defaultCharset()));
-        JavaForKeyCreator creator = new JavaForKeyCreator(generateFromSavestring.getPathToJava(), generateFromSavestring.getCallGraph(),
+        JavaForKeYCreator creator = new JavaForKeYCreator(generateFromSavestring.getPathToJava(), generateFromSavestring.getCallGraph(),
                 generateFromSavestring.getSdg(), generateFromSavestring.getStateSaver());
         SDGEdge e = generateFromSavestring.getViolationsWrapper().getSummaryEdgesAndCorresJavaMethods().keySet().iterator().next();
         StaticCGJavaMethod corresMethod = generateFromSavestring.getViolationsWrapper().getMethodCorresToSummaryEdge(e);
