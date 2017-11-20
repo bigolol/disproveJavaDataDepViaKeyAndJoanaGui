@@ -63,6 +63,17 @@ As of now, this repository will not be updated anymore and future development co
 [py8074/keyjoana](https://git.scc.kit.edu/py8074/keyjoana). If you are interested in the current version, please
 contact us and we provide executables. Requests for sensible cooperations are also welcome.
 
+## Preceeding Repositories
+
+This projects builds upon advances made in the following repositories (more recent projects are listed first):
+
+* [bigolol/disproveJavaDataDepViaKeyAndJoanaGui](https://github.com/bigolol/disproveJavaDataDepViaKeyAndJoanaGui)
+* [bigolol/joana-key-refactoring](https://github.com/bigolol/joana-key-refactoring)
+* [bigolol/JoanaKeyGui](https://github.com/bigolol/JoanaKeyGui)
+* [MarkoKB/Combined-Approach](https://github.com/MarkoKB/Combined-Approach)
+
+Respective authors are listed in the following section.
+
 ## Contributors
 
 This software was mainly designed and implemented by the following students:
